@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Command line tool - PyPPL - A Python PiPeLine framework</title>
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="../README/">PyPPL - A Python PiPeLine framework</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="../README/">Introduction</a>
+                    </li>
+                    <li >
+                        <a href="../basic-concepts-and-directory-structure/">Basics and folder structure</a>
+                    </li>
+                    <li >
+                        <a href="../placeholders/">Templating</a>
+                    </li>
+                    <li >
+                        <a href="../channels/">Channels</a>
+                    </li>
+                    <li >
+                        <a href="../specify-input-and-output-of-a-process/">Input and output of a process</a>
+                    </li>
+                    <li >
+                        <a href="../write-your-script/">The heart: script</a>
+                    </li>
+                    <li >
+                        <a href="../export-output-files/">Output file exporting</a>
+                    </li>
+                    <li >
+                        <a href="../caching/">Caching and resuming processes</a>
+                    </li>
+                    <li >
+                        <a href="../runners/">Runners</a>
+                    </li>
+                    <li >
+                        <a href="../set-other-properties-of-a-process/">Other attributes of a process</a>
+                    </li>
+                    <li >
+                        <a href="../configure-your-logs/">Log configuration</a>
+                    </li>
+                    <li >
+                        <a href="../configure-a-pipeline/">Pipeline configuration</a>
+                    </li>
+                    <li >
+                        <a href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
+                    </li>
+                    <li >
+                        <a href="../command-line-argument-parser/">Command line argument parser</a>
+                    </li>
+                    <li >
+                        <a href="../aggregations/">Aggregations</a>
+                    </li>
+                    <li class="active">
+                        <a href="./">Command line tool</a>
+                    </li>
+                    <li >
+                        <a href="../api/">API</a>
+                    </li>
+                    <li >
+                        <a href="../faq/">FAQ</a>
+                    </li>
+                    <li >
+                        <a href="../change-log/">Change log</a>
+                    </li>
+                </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                    <li >
+                        <a rel="next" href="../aggregations/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../api/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#command-line-tool">Command line tool</a></li>
+            <li><a href="#list-processes">List processes</a></li>
+            <li><a href="#clean-processes">Clean processes</a></li>
+            <li><a href="#compare-the-settings-of-two-pipeines">Compare the settings of two pipeines</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="command-line-tool">Command line tool</h1>
+<!-- toc -->
+
+<p>When you are debuggin a processes, specially when you are modify input, output and script, the suffix a process will change. Then there will be several <code>&lt;workdir&gt;</code> created in <code>&lt;ppldir&gt;</code>. The command line tool helps to maintain and clean up the <code>&lt;workdir&gt;</code>s</p>
+<pre><code class="bash">&gt; bin/pyppl --help
+usage: pyppl [-h] [-w WORKDIR] {clean,list,compare} ...
+
+A set of CLI tools for pyppl.
+
+positional arguments:
+  {clean,list,compare}
+    clean               Clean a workdir
+    list                List the status of a workdir
+    compare             Compare the settings of two processes.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -w WORKDIR, --workdir WORKDIR
+                        The path of workdir, default: ./workdir
+</code></pre>
+
+<p><code>pyppl</code> has a common option <code>-w</code> or <code>--workdir</code> to specify the work directory with the  processes you want to list, clean or compare. By default, it looks at the processes in <code>./workdir</code></p>
+<h2 id="list-processes">List processes</h2>
+<p><img alt="pyppl-cli" src="https://raw.githubusercontent.com/pwwang/pyppl/master/docs/pyppl-cli-list.png" /></p>
+<p><code>pyppl list</code> command will list the processes in<code>./workdir</code>. It will group the processes with same <code>id</code> and <code>tag</code>, and compare their time start to run. The latest one will show at the first place, follows the second latest, ... If a <code>proc.settings</code> cannot be found in the process directory, it will be shown in red.</p>
+<h2 id="clean-processes">Clean processes</h2>
+<p><img alt="pyppl-clean" src="https://raw.githubusercontent.com/pwwang/pyppl/master/docs/pyppl-cli-clean.png" /></p>
+<p><code>pyppl list</code> command will ask whether you want to remove the process directory for the older processes with the same <code>id</code> and <code>tag</code>.</p>
+<p>You can remove all those older process directories without confirmation by <code>pyppl clean --force</code></p>
+<blockquote>
+<p><strong>CAUTION</strong> Be careful when you have multiple pipelines in <code>./workdir</code>. 
+For a single pipeline, it does allow you have processes with same <code>id</code> and <code>tag</code>. However, for multiple pipelines, you may have. And if the two processes have the same <code>ppldir</code> (i.e. <code>./workdir</code>), they will have directories with the same <code>id</code> and <code>tag</code>, but different <code>suffix</code>. In this case, if you use <code>pyppl clean --force</code>, it will only try to keep only the latest one.
+So the best way is to set different tags for the processes with same ids in different pipelines.
+Or you can do it without <code>--force</code> and keep the ones you want.</p>
+</blockquote>
+<h2 id="compare-the-settings-of-two-pipeines">Compare the settings of two pipeines</h2>
+<p><img alt="pyppl-compare" src="https://raw.githubusercontent.com/pwwang/pyppl/master/docs/pyppl-cli-compare.png" /></p>
+<p><code>pyppl compare</code> uses python's <code>difflib</code> to compare the <code>proc.settings</code> files in the directories of two processes. it can take a process group name (i.e. <code>-p pSort.notag</code>, in this case, actually, the tag can be omitted if it is <code>notag</code>, so you can use <code>-p pSort</code>) to compare the top 2 latest processes or two process names with suffices (i.e. <code>-p1 pSort.notag.4HIhyVbp -p2 pSort.notag.7hNBe2uT</code>. </p>
+<p>You can also specify the direct path of process groups/directories:</p>
+<pre><code class="sh">pyppl -p ./workdir/PyPPL.pSort.notag 
+# or mixed
+pyppl -p1 ./workdir/PyPPL.pSort.notag.4HIhyVbp -p2 pSort.notag.7hNBe2uT 
+</code></pre>
+
+<p>The direct path will ignore the <code>workdir</code> specified by <code>-w</code>.  </p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>var base_url = '..';</script>
+        <script src="../js/base.js"></script>
+        <script src="../search/require.js"></script>
+        <script src="../search/search.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&larr;</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&rarr;</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    </body>
+</html>

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Templating - PyPPL - A Python PiPeLine framework</title>
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="../README/">PyPPL - A Python PiPeLine framework</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="../README/">Introduction</a>
+                    </li>
+                    <li >
+                        <a href="../basic-concepts-and-directory-structure/">Basics and folder structure</a>
+                    </li>
+                    <li class="active">
+                        <a href="./">Templating</a>
+                    </li>
+                    <li >
+                        <a href="../channels/">Channels</a>
+                    </li>
+                    <li >
+                        <a href="../specify-input-and-output-of-a-process/">Input and output of a process</a>
+                    </li>
+                    <li >
+                        <a href="../write-your-script/">The heart: script</a>
+                    </li>
+                    <li >
+                        <a href="../export-output-files/">Output file exporting</a>
+                    </li>
+                    <li >
+                        <a href="../caching/">Caching and resuming processes</a>
+                    </li>
+                    <li >
+                        <a href="../runners/">Runners</a>
+                    </li>
+                    <li >
+                        <a href="../set-other-properties-of-a-process/">Other attributes of a process</a>
+                    </li>
+                    <li >
+                        <a href="../configure-your-logs/">Log configuration</a>
+                    </li>
+                    <li >
+                        <a href="../configure-a-pipeline/">Pipeline configuration</a>
+                    </li>
+                    <li >
+                        <a href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
+                    </li>
+                    <li >
+                        <a href="../command-line-argument-parser/">Command line argument parser</a>
+                    </li>
+                    <li >
+                        <a href="../aggregations/">Aggregations</a>
+                    </li>
+                    <li >
+                        <a href="../command-line-tool/">Command line tool</a>
+                    </li>
+                    <li >
+                        <a href="../api/">API</a>
+                    </li>
+                    <li >
+                        <a href="../faq/">FAQ</a>
+                    </li>
+                    <li >
+                        <a href="../change-log/">Change log</a>
+                    </li>
+                </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                    <li >
+                        <a rel="next" href="../basic-concepts-and-directory-structure/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../channels/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#templating">Templating</a></li>
+            <li><a href="#common-data-avaible-for-rendering">Common data avaible for rendering</a></li>
+            <li><a href="#other-data-for-rendering">Other data for rendering</a></li>
+            <li><a href="#the-scope-of-data">The scope of data</a></li>
+            <li><a href="#built-in-functions">Built-in functions</a></li>
+            <li><a href="#usage-of-built-in-template-engine">Usage of built-in template engine</a></li>
+            <li><a href="#set-environment-of-template-engine">Set environment of template engine</a></li>
+            <li><a href="#use-jinja2">Use Jinja2</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="templating">Templating</h1>
+<!-- toc -->
+
+<p>{% raw %}
+<code>PyPPL</code> has its own template engine, which derived from a <a href="https://github.com/aosabook/500lines/tree/master/template-engine">500-line-or-less template engine</a>. It also supports <a href="http://jinja.pocoo.org/">Jinja2</a> if you have it installed and specify <code>"Jinja2"</code> to <code>pXXX.template</code>. The built-in template engine is enabled by default.</p>
+<h2 id="common-data-avaible-for-rendering">Common data avaible for rendering</h2>
+<p>When rendering a template, following data are fed to the render function. So that you can use those values in the template. Some attribute values of a process are shared for all templates that are applied:
+- <code>proc.aggr</code>: The aggregation name of the process
+- <code>proc.args</code>: A <code>dict</code> of process arguments. To access an item of it: <code>{{args.&lt;item&gt;}}</code>
+- <code>proc.cache</code>: The cache option
+- <code>proc.desc</code>: The description of the process
+- <code>proc.echo</code>: The echo option
+- <code>proc.errhow</code>: What to do if error happens
+- <code>proc.errntry</code>: If <code>errorhow == 'retry'</code>, how many times to re-try if a job fails
+- <code>proc.exdir</code>: The export directory
+- <code>proc.exhow</code>: How to export output files
+- <code>proc.exow</code>: Whether to overwrite existing files when exporting output files
+- <code>proc.forks</code>: How many jobs to run concurrently
+- <code>proc.id</code>: The id of the process.
+- <code>proc.lang</code>: The interpreter for the script
+- <code>proc.ppldir</code>: Where the workdirs are located
+- <code>proc.procvars</code>: The <code>dict</code> of all avaiable attributes of a process, can be accessed directly by <code>{{proc.&lt;var&gt;}}</code>
+- <code>proc.rc</code>: The rc option
+- <code>proc.resume</code>: The resume option
+- <code>proc.runner</code>: The runner
+- <code>proc.sets</code>: A list of attribute names that has been set explictly
+- <code>proc.size</code>: Number of jobs
+- <code>proc.suffix</code>: The unique suffix of the process
+- <code>proc.tag</code>: The tag of the process
+- <code>proc.workdir</code>: The workdir of the process</p>
+<h2 id="other-data-for-rendering">Other data for rendering</h2>
+<p>For each job, we also have some value available for rendering:</p>
+<ul>
+<li><code>job.index</code>: The index of the job</li>
+<li><code>job.indir</code>: The input directory of the job</li>
+<li><code>job.outdir</code>: The output directory of the job</li>
+<li><code>job.dir</code>: The directory of the job</li>
+<li><code>job.outfile</code>: The stdout file of the job</li>
+<li><code>job.errfile</code>: The stderr file of the job</li>
+<li><code>job.pidfile</code>: The file stores the PID of the job or the identity from a queue runner.</li>
+</ul>
+<p>Input, output and bring-in data are under namespace <code>in</code>, <code>out</code> and <code>bring</code>, respectively.
+For example, you have following definition:</p>
+<pre><code class="python">pXXX.input  = {&quot;a&quot;: [&quot;hello&quot;], &quot;b&quot;: [&quot;/path/to/file&quot;]}
+pXXX.output = &quot;a:{{in.a}} world!&quot;
+pXXX.brings = {&quot;b&quot;: &quot;{{in.b | bn}}.index&quot;}
+</code></pre>
+
+<p>Now you can access them by: <code>{{in.a}}</code>, <code>{{in.b}}</code>, <code>{{out.a}}</code>, <code>{{bring.b}}</code></p>
+<h2 id="the-scope-of-data">The scope of data</h2>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Data available</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pXXX.beforeCmd</code></td>
+<td><code>{{proc.*}}</code></td>
+<td>Command to run before job starts</td>
+</tr>
+<tr>
+<td><code>pXXX.afterCmd</code></td>
+<td><code>{{proc.*}}</code></td>
+<td>Command to run after job finishes</td>
+</tr>
+<tr>
+<td><code>pXXX.brings</code></td>
+<td><code>{{proc.*}}</code>, <code>{{job.*}}</code>, <code>{{in.*}}</code></td>
+<td>The bring-in files</td>
+</tr>
+<tr>
+<td><code>pXXX.output</code></td>
+<td><code>{{proc.*}}</code>, <code>{{job.*}}</code>, <code>{{in.*}}</code>, <code>{{bring.*}}</code></td>
+<td>The output of the process</td>
+</tr>
+<tr>
+<td><code>pXXX.expect</code></td>
+<td>All above-mentioned data</td>
+<td>Command to check output</td>
+</tr>
+<tr>
+<td><code>pXXX.expart</code></td>
+<td>All above-mentioned data</td>
+<td>Partial export</td>
+</tr>
+<tr>
+<td><code>pXXX.script</code></td>
+<td>All above-mentioned data</td>
+<td>The script to run</td>
+</tr>
+</tbody>
+</table>
+<h2 id="built-in-functions">Built-in functions</h2>
+<p>Sometimes we need to transform the data in a template. We have some built-in functions available for the transformation.<br />
+For built-in template engine, you may use pipe, for example: <code>{{in.file | basename}}</code>; for <code>Jinja2</code>, you have to use functions as "functions", for example: <code>{{basename(in.file)}}</code>. Here we give the examples with built-in template engine syntax.</p>
+<ul>
+<li><code>R</code>: Transform a python value to R value. For example:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Usage</th>
+<th>Data</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{{v</code>&#x7c;<code>R}}</code></td>
+<td><code>{'v': True}</code></td>
+<td><code>TRUE</code></td>
+</tr>
+<tr>
+<td></td>
+<td><code>{'v': 'TRUE'}</code></td>
+<td><code>TRUE</code></td>
+</tr>
+<tr>
+<td></td>
+<td><code>{'v': 'NA'}</code></td>
+<td><code>NA</code></td>
+</tr>
+<tr>
+<td></td>
+<td><code>{'v': 'NULL'}</code></td>
+<td><code>NULL</code></td>
+</tr>
+<tr>
+<td></td>
+<td><code>{'v': 1}</code></td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td></td>
+<td><code>{'v': 'r:c(1,2,3)'}</code></td>
+<td><code>c(1,2,3)</code></td>
+</tr>
+<tr>
+<td></td>
+<td><code>{'v': 'plainstring'}</code></td>
+<td><code>"plainstring"</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>Rvec</code>: Transform a python list to a R vector. For example:</li>
+<li><code>{{v | Rvec}}</code> with <code>{'v': [1,2,3]}</code> results in <code>c(1,2,3)</code></li>
+<li><code>Rlist</code>: Transform a python dict to a R list. For example:</li>
+<li><code>{{v | Rlist}}</code> with <code>{'v': {'a':1, 'b':2}}</code> results in <code>list(a=1, b=2)</code></li>
+<li><code>realpath</code>: Shortcut of <code>os.path.realpath</code></li>
+<li><code>readlink</code>: Shortcut of <code>os.readlink</code></li>
+<li><code>dirname</code>: Shortcut of <code>os.path.dirname</code></li>
+<li><code>basename</code>: Get the basename of a file. If a file is renamed by <code>PyPPL</code> in case of input files with the same basename, it tries to get the original basename. For example:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Usage</th>
+<th>Data</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{{v</code>&#x7c;<code>basename}}</code></td>
+<td><code>{'v': '/path/to/file.txt'}</code></td>
+<td><code>file.txt</code></td>
+</tr>
+<tr>
+<td></td>
+<td><code>{'v': '/path/to/file[1].txt'}</code></td>
+<td><code>file.txt</code></td>
+</tr>
+<tr>
+<td><code>{{v, orig</code>&#x7c;<code>basename}}</code></td>
+<td><code>{'v': '/path/to/file[1].txt', 'orig': True}</code></td>
+<td><code>file[1].txt</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>bn</code>: Shortcut of <code>basename</code></li>
+<li><code>filename</code>: similar as <code>basename</code> but without extension.</li>
+<li><code>fn</code>: Shortcut of <code>filename</code></li>
+<li><code>ext</code>: Get extension of a file. Shortcut of <code>os.path.splitext(x)[1]</code></li>
+<li>Dot is included. To remove the dot: <code>{{v | ext | [1:]}}</code></li>
+<li><code>prefix</code>: Get the prefix of a path, without extension. It acts like <code>{{v | dirname}}/{{v | filename}}</code></li>
+<li><code>quote</code>: Double-quote a string.</li>
+<li><code>asquote</code>: Double quote items in a list and join them by space. For example:</li>
+<li><code>{{v | asquote}}</code> with <code>{'v': [1,2,3]}</code> results in <code>"1" "2" "3"</code></li>
+<li><code>acquote</code>: Double quote items in a list and join them by comma.</li>
+<li><code>squote</code>: Single-quote a string.</li>
+<li><code>json</code>: Dumps a python object to a json string. Shortcut of <code>json.dumps</code></li>
+<li><code>read</code>: Read the content of a file.</li>
+<li><code>readlines</code>: Read the lines of a file. Empty lines are skipped by default. To return the empty lines for <code>{'v': '/path/to/file', 'skipEmptyLines': False}</code>: </li>
+<li><code>{{v, skipEmptyLines | readlines}}</code></li>
+</ul>
+<h2 id="usage-of-built-in-template-engine">Usage of built-in template engine</h2>
+<ul>
+<li>Basic usage:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Usage</th>
+<th>Data</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{{v}}</code></td>
+<td><code>{'v': 1}</code></td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>{{v.a}}</code>, <code>{{v['a']}}</code></td>
+<td><code>{'v': {'a': 1}}</code></td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>{{v.0}}</code>, <code>{{v[0]}}</code></td>
+<td><code>{'v': [1]}</code></td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>{{v.upper()}}</code></td>
+<td><code>{'v': "a"}</code></td>
+<td><code>A</code></td>
+</tr>
+<tr>
+<td><code>{{v.0.upper()}}</code></td>
+<td><code>{'v': ["a"]}</code></td>
+<td><code>A</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Applying functions:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Usage</th>
+<th>Data</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{{v</code>&#x7c;<code>R}}</code></td>
+<td><code>{'v': True}</code></td>
+<td><code>TRUE</code></td>
+</tr>
+<tr>
+<td><code>{{v1, v2</code>&#x7c;<code>paste}}</code></td>
+<td><code>{'v1': 'Hello', 'v2': 'world!', 'paste': lambda x, y: x + ' ' + y}</code></td>
+<td><code>Hello world!</code></td>
+</tr>
+<tr>
+<td><code>{{v1, v2</code>&#x7c;<code>lambda x, y: x + ' ' + y}}</code></td>
+<td><code>{'v1': 'Hello', 'v2': 'world!'}</code></td>
+<td><code>Hello world!</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Note</strong> If you want to pass a literal value (for example: <code>1</code>, <code>True</code>), you CANNOT do this: <code>{{v, False | readlines}}</code>. Instead, you can either:
+  - specify the value in data: <code>{'v': '/path/to/file', 'skipEmptyLines': False}</code>, <br />
+    then <code>{{v, skipEmptyLines | readlines}}</code>; or
+  - use <code>lambda</code> function: <code>{{v, readlines | lambda x, func: func(x, False)}}</code></p>
+</blockquote>
+<ul>
+<li><code>If-else/elif</code> statements:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Usage</th>
+<th>Data</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{% if v %}</code><br />&nbsp;&nbsp;<code>1</code><br /><code>{% else %}</code><br />&nbsp;&nbsp;<code>2</code><br /><code>{% endif %}</code></td>
+<td><code>{'v': True}</code></td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>{% if v</code>&#x7c;<code>notExists %}</code><br />&nbsp;&nbsp;<code>Path not exists.</code><br /><code>{% elif v</code>&#x7c;<code>isDir %}</code><br />&nbsp;&nbsp;<code>Path is a directory.</code><br /><code>{% else %}</code><br />&nbsp;&nbsp;<code>Path exists but is not a directory.</code><br /><code>{% endif %}</code></td>
+<td><code>{</code><br /><code>'v': '/path/to/file',</code><br /><code>'notExists': lambda x: not __import__('os').path.exists(x),</code><br /><code>'isDir': __import__('os').path.isdir</code><br /><code>}</code></td>
+<td><code>Path exists but is not a directory.</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Loops:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Usage</th>
+<th>Data</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{% for var in varlist %}{{var</code>&#x7c;<code>R}}{% endfor %}</code></td>
+<td><code>{'varlist': ['abc', 'True', 1, False]}</code></td>
+<td><code>"abc"TRUE1FALSE</code></td>
+</tr>
+<tr>
+<td><code>{% for k , v in data.items() %}{{k}}:{{v}}{% endfor %}</code></td>
+<td><code>{'data': {'a':1, 'b':2}}</code></td>
+<td><code>a:1b:2</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="set-environment-of-template-engine">Set environment of template engine</h2>
+<p>You can define you own functions/data for template rendering:</p>
+<pre><code class="python">pXXX.envs.data  = {'v1': 'a', 'v2': 'b', 'b': True}
+pXXX.envs.os    = __import__('os')
+pXXX.envs.paste = lambda x,y: x +' ' + y
+# use them
+pXXX.script = &quot;&quot;&quot;
+{% if data.b %}
+print &quot;{{data.v1, data.v2 | paste}}&quot;
+{% else %}
+print &quot;{{data.v1, data.v2 | os.path.join}}&quot;
+{% endif %}
+&quot;&quot;&quot;
+</code></pre>
+
+<p>Then if <code>pXXX.envs.data['b'] is True</code>, it prints <code>a b</code>; otherwise it prints <code>a/b</code>.</p>
+<h2 id="use-jinja2">Use Jinja2</h2>
+<p>All the data and environment definition mentioned above are all applicable when you use <code>Jinja2</code> as your template engine.<br />
+For usage of <code>Jinja2</code>, you may refer to its <a href="http://jinja.pocoo.org/">official documentation</a>.</p>
+<p>{% endraw %}</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>var base_url = '..';</script>
+        <script src="../js/base.js"></script>
+        <script src="../search/require.js"></script>
+        <script src="../search/search.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&larr;</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&rarr;</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    </body>
+</html>

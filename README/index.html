@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Introduction - PyPPL - A Python PiPeLine framework</title>
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="./">PyPPL - A Python PiPeLine framework</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="./">Introduction</a>
+                    </li>
+                    <li >
+                        <a href="../basic-concepts-and-directory-structure/">Basics and folder structure</a>
+                    </li>
+                    <li >
+                        <a href="../placeholders/">Templating</a>
+                    </li>
+                    <li >
+                        <a href="../channels/">Channels</a>
+                    </li>
+                    <li >
+                        <a href="../specify-input-and-output-of-a-process/">Input and output of a process</a>
+                    </li>
+                    <li >
+                        <a href="../write-your-script/">The heart: script</a>
+                    </li>
+                    <li >
+                        <a href="../export-output-files/">Output file exporting</a>
+                    </li>
+                    <li >
+                        <a href="../caching/">Caching and resuming processes</a>
+                    </li>
+                    <li >
+                        <a href="../runners/">Runners</a>
+                    </li>
+                    <li >
+                        <a href="../set-other-properties-of-a-process/">Other attributes of a process</a>
+                    </li>
+                    <li >
+                        <a href="../configure-your-logs/">Log configuration</a>
+                    </li>
+                    <li >
+                        <a href="../configure-a-pipeline/">Pipeline configuration</a>
+                    </li>
+                    <li >
+                        <a href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
+                    </li>
+                    <li >
+                        <a href="../command-line-argument-parser/">Command line argument parser</a>
+                    </li>
+                    <li >
+                        <a href="../aggregations/">Aggregations</a>
+                    </li>
+                    <li >
+                        <a href="../command-line-tool/">Command line tool</a>
+                    </li>
+                    <li >
+                        <a href="../api/">API</a>
+                    </li>
+                    <li >
+                        <a href="../faq/">FAQ</a>
+                    </li>
+                    <li >
+                        <a href="../change-log/">Change log</a>
+                    </li>
+                </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                    <li class="disabled">
+                        <a rel="next" >
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../basic-concepts-and-directory-structure/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#pyppl-a-python-pipeline-framework">PyPPL - A Python PiPeLine framework</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#requirements">Requirements</a></li>
+            <li><a href="#installation">Installation</a></li>
+            <li><a href="#get-started">Get started</a></li>
+            <li><a href="#deduce-input-channel-from-dependent-process">Deduce input channel from dependent process</a></li>
+            <li><a href="#modify-input-channel">Modify input channel</a></li>
+            <li><a href="#use-a-different-language">Use a different language</a></li>
+            <li><a href="#use-args">Use args</a></li>
+            <li><a href="#use-the-command-line-argument-parser">Use the command line argument parser</a></li>
+            <li><a href="#use-a-different-runner">Use a different runner</a></li>
+            <li><a href="#use-jinja2-as-template-engine">Use Jinja2 as template engine</a></li>
+            <li><a href="#debug-your-script">Debug your script</a></li>
+            <li><a href="#switch-runner-profiles">Switch runner profiles</a></li>
+            <li><a href="#draw-the-pipeline-chart">Draw the pipeline chart</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="pyppl-a-python-pipeline-framework"><a href="https://github.com/pwwang/pyppl/">PyPPL</a> - A <a href="#">Py</a>thon <a href="#">P</a>i<a href="#">P</a>e<a href="#">L</a>ine framework</h1>
+<p><img alt="Pypi" src="https://img.shields.io/pypi/v/pyppl.svg?style=flat-square" /> <img alt="Github" src="https://img.shields.io/github/tag/pwwang/PyPPL.svg?style=flat-square" /> [<img alt="Gitter chat" src="https://img.shields.io/gitter/room/pwwang/PyPPL.svg?style=flat-square" />]<a href="https://gitter.im/PyPPL/Lobby">10</a> [<img alt="Codacy" src="https://img.shields.io/codacy/grade/a04aac445f384a8dbe47da19c779763f.svg?style=flat-square" />]<a href="https://www.codacy.com/app/pwwang/PyPPL?utm_source=github.com&amp;amp;utm_medium=referral&amp;amp;utm_content=pwwang/pyppl&amp;amp;utm_campaign=Badge_Grade">5</a> <img alt="Codacy coverage" src="https://img.shields.io/codacy/coverage/a04aac445f384a8dbe47da19c779763f.svg?style=flat-square" /> <img alt="Gitbook" src="https://www.gitbook.com/button/status/book/pwwang/pyppl" /></p>
+<p><a href="https://pwwang.gitbooks.io/PyPPL/">Documentation</a> | <a href="https://pwwang.gitbooks.io/PyPPL/api.html">API</a> | <a href="https://pwwang.gitbooks.io/PyPPL/change-log.html">Change log</a> | <a href="https://pwwang.gitbooks.io/PyPPL/content/faq.html">FAQ</a></p>
+<!-- toc -->
+
+<h2 id="features">Features</h2>
+<ul>
+<li><a href="https://pwwang.gitbooks.io/PyPPL/command-line-argument-parser.html">Easy-to-use command line parser.</a></li>
+<li><a href="https://pwwang.gitbooks.io/PyPPL/content/configure-your-logs.html">Fancy logs.</a></li>
+<li><a href="https://pwwang.gitbooks.io/PyPPL/caching.html">Process caching.</a></li>
+<li><a href="https://pwwang.gitbooks.io/PyPPL/placeholders.html">Script templating (using either builtin engine or Jinja2).</a></li>
+<li><a href="https://pwwang.gitbooks.io/PyPPL/runners.html">Runner customization</a>.</li>
+<li><a href="https://pwwang.gitbooks.io/PyPPL/set-other-properties-of-a-process.html#error-handling-perrhowperrntry">Error handling for processes.</a></li>
+<li><a href="https://pwwang.gitbooks.io/PyPPL/configure-a-pipeline.html#use-a-configuration-file">Easy-switching running profile.</a></li>
+<li>Flowchat in <a href="https://en.wikipedia.org/wiki/DOT_(graph_description_language)">DOT</a> for your pipelines (<a href="https://pwwang.gitbooks.io/PyPPL/draw-flowchart-of-a-pipeline.html">Details</a>).</li>
+<li><a href="https://pwwang.gitbooks.io/PyPPL/aggregations.html">Aggregations (a set of processes predefined).</a></li>
+<li>Highly reusable processes (see <a href="https://github.com/pwwang/bioprocs">a set of highly reusable bioinformatics processes</a>).</li>
+</ul>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li>OS: Linux, OSX or WSL (Windows Subsystem for Linux)</li>
+<li>Python 2.7+ or Python 3.4+ (lower versions not tested)</li>
+<li>Python packages: <a href="https://github.com/cdgriffith/Box">python-box</a>, <a href="https://github.com/benjaminp/six">six</a>, <a href="https://github.com/benediktschmitt/py-filelock">filelock</a>, (<a href="https://github.com/xflr6/graphviz">graphviz</a> and <a href="https://github.com/yaml/pyyaml">pyyaml</a>, suggested)</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<pre><code class="bash"># install latest version
+git clone https://github.com/pwwang/PyPPL.git
+cd PyPPL
+python setup.py install
+# or simply:
+pip install git+git://github.com/pwwang/PyPPL.git
+
+# install released version
+pip install PyPPL
+
+# run tests for both python2 and python3
+make test
+
+# run tests only for python2
+make test2
+
+# run tests only for python3
+make test3
+
+# run tutorials
+make tutorials
+</code></pre>
+
+<h2 id="get-started">Get started</h2>
+<p>See <code>tutorials/getStarted/</code><br />
+Sort 5 files simultaneously: </p>
+<pre><code class="python">1. from pyppl import PyPPL, Proc, Channel
+
+2. pSort         = Proc(desc = 'Sort files.')
+3. pSort.input   = {&quot;infile:file&quot;: Channel.fromPattern(&quot;./data/*.txt&quot;)}
+4. pSort.output  = &quot;outfile:file:{{in.infile | fn}}.sorted&quot;
+5. pSort.forks   = 5
+6. pSort.exdir   = './export'
+7. pSort.script  = &quot;&quot;&quot;
+  sort -k1r {{in.infile}} &gt; {{out.outfile}} 
+&quot;&quot;&quot; 
+
+8. PyPPL().start(pSort).run()
+</code></pre>
+
+<p><strong>Line 1</strong>: Import the modules.<br />
+<strong>Line 2</strong>: Define the process with a description.<br />
+<strong>Line 3</strong>: Define the input data for the process.<br />
+<strong>Line 4</strong>: Define the output. Templates are also applied here.<br />
+<strong>Line 5</strong>: Define how many jobs are running simultaneously.<br />
+<strong>Line 6</strong>: Set the directory to export the output files.<br />
+<strong>Line 7</strong>: Set your script to run.<br />
+<strong>Line 8</strong>: Set the starting process and run the pipeline.  </p>
+<p><img alt="getStarted" src="https://raw.githubusercontent.com/pwwang/PyPPL/master/docs/getStarted.png" /></p>
+<pre><code>&gt; ls -l ./export
+total 0
+-rw-rw-rw- 1 pwwang pwwang 44 Sep 14 20:50 test1.sorted
+-rw-rw-rw- 1 pwwang pwwang 56 Sep 14 20:50 test2.sorted
+-rw-rw-rw- 1 pwwang pwwang 59 Sep 14 20:50 test3.sorted
+-rw-rw-rw- 1 pwwang pwwang 58 Sep 14 20:50 test4.sorted
+-rw-rw-rw- 1 pwwang pwwang 58 Sep 14 20:50 test5.sorted
+</code></pre>
+
+<h2 id="deduce-input-channel-from-dependent-process">Deduce input channel from dependent process</h2>
+<p>See <code>tutorials/inputFromDependent/</code><br />
+If a process depends on another one, the input channel can be deduced from the output channel of the latter process.<br />
+Sort 5 files and then add line number to each line.</p>
+<pre><code class="python">from pyppl import PyPPL, Proc, Channel
+
+pSort        = Proc(desc = 'Sort files.')
+pSort.input  = {&quot;infile:file&quot;: Channel.fromPattern(&quot;./data/*.txt&quot;)}
+pSort.output = &quot;outfile:file:{{in.infile | fn}}.sorted&quot;
+pSort.forks  = 5
+pSort.script = &quot;&quot;&quot;
+  sort -k1r {{in.infile}} &gt; {{out.outfile}} 
+&quot;&quot;&quot; 
+
+pAddPrefix         = Proc(desc = 'Add line number to each line.')
+pAddPrefix.depends = pSort
+# automatically inferred from pSort.output
+pAddPrefix.input   = &quot;infile:file&quot;  
+pAddPrefix.output  = &quot;outfile:file:{{in.infile | fn}}.ln&quot;
+pAddPrefix.exdir   = './export'
+pAddPrefix.forks   = 5
+pAddPrefix.script  = &quot;&quot;&quot;
+paste -d. &lt;(seq 1 $(wc -l {{in.infile}} | cut -f1 -d' ')) {{in.infile}} &gt; {{out.outfile}}
+&quot;&quot;&quot; 
+
+PyPPL().start(pSort).run()
+</code></pre>
+
+<pre><code>&gt; head -3 ./export/test1.ln
+1.8984
+2.663
+3.625
+</code></pre>
+
+<h2 id="modify-input-channel">Modify input channel</h2>
+<p>See <code>tutorials/transformInputChannels/</code><br />
+Sort 5 files, add line numbers, and merge them into one file.</p>
+<pre><code class="python">from pyppl import PyPPL, Proc, Channel
+
+pSort        = Proc(desc = 'Sort files.')
+pSort.input  = {&quot;infile:file&quot;: Channel.fromPattern(&quot;./data/*.txt&quot;)}
+pSort.output = &quot;outfile:file:{{in.infile | fn}}.sorted&quot;
+pSort.forks  = 5
+pSort.script = &quot;&quot;&quot;
+  sort -k1r {{in.infile}} &gt; {{out.outfile}} 
+&quot;&quot;&quot; 
+
+pAddPrefix         = Proc(desc = 'Add line number to each line.')
+pAddPrefix.depends = pSort
+pAddPrefix.input   = &quot;infile:file&quot;  # automatically inferred from pSort.output
+pAddPrefix.output  = &quot;outfile:file:{{in.infile | fn}}.ln&quot;
+pAddPrefix.forks   = 5
+pAddPrefix.script  = &quot;&quot;&quot;
+paste -d. &lt;(seq 1 $(wc -l {{in.infile}} | cut -f1 -d' ')) {{in.infile}} &gt; {{out.outfile}}
+&quot;&quot;&quot; 
+
+pMergeFiles         = Proc(desc = 'Merge files, each as a column.')
+pMergeFiles.depends = pAddPrefix
+# Transform it into a list of files
+# [&quot;test1.ln&quot;, &quot;test2.ln&quot;, ..., &quot;test5.ln&quot;]
+pMergeFiles.input   = {&quot;infiles:files&quot;: lambda ch: [ch.flatten()]}
+pMergeFiles.output  = &quot;outfile:file:mergedfile.txt&quot;
+pMergeFiles.exdir   = &quot;./export&quot;
+pMergeFiles.script  = &quot;&quot;&quot;
+paste {{in.infiles | asquote}} &gt; {{out.outfile}}
+&quot;&quot;&quot;
+
+PyPPL().start(pSort).run()
+</code></pre>
+
+<pre><code>&gt; head -3 ./export/mergedfile.txt
+1.8984  1.6448  1.2915  1.7269  1.7692
+2.663   2.3369  2.26223 2.3866  2.7536
+3.625   3.28984 3.25945 3.29971 3.30204
+</code></pre>
+
+<h2 id="use-a-different-language">Use a different language</h2>
+<p>See <code>tutorials/differentLang/</code><br />
+Plot heatmap using R.</p>
+<pre><code class="python">from pyppl import PyPPL, Proc
+
+pHeatmap        = Proc(desc = 'Draw heatmap.')
+pHeatmap.input  = {'seed': 8525}
+pHeatmap.output = &quot;outfile:file:heatmap.png&quot;
+pHeatmap.exdir  = './export'
+# Use full path &quot;/path/to/Rscript&quot; if it's not in $PATH
+# You can also use a shebang in script
+# in this case: #!/usr/bin/env Rscript
+pHeatmap.lang   = 'Rscript' 
+pHeatmap.script = &quot;&quot;&quot;
+set.seed({{in.seed}})
+mat = matrix(rnorm(100), ncol=10)
+png(filename = &quot;{{out.outfile}}&quot;)
+heatmap(mat)
+dev.off()
+&quot;&quot;&quot;
+
+PyPPL().start(pHeatmap).run()
+</code></pre>
+
+<p><code>./export/heatmap.png</code><br />
+<img alt="heatmap.png" src="https://raw.githubusercontent.com/pwwang/PyPPL/master/docs/heatmap.png" /></p>
+<h2 id="use-args">Use args</h2>
+<p>See <code>tutorials/useArgs/</code><br />
+If the jobs are sharing the same set of configurations (in this case, the number of rows and columns of the matrix), they can be set in <code>pXXX.args</code>. The other benefit is to make the channels intact if the configurations are not suppose to be channeling.  </p>
+<pre><code class="python">from pyppl import PyPPL, Proc
+
+pHeatmap           = Proc(desc = 'Draw heatmap.')
+pHeatmap.input     = {'seed': [1,2,3]}
+pHeatmap.output    = &quot;outfile:file:heatmap{{in.seed}}.png&quot;
+pHeatmap.exdir     = &quot;./export&quot;
+pHeatmap.forks     = 3
+pHeatmap.args.ncol = 10
+pHeatmap.args.nrow = 10
+pHeatmap.lang      = 'Rscript' # or /path/to/Rscript if it's not in $PATH
+pHeatmap.script = &quot;&quot;&quot;
+set.seed({{in.seed}})
+mat = matrix(rnorm({{args.ncol, args.nrow | lambda x, y: x*y}}), ncol={{args.ncol}})
+png(filename = &quot;{{out.outfile}}&quot;, width=150, height=150)
+heatmap(mat)
+dev.off()
+&quot;&quot;&quot;
+
+PyPPL().start(pHeatmap).run()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th><code>./export/heatmap1.png</code></th>
+<th><code>./export/heatmap2.png</code></th>
+<th><code>./export/heatmap3.png</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img alt="heatmap1.png" src="https://raw.githubusercontent.com/pwwang/PyPPL/master/docs/heatmap1.png" /></td>
+<td><img alt="heatmap2.png" src="https://raw.githubusercontent.com/pwwang/PyPPL/master/docs/heatmap2.png" /></td>
+<td><img alt="heatmap3.png" src="https://raw.githubusercontent.com/pwwang/PyPPL/master/docs/heatmap3.png" /></td>
+</tr>
+</tbody>
+</table>
+<h2 id="use-the-command-line-argument-parser">Use the command line argument parser</h2>
+<p>See <code>tutorials/useParams/</code>  </p>
+<pre><code class="python">from pyppl import PyPPL, Proc, Channel, params
+
+params.datadir    \
+  .setRequired()  \
+  .setDesc('The data directory containing the data files.')
+
+params = params.parse().toDict()
+
+pSort         = Proc(desc = 'Sort files.')
+pSort.input   = {&quot;infile:file&quot;: Channel.fromPattern(params.datadir + '/*.txt')}
+pSort.output  = &quot;outfile:file:{{in.infile | fn}}.sorted&quot;
+pSort.forks   = 5
+pSort.exdir   = './export'
+pSort.script  = &quot;&quot;&quot;
+  sort -k1r {{in.infile}} &gt; {{out.outfile}} 
+&quot;&quot;&quot; 
+
+PyPPL().start(pSort).run()
+
+</code></pre>
+
+<p>Run the pipeline:<br />
+<code>&gt; python useParams.py</code></p>
+<pre><code>USAGE:
+  useParams.py --param-datadir &lt;str&gt;
+
+REQUIRED OPTIONS:
+  --param-datadir &lt;str&gt;                 The data directory containing the data files.
+
+OPTIONAL OPTIONS:
+  -h, --help, -H, -?                    Print this help information.
+</code></pre>
+
+<p>Provide value to <code>--param-datadir</code>:<br />
+<code>&gt; python useParams.py --param-datadir ./data</code></p>
+<h2 id="use-a-different-runner">Use a different runner</h2>
+<p>See <code>/tutorials/differentRunner/</code></p>
+<pre><code class="python">from pyppl import PyPPL, Proc, Channel
+
+pSort         = Proc(desc = 'Sort files.')
+pSort.input   = {&quot;infile:file&quot;: Channel.fromPattern(&quot;./data/*.txt&quot;)}
+pSort.output  = &quot;outfile:file:{{in.infile | fn}}.sorted&quot;
+# specify the runner
+pSort.runner  = 'sge'
+# specify the runner options
+pSort.sgeRunner = {
+    &quot;sge.q&quot; : &quot;1-day&quot;
+}
+pSort.forks   = 5
+pSort.exdir   = './export'
+pSort.script  = &quot;&quot;&quot;
+  sort -k1r {{in.infile}} &gt; {{out.outfile}} 
+&quot;&quot;&quot; 
+
+PyPPL().start(pSort).run()
+# or run all process with sge runner:
+# PyPPL().start(pSort).run('sge')
+# or:
+# PyPPL({
+#   'proc': {
+#       'runner': 'sge', 
+#       'sgeRunner': {'sge.q': '1-day'}
+#   }
+# }).start(pSort).run()
+</code></pre>
+
+<h2 id="use-jinja2-as-template-engine">Use Jinja2 as template engine</h2>
+<p>See <code>/tutorials/useJinja2/</code></p>
+<pre><code class="python">from pyppl import PyPPL, Proc, Channel
+
+pSort          = Proc(desc = 'Sort files.')
+pSort.input    = {&quot;infile:file&quot;: Channel.fromPattern(&quot;./data/*.txt&quot;)}
+# Notice the different between builtin template engine and Jinja2
+pSort.output   = &quot;outfile:file:{{ fn(in.infile) }}.sorted&quot;
+# pSort.output = &quot;outfile:file:{{in.infile | fn}}.sorted&quot;
+pSort.forks    = 5
+# You have to have Jinja2 installed (pip install Jinja2)
+pSort.template = 'Jinja2'
+pSort.exdir    = './export'
+pSort.script   = &quot;&quot;&quot;
+  sort -k1r {{in.infile}} &gt; {{out.outfile}} 
+&quot;&quot;&quot; 
+
+PyPPL().start(pSort).run()
+</code></pre>
+
+<h2 id="debug-your-script">Debug your script</h2>
+<p>See <code>/tutorials/debugScript/</code><br />
+You can directly go to <code>&lt;workdir&gt;/&lt;job.index&gt;/job.script</code> to debug your script, or you can also print some values out throught <code>PyPPL</code> log system.  </p>
+<pre><code class="python">from pyppl import PyPPL, Proc
+
+pHeatmap           = Proc(desc = 'Draw heatmap.')
+pHeatmap.input     = {'seed': [1,2,3,4,5]}
+pHeatmap.output    = &quot;outfile:file:heatmap{{in.seed}}.png&quot;
+pHeatmap.exdir     = &quot;./export&quot;
+# Don't cache jobs for debugging
+pHeatmap.cache     = False
+# Output debug information for all jobs, but don't echo stdout and stderr
+pHeatmap.echo      = {'jobs': range(5), 'type': ''}
+pHeatmap.args.ncol = 10
+pHeatmap.args.nrow = 10
+pHeatmap.lang      = 'Rscript' # or /path/to/Rscript if it's not in $PATH
+pHeatmap.script = &quot;&quot;&quot;
+set.seed({{in.seed}})
+mat = matrix(rnorm({{args.ncol, args.nrow | lambda x, y: x*y}}), ncol={{args.ncol}})
+png(filename = &quot;{{out.outfile}}&quot;, width=150, height=150)
+
+# have to be on stderr
+cat(&quot;pyppl.log.debug:Plotting heatmap #{{job.index | lambda x: int(x) + 1}} ...&quot;, file = stderr())
+
+heatmap(mat)
+dev.off()
+&quot;&quot;&quot;
+
+PyPPL({
+    'log': {
+        'levels' : 'basic',
+        'lvldiff': []
+    }
+}).start(pHeatmap).run()
+</code></pre>
+
+<p>You will get something like this in your log:
+<img alt="debugScript.png" src="https://raw.githubusercontent.com/pwwang/PyPPL/master/docs/debugScript.png" /></p>
+<h2 id="switch-runner-profiles">Switch runner profiles</h2>
+<p>See <code>tutorials/siwthcRunnerProfile/</code><br />
+We can define a set of runner profiles in a <code>json</code> file (<code>./profiles.json</code>):</p>
+<pre><code class="json">{
+  &quot;proc&quot;: {
+    &quot;runner&quot;: &quot;local&quot;,
+    &quot;forks&quot; : 1,
+    &quot;sgeRunner&quot;: {
+      &quot;sge.q&quot;: &quot;1-day&quot;
+    } 
+  },
+  &quot;local5&quot;: {
+    &quot;runner&quot;: &quot;local&quot;,
+    &quot;forks&quot;:  5
+  },
+  &quot;sge7days&quot;: {
+    &quot;runner&quot;: &quot;sge&quot;,
+    &quot;sgeRunner&quot;: {
+      &quot;sge.q&quot;: &quot;7-days&quot;
+    }
+  }
+}
+</code></pre>
+
+<p>or you can also use <code>.yaml</code>(<code>pyyaml</code> is required) file:</p>
+<pre><code class="yaml">proc:
+  runner: local
+  forks : 1
+  sgeRunner:
+    sge.q: 1-day
+local5:
+  runner: local
+  forks : 5
+sge7days:
+  runner: local
+  sgeRunner:
+    sge.q: 7-days
+</code></pre>
+
+<p>To switch profile:</p>
+<pre><code class="python"># default profile (proc)
+PyPPL(cfgfile = &quot;./profiles.json&quot;).start(pHeatmap).run()
+# switch to local5 or sge7days:
+# PyPPL(cfgfile = &quot;./profiles.json&quot;).start(pHeatmap).run('local5')
+# PyPPL(cfgfile = &quot;./profiles.json&quot;).start(pHeatmap).run('sge7days')
+
+# You may also use runner name as profile, which means to run using the runner with default options:
+# PyPPL(cfgfile = &quot;./profiles.json&quot;).start(pHeatmap).run('sge') # use 1-day queue
+</code></pre>
+
+<h2 id="draw-the-pipeline-chart">Draw the pipeline chart</h2>
+<p><code>PyPPL</code> can generate the graph in <a href="https://en.wikipedia.org/wiki/DOT_(graph_description_language)">DOT language</a>. </p>
+<pre><code class="python">from pyppl import PyPPL, Proc
+
+p1 = Proc()
+p2 = Proc()
+p3 = Proc()
+p4 = Proc()
+p5 = Proc()
+p6 = Proc()
+p7 = Proc()
+p8 = Proc()
+p9 = Proc()
+&quot;&quot;&quot;
+           p1         p8
+        /      \      /
+     p2           p3
+        \      /
+           p4         p9
+        /      \      /
+     p5          p6 (export)
+        \      /
+          p7 (export)
+&quot;&quot;&quot;
+p2.depends = p1
+p3.depends = p1, p8
+p4.depends = p2, p3
+p4.exdir   = &quot;./export&quot;
+p5.depends = p4
+p6.depends = p4, p9
+p6.exdir   = &quot;./export&quot;
+p7.depends = p5, p6
+p7.exdir   = &quot;./export&quot;
+
+# make sure at least one job is created.
+p1.input = {&quot;in&quot;: [0]}
+p8.input = {&quot;in&quot;: [0]}
+p9.input = {&quot;in&quot;: [0]}
+
+PyPPL().start(p1, p8, p9).flowchart().run()
+</code></pre>
+
+<p><code>drawFlowchart.pyppl.dot</code>:</p>
+<pre><code class="dot">digraph PyPPL {
+    &quot;p8&quot; [color=&quot;#259229&quot; fillcolor=&quot;#ffffff&quot; fontcolor=&quot;#000000&quot; shape=&quot;box&quot; style=&quot;filled&quot;]
+    &quot;p1&quot; [color=&quot;#259229&quot; fillcolor=&quot;#ffffff&quot; fontcolor=&quot;#000000&quot; shape=&quot;box&quot; style=&quot;filled&quot;]
+    &quot;p9&quot; [color=&quot;#259229&quot; fillcolor=&quot;#ffffff&quot; fontcolor=&quot;#000000&quot; shape=&quot;box&quot; style=&quot;filled&quot;]
+    &quot;p7&quot; [color=&quot;#d63125&quot; fillcolor=&quot;#ffffff&quot; fontcolor=&quot;#c71be4&quot; shape=&quot;box&quot; style=&quot;filled&quot;]
+    &quot;p5&quot; [color=&quot;#000000&quot; fillcolor=&quot;#ffffff&quot; fontcolor=&quot;#000000&quot; shape=&quot;box&quot; style=&quot;rounded,filled&quot;]
+    &quot;p4&quot; [color=&quot;#000000&quot; fillcolor=&quot;#ffffff&quot; fontcolor=&quot;#c71be4&quot; shape=&quot;box&quot; style=&quot;rounded,filled&quot;]
+    &quot;p2&quot; [color=&quot;#000000&quot; fillcolor=&quot;#ffffff&quot; fontcolor=&quot;#000000&quot; shape=&quot;box&quot; style=&quot;rounded,filled&quot;]
+    &quot;p3&quot; [color=&quot;#000000&quot; fillcolor=&quot;#ffffff&quot; fontcolor=&quot;#000000&quot; shape=&quot;box&quot; style=&quot;rounded,filled&quot;]
+    &quot;p6&quot; [color=&quot;#000000&quot; fillcolor=&quot;#ffffff&quot; fontcolor=&quot;#c71be4&quot; shape=&quot;box&quot; style=&quot;rounded,filled&quot;]
+    &quot;p2&quot; -&gt; &quot;p4&quot;
+    &quot;p3&quot; -&gt; &quot;p4&quot;
+    &quot;p1&quot; -&gt; &quot;p2&quot;
+    &quot;p1&quot; -&gt; &quot;p3&quot;
+    &quot;p6&quot; -&gt; &quot;p7&quot;
+    &quot;p4&quot; -&gt; &quot;p5&quot;
+    &quot;p4&quot; -&gt; &quot;p6&quot;
+    &quot;p5&quot; -&gt; &quot;p7&quot;
+    &quot;p8&quot; -&gt; &quot;p3&quot;
+    &quot;p9&quot; -&gt; &quot;p6&quot;
+}
+</code></pre>
+
+<p>To generate svg file, you have to have <a href="https://github.com/xflr6/graphviz">graphviz</a> installed.<br />
+<code>drawFlowchart.pyppl.svg</code>:<br />
+<img alt="PyPPL chart" src="https://raw.githubusercontent.com/pwwang/PyPPL/master/docs/drawFlowchart_pyppl.png" /></p>
+<p><strong><em>Enjoy pipelining!!!</em></strong></p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>var base_url = '..';</script>
+        <script src="../js/base.js"></script>
+        <script src="../search/require.js"></script>
+        <script src="../search/search.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&larr;</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&rarr;</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    </body>
+</html>

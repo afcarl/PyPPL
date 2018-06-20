@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Input and output of a process - PyPPL - A Python PiPeLine framework</title>
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="../README/">PyPPL - A Python PiPeLine framework</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="../README/">Introduction</a>
+                    </li>
+                    <li >
+                        <a href="../basic-concepts-and-directory-structure/">Basics and folder structure</a>
+                    </li>
+                    <li >
+                        <a href="../placeholders/">Templating</a>
+                    </li>
+                    <li >
+                        <a href="../channels/">Channels</a>
+                    </li>
+                    <li class="active">
+                        <a href="./">Input and output of a process</a>
+                    </li>
+                    <li >
+                        <a href="../write-your-script/">The heart: script</a>
+                    </li>
+                    <li >
+                        <a href="../export-output-files/">Output file exporting</a>
+                    </li>
+                    <li >
+                        <a href="../caching/">Caching and resuming processes</a>
+                    </li>
+                    <li >
+                        <a href="../runners/">Runners</a>
+                    </li>
+                    <li >
+                        <a href="../set-other-properties-of-a-process/">Other attributes of a process</a>
+                    </li>
+                    <li >
+                        <a href="../configure-your-logs/">Log configuration</a>
+                    </li>
+                    <li >
+                        <a href="../configure-a-pipeline/">Pipeline configuration</a>
+                    </li>
+                    <li >
+                        <a href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
+                    </li>
+                    <li >
+                        <a href="../command-line-argument-parser/">Command line argument parser</a>
+                    </li>
+                    <li >
+                        <a href="../aggregations/">Aggregations</a>
+                    </li>
+                    <li >
+                        <a href="../command-line-tool/">Command line tool</a>
+                    </li>
+                    <li >
+                        <a href="../api/">API</a>
+                    </li>
+                    <li >
+                        <a href="../faq/">FAQ</a>
+                    </li>
+                    <li >
+                        <a href="../change-log/">Change log</a>
+                    </li>
+                </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                    <li >
+                        <a rel="next" href="../channels/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../write-your-script/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#input-and-output-of-a-process">Input and output of a process</a></li>
+            <li><a href="#specify-input-of-a-process">Specify input of a process</a></li>
+            <li><a href="#specify-output-of-a-process">Specify output of a process</a></li>
+            <li><a href="#types-of-input-and-output">Types of input and output</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="input-and-output-of-a-process">Input and output of a process</h1>
+<!-- toc -->
+
+<p>{% raw %}</p>
+<h2 id="specify-input-of-a-process">Specify input of a process</h2>
+<p>The input of a process of basically a <code>dict</code> with keys as the placeholders and the values as the input channels:</p>
+<pre><code class="python">p = Proc()
+p.input = {&quot;ph1&quot;:[1,2,3], &quot;ph2&quot;:[4,5,6]}
+# You can also use combined keys and channels
+# p.input = {&quot;ph1, ph2&quot;: [(1,4), (2,5), (3,6)]}
+</code></pre>
+
+<p>The complete form of an input key is <code>&lt;key&gt;:&lt;type&gt;</code>. The <code>&lt;type&gt;</code> could be <code>var</code>, <code>file</code> (a.k.a <code>path</code>, <code>dir</code> or <code>folder</code>) and <code>files</code> (a.k.a <code>paths</code>, <code>dirs</code> or <code>folders</code>). <strong>A type of <code>var</code> can be omitted.</strong> So <code>{"ph1":[1,2,3], "ph2":[4,5,6]}</code> is the same as <code>{"ph1:var":[1,2,3], "ph2:var":[4,5,6]}</code></p>
+<p>You can also use a <code>str</code> or a <code>list</code> if a process depends on a prior process, it will automatically use the output channel of the prior process, or you want to use the arguments from command line as input channel (in most case for starting processes, which do not depend on any other processes). For example:</p>
+<p>Use output channel of prior process:</p>
+<pre><code class="python">p1 = Proc()
+p1.input  = {&quot;ph1&quot;:[1,2,3], &quot;ph2&quot;:[4,5,6]}
+p1.output = &quot;out1:{{in.ph1}},out2:{{in.ph2}}&quot;
+# same as p.output = [&quot;out1:{{in.ph1}}&quot;, &quot;out2:{{in.ph2}}&quot;]
+p1.script = &quot;# your logic here&quot;
+
+p2 = proc()
+p2.depends = p1
+p2.input   = &quot;in1, in2&quot;  
+# will automatically use output channel of p1
+</code></pre>
+
+<blockquote>
+<p><strong>Caution</strong> the number of input keys should be no more than that of the output from the prior process. Otherwise, there is not enough data for the keys.
+<strong>Note</strong> For output, <code>dict</code> is not supported. As we need the order of the keys and data to be kept when it's being passed on. But you may use <code>OrderedDict</code>.
+<strong>Hint</strong> If you have input keys defined by a string before, for example:
+  <code>python
+  p1.input = "ph1, ph2"</code>
+  You can then specify the input data/channel directly:
+  <code>python
+  p1.input = [(1,4), (2,5), (3,6)]
+  # same as:
+  p1.input  = {"ph1":[1,2,3], "ph2":[4,5,6]}</code>
+  One thing has to be reminded is that, you can do:
+  <code>python
+  p1.input = {"in": "a"}  # same as p1.input = {"in": ["a"]}</code>
+  But you cannot do:
+  <code>python
+  p1.input = "in"
+  p1.input = "a" 
+  # the right way is p.input = ["a"]
+  # because PyPPL will take "a" as the input key instead of data, as it's a string</code></p>
+</blockquote>
+<p>Use <code>sys.argv</code> (see details for <a href="https://pwwang.gitbooks.io/pyppl/content/channels.html#initialize-a-channel"><code>Channel.fromArgv</code></a>):</p>
+<pre><code class="python">p3 = Proc()
+p3.input = &quot;in1&quot;
+# same as p3.input = {&quot;in1&quot;: channel.fromArgv ()}
+# Run the program: &gt; python test.py 1 2 3
+# Then in job#0: {{in.in1}} -&gt; 1
+# Then in job#1: {{in.in1}} -&gt; 2
+# Then in job#2: {{in.in1}} -&gt; 3
+
+p4 = Proc()
+p4.input = &quot;in1, in2&quot;
+# same as p4.input = {&quot;in1, in2&quot;: channel.fromArgv ()}
+# Run the program: python test.py 1,a 2,b 3,c
+# Job#0: {{in.in1}} -&gt; 1, {{in.in2}} -&gt; a
+# Job#1: {{in.in1}} -&gt; 2, {{in.in2}} -&gt; b
+# Job#2: {{in.in1}} -&gt; 3, {{in.in2}} -&gt; c
+</code></pre>
+
+<h3 id="specify-files-as-input">Specify files as input</h3>
+<ul>
+<li>Use a single file:
+  When you specify file as input, you should use <code>file</code> (a.k.a <code>path</code>, <code>dir</code> or <code>folder</code>) flag for the type: 
+  <code>python
+  p.input = {"infile:file": channel.fromPattern("./*.txt")}</code>
+  Then <code>PyPPL</code> will create symbolic links in <code>&lt;workdir&gt;/&lt;job.index&gt;/input/</code>. </li>
+</ul>
+<blockquote>
+<p><strong>Note</strong> The <code>{{in.infile}}</code>
+   will return the path of the link in <code>&lt;indir&gt;</code> pointing to the actual input file. If you want to get the path of the actual path, you may use: 
+  <code>{{ in.infile | readlink }} or {{ in._infile }}</code>
+- Use a list of files:
+  Similar as a single file, but you have to specify it as <code>files</code>:
+  <code>python
+  p.input = {"infiles:files": [channel.fromPattern("./*.txt").flatten()]}</code>
+  Then remember <code>{{in.infiles}}</code> is a list, so is <code>{{in._infiles}}</code>
+- Rename input file links
+  When there are input files (different files) with the same basename, later ones will be renamed in <code>&lt;indir&gt;</code>. For example:
+  <code>python
+  pXXX.input = {
+    "infile1:file": "/path1/to/theSameBasename.txt", 
+    "infile2:file": "/path2/to/theSameBasename.txt"
+  }</code>
+  Remember both files will have symblic links created in <code>&lt;indir&gt;</code>. To avoid <code>infile2</code> being overwritten, the basename of the link will be <code>theSameBasename[1].txt</code>. If you are using built-in template functions to get the filename (<code>{{in.file2 | fn}}</code>), we can still get <code>theSameBasename.txt</code> instead of <code>theSameBasename[1].txt</code>. <code>bn</code>, <code>basename</code>, <code>prefix</code> act similarly.</p>
+</blockquote>
+<h3 id="bring-related-files-to-input-directory">Bring related files to input directory</h3>
+<p>Some programs, for example, mutation calling programs, take bam files as input. However, during the process, they actually need the bam files to be indexed with an index file (.bai), which will not be explicitly specified with program options. Usually, they will try to find the index file according to the path of the bam files. For example, index file <code>tumor.bam.bai</code> for input file <code>tumor.bam</code>. Sometimes, we will generate the index file in advance and put it together with the input file. When you specify the bam files to <code>pyppl</code> process, we will create a link for it in <code>&lt;indir&gt;</code>, but not for the index file (we don't know, right?). If the index file is not found, some programs will try to generate the index file, some will not and just quit. To avoid that, you can use <code>p.brings</code> to bring the index file in.</p>
+<pre><code class="python"># ls /a/b/
+# /a/b/tumor.bam /a/b/tumor.bam.bai
+
+p.input  = {&quot;bamfile:file&quot;: [&quot;/a/b/tumor.bam&quot;]}
+p.brings = {
+  &quot;bamfile&quot;: &quot;{{bamfile | bn}}.bai&quot;
+}
+</code></pre>
+
+<blockquote>
+<p><strong>Note</strong> 
+1. If <code>/a/b/tumor.bam</code> is a symbolic link to <code>/c/d/tumor.bam</code>, the index file <code>/c/d/tumor.bam.bai</code> will also be found.
+2. Multiple files can be brought, so <code>{{bring.bamfile}}</code> and <code>{{bring._bamfile}}</code> always return a list.
+3. A link will be create in <code>&lt;indir&gt;</code>, of which the path can be got by <code>{{bring.bamfile[0]}}</code>. To get the original path of the index file: <code>{{brings._bamfile[0]}}</code>
+4. You can use wildcards to find the files.
+5. You don't need to worry if the link is renamed. <code>{{bamfile | bn}}</code> will still return <code>tumor.bam</code> if the link of it is renamed to <code>tumor[1].bam</code>.
+6. You can bring in multiple files:
+<code>python
+p.brings = {"bamfile": ["{{bamfile | bn}}.bai", "{{bamfile | bn}}.bai2"]}</code></p>
+</blockquote>
+<h3 id="use-callback-to-modify-the-input-channel">Use callback to modify the input channel</h3>
+<p>You can modify the input channel of a process by a callback. For example:</p>
+<pre><code class="python">p1 = Proc()
+p1.input  = {&quot;ph1&quot;:[1,2,3], &quot;ph2&quot;:[4,5,6]}
+p1.output = &quot;out1:{{ph1}},out2:{{ph2}}&quot;
+p1.script = &quot;# your logic here&quot;
+# the output channel is [(1,4), (2,5), (3,6)]
+p2.depends = p1
+p2.input   = {&quot;in1, in2&quot;: lambda ch: ch.slice(1)}  
+# just use the last 2 columns: [(2,5), (3,6)]
+# p1.channel keeps intact
+</code></pre>
+
+<p>You can check more examples in some channel methods: <a href="https://pwwang.gitbooks.io/pyppl/channels.html#expand-a-channel-by-directory">channel.expand</a> and <a href="https://pwwang.gitbooks.io/pyppl/channels.html#collapse-a-channel-by-files-in-a-common-ancestor-directory">channel.collapse</a>.</p>
+<blockquote>
+<p><strong>Caution</strong> If you use callback to modify the channel, you may combine the keys: in the above case <code>"in1, in2": ...</code>, or specify them independently: <code>p2.input = {"in1": lambda ch: ch.slice(1,1), "in2": lambda ch: ch.slice(2)}</code>. But remember, <strong>all channels</strong> from <code>p2.depends</code> will be passed to each callback function. For example:</p>
+</blockquote>
+<pre><code class="python">p2.depends = [p0, p1]
+p2.input   = {&quot;in1&quot;: lambda ch0, ch1: ..., &quot;in2&quot;: labmda ch0, ch1: ...}
+# all channels from p2.depends are passed to each function
+</code></pre>
+
+<h2 id="specify-output-of-a-process">Specify output of a process</h2>
+<p>Different from input, instead of channels, you have to tell <code>PyPPL</code> how to compute the output channel. The output can be a <code>list</code>, <code>str</code> or <code>OrderedDict</code> (<strong>but not a <code>dict</code>, as the order of keys has to be kept</strong>). If it's <code>str</code>, a comma (<code>,</code>) is used to separate different keys:</p>
+<pre><code class="python">p.input  = {&quot;invar&quot;:[1], &quot;infile:file&quot;: [&quot;/a/b/c.txt&quot;]}
+p.output = &quot;outvar:var:{{in.invar}}2, outfile:file:{{in.infile | bn}}2, outdir:dir:{{in.indir | fn}}-dir&quot;
+# The type 'var' is omitted in the first element.
+# The output channel (pXXX.channel) will be:
+# [(&quot;12&quot;, &quot;c.txt2&quot;, &quot;c-dir&quot;)]
+</code></pre>
+
+<p>The output keys are automatically attached to the output channel, so you may use them to access the columns. In previous example:</p>
+<pre><code class="python">p.channel.outvar  == [('12', )]
+p.channel.outfile == [('&lt;outdir&gt;/c.txt2', )]
+p.channel.outdir  == [('&lt;outdir&gt;/c-dir', )]
+</code></pre>
+
+<h2 id="types-of-input-and-output">Types of input and output</h2>
+<p>|Input/Output|Type|Aliases|Behavior|Example-assignment (<code>p.input/output=?</code>)|Example-template-value|
+|------------|----|-------|--------|-------|
+|Input|<code>var</code>|-|Use the value directly|<code>{"in:var": [1]}</code>|<code>{{in.in}} -&gt; 1</code>|
+|Input|<code>file</code>|<code>path</code><br /><code>dir</code><br /><code>folder</code>|Create link in <code>&lt;indir&gt;</code> and assign the original path to <code>in._in</code>|<code>{"in:file": ["/path/to/file"]}</code>|<code>{{in.in}} -&gt; &lt;indir&gt;/file</code><br /><code>{{in._in}} -&gt; /path/to/file</code>|
+|Input|<code>files</code>|<code>paths</code><br /><code>dirs</code><br /><code>folders</code>|Same as <code>file</code> but do for multiple files|<code>{</code><br /><code>"in:files":</code><br /><code>(["/path/to/file1",</code><br /><code>"/path/to/file2"],)</code><br /><code>}</code>|<code>{{in.in</code>&#124;<code>asquote}} -&gt; "&lt;indir&gt;/file1" "&lt;indir&gt;/file2"</code><br /><code>{{in._in</code>&#124;<code>asquote}} -&gt; "/path/to/file1" "/path/to/file2"</code>|
+|Output|<code>var</code>|-|Specify direct value|<code>"out:var:{{job.index}}"</code>|<code>{{out.out}} -&gt; &lt;job.index&gt;</code>|
+|Output|<code>file</code>|<code>path</code>|Just specify the basename, output file will be generated in <code>job.outdir</code>|<code>"out:file:{{in.infile</code>&#124;<code>fn}}.out"</code>|<code>{{out.out}} == &lt;outdir&gt;/&lt;filename of infile&gt;.out</code>|
+|Output|<code>dir</code>|<code>folder</code>|Do the same thing as <code>file</code> but will create the directory|<code>"out:dir:{{in.infile</code>&#124;<code>fn}}-outdir"</code>|<code>{{out.out}} == &lt;outdir&gt;/&lt;filename of infile&gt;-outdir</code> <br />(automatically created)|
+|Output|<code>stdout</code>|-|Link <code>job.stdout</code> file to <code>&lt;outdir&gt;</code>|<code>out:stdout:{{in.infile</code>&#124;<code>fn}}.out</code> | <code>{{out.out}} == &lt;outdir&gt;/&lt;filename of infile&gt;.out</code>|
+|Output|<code>stderr</code>|-|Link <code>job.stderr</code> file to <code>&lt;outdir&gt;</code>|<code>err:stderr:{{in.infile</code>&#124;<code>fn}}.err</code> | <code>{{out.err}} == &lt;outdir&gt;/&lt;filename of infile&gt;.err</code>|</p>
+<p>{% endraw %}</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>var base_url = '..';</script>
+        <script src="../js/base.js"></script>
+        <script src="../search/require.js"></script>
+        <script src="../search/search.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&larr;</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&rarr;</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    </body>
+</html>
