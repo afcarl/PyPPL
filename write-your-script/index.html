@@ -87,6 +87,8 @@
         
             <li><a class="toctree-l3" href="#debug-your-script">Debug your script</a></li>
         
+            <li><a class="toctree-l3" href="#output-stdoutstderr-to-pyppl-logs">Output stdout/stderr to PyPPL logs</a></li>
+        
         </ul>
     
 
@@ -105,7 +107,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../runners/">Runners</a>
+    <a class="" href="../runners/">Runners and running profiles</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../error-handling/">Error handling of processes</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -120,12 +127,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
+    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
 	    </li>
           
             <li class="toctree-l1">
 		
-    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
+    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -196,81 +203,125 @@
 <h2 id="choose-your-language">Choose your language</h2>
 <p>You can either specify the path of interpreter to <code>pXXX.lang</code>. If the interpreter is in <code>$PATH</code>, you can directly give the basename of the interpreter.<br />
 For example, if you have your own perl installed at <code>/home/user/bin/perl</code>, then you need to tell <code>PyPPL</code> where it is: <code>pXXX.lang = "/home/user/bin/perl"</code>. If <code>/home/user/bin</code> is in your <code>$PATH</code>, you can simply do: <code>p.lang = "perl"</code><br />
-You can also use <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a> to specify the interperter:</p>
-<pre><code class="perl">#!/home/usr/bin/perl
-# You perl code goes here
-</code></pre>
-
+You can also use <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a> to specify the interperter:
+<div class="highlight"><pre><span></span><span class="ch">#!/home/usr/bin/perl</span>
+<span class="c1"># You perl code goes here</span>
+</pre></div></p>
 <h2 id="use-script-from-a-file">Use script from a file</h2>
 <p>You can also put the script into a file, and use it with a <code>file:</code> prefix: <code>pXXX.script = "file:/a/b/c.pl"</code>  </p>
-<blockquote>
-<p><strong>Note</strong>: You may also use a relative-path template, which is relative to where <code>pXXX.script</code> is defined. For example: <code>pXXX.script = "file:./scripts/script.py"</code> is defined in <code>/a/b/pipeline.py</code>, then the script file refers to <code>/a/b/scripts/script.py</code></p>
-<p><strong>HINT</strong>: Indents are important in python, when you write your scripts, you have to follow exactly the indents in the script string, for example:</p>
-</blockquote>
-<pre><code class="python">def test():
-    p = Proc()
-    p.lang = &quot;python&quot;
-    p.script = &quot;&quot;&quot;
-import os
-import re
-def somefunc ():
-    pass
-&quot;&quot;&quot;
-</code></pre>
-
-<p>But with <code>'## indent remove ##'</code>, you can do it more elegantly:</p>
-<pre><code class="python">def test():
-    p = proc()
-    p.lang = &quot;python&quot;
-    p.script = &quot;&quot;&quot;
-    # make sure it's not at the beginning of the file
-    ## PYPPL INDENT REMOVE ## 
-    import os
-    import re
-    def somefunc():
-        pass
-    &quot;&quot;&quot;
-</code></pre>
-
-<p>The leading white spaces of line <code>## indent remove ##</code> will be removed for each line (including itself) below it. In this case, the extra <code>&lt;tab&gt;</code> of pass will be kept.<br />
-You may use <code>## indent keep ##</code> to stop removing the white spaces for the following lines.</p>
-<blockquote>
-<p><strong>Caution</strong> <code>## indent remove ##</code> Should not be at the beginning of the file, otherwise the leading spaces will be stripped so we can detect how many spaces should be removed for the following lines.</p>
-</blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You may also use a relative-path template, which is relative to where <code>pXXX.script</code> is defined. For example: <code>pXXX.script = "file:./scripts/script.py"</code> is defined in <code>/a/b/pipeline.py</code>, then the script file refers to <code>/a/b/scripts/script.py</code></p>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Indents are important in python, when you write your scripts, you have to follow exactly the indents in the script string, for example:</p>
+</div>
+<p><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Proc</span><span class="p">()</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">lang</span> <span class="o">=</span> <span class="s2">&quot;python&quot;</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">import os</span>
+<span class="s2">import re</span>
+<span class="s2">def somefunc ():</span>
+<span class="s2">    pass</span>
+<span class="s2">&quot;&quot;&quot;</span>
+</pre></div>
+But with <code>'# PYPPL INDENT REMOVE'</code>, you can do it more elegantly:
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">proc</span><span class="p">()</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">lang</span> <span class="o">=</span> <span class="s2">&quot;python&quot;</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    # make sure it&#39;s not at the beginning of the file</span>
+<span class="s2">    # PYPPL INDENT REMOVE</span>
+<span class="s2">    import os</span>
+<span class="s2">    import re</span>
+<span class="s2">    def somefunc():</span>
+<span class="s2">        pass</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+</pre></div>
+The leading white spaces of line <code># PYPPL INDENT REMOVE</code> will be removed for each line (including itself) below it. In this case, the extra <code>&lt;tab&gt;</code> of pass will be kept.<br />
+You may use <code># PYPPL INDENT KEEP</code> to stop removing the white spaces for the following lines.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p><code># PYPPL INDENT REMOVE</code> Should not be at the beginning of the file, otherwise the leading spaces will be stripped so we can detect how many spaces should be removed for the following lines.</p>
+</div>
 <h2 id="debug-your-script">Debug your script</h2>
 <p>If you need to debug your script, you just need to find the real running script, which is at: <code>&lt;workdir&gt;/&lt;job.index&gt;/job.script</code>. The template is rendered already in the file. You can debug it using the tool according to the language you used for the script.</p>
-<p>You may also add logs to pyppl's main logs on the screen or in log files. To do that, you just need to print you message starting with <code>pyppl.log</code> to STDERR:</p>
-<pre><code class="python"># python
-import sys
-sys.stderr.write('pyppl.log: Something for debug.')
-</code></pre>
+<p>You may also add logs to pyppl's main logs on the screen or in log files. To do that, you just need to print you message starting with <code>pyppl.log</code> to STDERR:
+<div class="highlight"><pre><span></span><span class="c1"># python</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;pyppl.log: Something for debug.&#39;</span><span class="p">)</span>
+</pre></div></p>
+<div class="highlight"><pre><span></span><span class="c1"># bash</span>
+<span class="nb">echo</span> <span class="s2">&quot;pyppl.log: Something for debug.&quot;</span> <span class="m">1</span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+</pre></div>
 
-<pre><code class="bash"># bash
-echo &quot;pyppl.log: Something for debug.&quot; 1&gt;&amp;2
-</code></pre>
-
-<pre><code class="R"># Rscript
-cat(&quot;pyppl.log: Something for debug.&quot;, file = stderr())
-</code></pre>
-
-<p>Either one of the above will have a log message like:</p>
-<pre><code>[2017-01-01 01:01:01][    LOG] Something for debug.
-</code></pre>
-
-<p>You may also use a different log level (flag):</p>
-<pre><code class="python"># python
-import sys
-sys.stderr.write('pyppl.log.flag: Something for debug.')
-</code></pre>
-
-<p>Then the log message will be:</p>
-<pre><code>[2017-01-01 01:01:01][   FLAG] Something for debug.
-</code></pre>
-
-<blockquote>
-<p><strong>NOTE</strong> The level name you specified after <code>pyppl.log</code> does not apply to <a href="https://pwwang.gitbooks.io/pyppl/configure-your-logs.html">normal log filters or themes</a>, because the actual level is <code>_FLAG</code> in this case. So unless you set <code>loglevels</code> to <code>None</code>, it will be anyway printed out. For themes, the color at the empty string key will be used. 
-You can define filters or themes for this kind of logs, just remember the actual level name has an <code>_</code> prefix. See <a href="https://pwwang.gitbooks.io/pyppl/configure-your-logs.html">here</a> to learn how to define filters and themes.</p>
-</blockquote>
+<p><div class="highlight"><pre><span></span><span class="c1"># Rscript</span>
+<span class="kp">cat</span><span class="p">(</span><span class="s">&quot;pyppl.log: Something for debug.&quot;</span><span class="p">,</span> file <span class="o">=</span> <span class="kp">stderr</span><span class="p">())</span>
+</pre></div>
+Either one of the above will have a log message like:
+<div class="highlight"><pre><span></span>[2017-01-01 01:01:01][    LOG] Something for debug.
+</pre></div>
+You may also use a different log level (flag):
+<div class="highlight"><pre><span></span><span class="c1"># python</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;pyppl.log.flag: Something for debug.&#39;</span><span class="p">)</span>
+</pre></div>
+Then the log message will be:
+<div class="highlight"><pre><span></span>[2017-01-01 01:01:01][   FLAG] Something for debug.
+</pre></div></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The level name you specified after <code>pyppl.log</code> does not apply to <a href="https://pwwang.github.io/PyPPL/configure-your-logs.html">normal log filters or themes</a>, because the actual level is <code>_FLAG</code> in this case. So unless you set <code>loglevels</code> to <code>None</code>, it will be anyway printed out. For themes, the color at the empty string key will be used. </p>
+<p>You can define filters or themes for this kind of logs, just remember the actual level name has an <code>_</code> prefix. See <a href="https://pwwang.github.io/PyPPL/configure-your-logs.html">here</a> to learn how to define filters and themes.</p>
+</div>
+<h2 id="output-stdoutstderr-to-pyppl-logs">Output stdout/stderr to PyPPL logs</h2>
+<p>Instead of log some information, you may also choose to output the stdout/stderr from the jobs to the main <code>PyPPL</code> log.</p>
+<p>This is controlled by setting <code>p.echo</code>, which is set to <code>False</code> by default. The full configuration of the value could be:
+<div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;jobs&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="c1"># the jobs that are allowed to output</span>
+    <span class="c1"># the regular expression for each type of output</span>
+    <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;stdout&#39;</span><span class="p">:</span> <span class="sa">r</span><span class="s1">&#39;^STDOUT:&#39;</span><span class="p">,</span> <span class="s1">&#39;stderr&#39;</span><span class="p">:</span> <span class="sa">r</span><span class="s1">&#39;^STDERR&#39;</span><span class="p">}</span> 
+<span class="p">}</span>
+</pre></div>
+But there are also some abbrevations for the setting:</p>
+<table>
+<thead>
+<tr>
+<th>Abbrevation (<code>p.echo = ?</code>)</th>
+<th>Full setting</th>
+<th>Memo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>False</code></td>
+<td><code>False</code></td>
+<td>Disable output</td>
+</tr>
+<tr>
+<td><code>True</code></td>
+<td><code>{'jobs':[0], 'type': {'stderr':None, 'stdout':None}}</code></td>
+<td>Output all stdout/stderr of job #0</td>
+</tr>
+<tr>
+<td><code>'stderr'</code></td>
+<td><code>{'jobs':[0], 'type': {'stderr':None}}</code></td>
+<td>Output all stderr of job #0</td>
+</tr>
+<tr>
+<td><code>{'jobs':0, 'type': 'stdout'}</code></td>
+<td><code>{'jobs':[0], 'type': {'stdout':None}}</code></td>
+<td>Output all stdout of job #0</td>
+</tr>
+<tr>
+<td><code>{'type': {'all': r'^output'}}</code></td>
+<td><code>{ 'jobs': [0], 'type': {'stdout': r'^output', 'stderr': r'^output'} }</code></td>
+<td>Output all lines starting with <code>"output"</code> from stdout/stderr of job #0</td>
+</tr>
+</tbody>
+</table>
               
             </div>
           </div>

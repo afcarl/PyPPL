@@ -89,7 +89,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../runners/">Runners</a>
+    <a class="" href="../runners/">Runners and running profiles</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../error-handling/">Error handling of processes</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -100,11 +105,6 @@
             <li class="toctree-l1">
 		
     <a class="" href="../configure-your-logs/">Log configuration</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
 	    </li>
           
             <li class="toctree-l1 current">
@@ -126,6 +126,11 @@
     
 
     </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -196,116 +201,111 @@
 <p><code>PyPPL</code> will generate a graph in <a href="https://en.wikipedia.org/wiki/DOT_(graph_description_language)">DOT language</a>, according to the process dependencies. 
 You can have multiple <a href="https://en.wikipedia.org/wiki/DOT_(graph_description_language)#Layout_programs">renderers</a> to visualize to graph. A typical one is <a href="https://en.wikipedia.org/wiki/Graphviz">Graphviz</a>. With its python port <a href="https://github.com/xflr6/graphviz/">graphviz</a> installed, you can output the flowchart to an svg figure. </p>
 <h2 id="generate-the-flowchart">Generate the flowchart</h2>
-<p>For example, if we have a pipeline written in <code>pipeline.py</code>:</p>
-<pre><code class="python">from pyppl import PyPPL, Proc
+<p>For example, if we have a pipeline written in <code>pipeline.py</code>:
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyppl</span> <span class="kn">import</span> <span class="n">PyPPL</span><span class="p">,</span> <span class="n">Proc</span>
 
-p1 = Proc()
-p2 = Proc()
-p3 = Proc()
-p4 = Proc()
-p5 = Proc()
-p6 = Proc()
-p7 = Proc()
-p8 = Proc()
-p9 = Proc()
-&quot;&quot;&quot;
-           p1         p8
-        /      \      /
-     p2           p3
-        \      /
-           p4         p9
-        /      \      /
-     p5          p6 (export)
-        \      /
-          p7 (export)
-&quot;&quot;&quot;
-p2.depends = p1
-p3.depends = p1, p8
-p4.depends = p2, p3
-p4.exdir   = &quot;./export&quot;
-p5.depends = p4
-p6.depends = p4, p9
-p6.exdir   = &quot;./export&quot;
-p7.depends = p5, p6
-p7.exdir   = &quot;./export&quot;
+<span class="n">p1</span> <span class="o">=</span> <span class="n">Proc</span><span class="p">()</span>
+<span class="n">p2</span> <span class="o">=</span> <span class="n">Proc</span><span class="p">()</span>
+<span class="n">p3</span> <span class="o">=</span> <span class="n">Proc</span><span class="p">()</span>
+<span class="n">p4</span> <span class="o">=</span> <span class="n">Proc</span><span class="p">()</span>
+<span class="n">p5</span> <span class="o">=</span> <span class="n">Proc</span><span class="p">()</span>
+<span class="n">p6</span> <span class="o">=</span> <span class="n">Proc</span><span class="p">()</span>
+<span class="n">p7</span> <span class="o">=</span> <span class="n">Proc</span><span class="p">()</span>
+<span class="n">p8</span> <span class="o">=</span> <span class="n">Proc</span><span class="p">()</span>
+<span class="n">p9</span> <span class="o">=</span> <span class="n">Proc</span><span class="p">()</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		   p1         p8</span>
+<span class="sd">		/      \      /</span>
+<span class="sd">	 p2           p3</span>
+<span class="sd">		\      /</span>
+<span class="sd">		   p4         p9</span>
+<span class="sd">		/      \      /</span>
+<span class="sd">	 p5          p6 (export)</span>
+<span class="sd">		\      /</span>
+<span class="sd">		  p7 (export)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">p2</span><span class="o">.</span><span class="n">depends</span> <span class="o">=</span> <span class="n">p1</span>
+<span class="n">p3</span><span class="o">.</span><span class="n">depends</span> <span class="o">=</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p8</span>
+<span class="n">p4</span><span class="o">.</span><span class="n">depends</span> <span class="o">=</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span>
+<span class="n">p4</span><span class="o">.</span><span class="n">exdir</span>   <span class="o">=</span> <span class="s2">&quot;./export&quot;</span>
+<span class="n">p5</span><span class="o">.</span><span class="n">depends</span> <span class="o">=</span> <span class="n">p4</span>
+<span class="n">p6</span><span class="o">.</span><span class="n">depends</span> <span class="o">=</span> <span class="n">p4</span><span class="p">,</span> <span class="n">p9</span>
+<span class="n">p6</span><span class="o">.</span><span class="n">exdir</span>   <span class="o">=</span> <span class="s2">&quot;./export&quot;</span>
+<span class="n">p7</span><span class="o">.</span><span class="n">depends</span> <span class="o">=</span> <span class="n">p5</span><span class="p">,</span> <span class="n">p6</span>
+<span class="n">p7</span><span class="o">.</span><span class="n">exdir</span>   <span class="o">=</span> <span class="s2">&quot;./export&quot;</span>
 
-# make sure at least one job is created.
-p1.input = {&quot;in&quot;: [0]}
-p8.input = {&quot;in&quot;: [0]}
-p9.input = {&quot;in&quot;: [0]}
+<span class="c1"># make sure at least one job is created.</span>
+<span class="n">p1</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;in&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">]}</span>
+<span class="n">p8</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;in&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">]}</span>
+<span class="n">p9</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;in&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">]}</span>
 
-PyPPL().star(p1, p8, p9).flowchart().run()
-</code></pre>
-
-<p>You can specify different files to store the dot and svg file:</p>
-<pre><code class="python">pyppl().starts(p1, p8, p9).flowchart(&quot;/another/dot/file&quot;, &quot;/another/svg/file&quot;)
-</code></pre>
-
+<span class="n">PyPPL</span><span class="p">()</span><span class="o">.</span><span class="n">star</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p8</span><span class="p">,</span> <span class="n">p9</span><span class="p">)</span><span class="o">.</span><span class="n">flowchart</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div></p>
+<p>You can specify different files to store the dot and svg file:
+<div class="highlight"><pre><span></span><span class="n">pyppl</span><span class="p">()</span><span class="o">.</span><span class="n">starts</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p8</span><span class="p">,</span> <span class="n">p9</span><span class="p">)</span><span class="o">.</span><span class="n">flowchart</span><span class="p">(</span><span class="s2">&quot;/another/dot/file&quot;</span><span class="p">,</span> <span class="s2">&quot;/another/svg/file&quot;</span><span class="p">)</span>
+</pre></div></p>
 <blockquote>
 <p><strong>Note</strong> The svg file will be only generated if you specify the right command to do it.</p>
 </blockquote>
-<p>For example, if you have <a href="http://www.graphviz.org/">Graphviz</a> installed, you will have <code>dot</code> available to convert the dot file to svg file:</p>
-<pre><code class="python">PyPPL().start(p1, p8, p9).flowchart(
-    &quot;/another/dot/file&quot;, 
-    &quot;/another/svg/file&quot;
-)
-</code></pre>
-
+<p>For example, if you have <a href="http://www.graphviz.org/">Graphviz</a> installed, you will have <code>dot</code> available to convert the dot file to svg file:
+<div class="highlight"><pre><span></span><span class="n">PyPPL</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p8</span><span class="p">,</span> <span class="n">p9</span><span class="p">)</span><span class="o">.</span><span class="n">flowchart</span><span class="p">(</span>
+	<span class="s2">&quot;/another/dot/file&quot;</span><span class="p">,</span> 
+	<span class="s2">&quot;/another/svg/file&quot;</span>
+<span class="p">)</span>
+</pre></div></p>
 <p>The graph (<code>svgfile</code>) will be like:<br />
 <img alt="Pipeline" src="../drawFlowchart_pyppl.png" /></p>
 <p>The green processes are the starting processes; ones with purple text are processes that will export the output files; and nodes in red are the end processes of the pipeline.</p>
 <h2 id="use-the-dark-theme">Use the dark theme</h2>
-<pre><code class="python">PyPPL({
-    'flowchart': {'theme': 'dark'}
-}).star(p1, p8, p9).flowchart().run()
-</code></pre>
-
-<p><img alt="Pipeline-flowchart-dark" src="../drawFlowchart_pyppl_dark.png" /></p>
+<p><div class="highlight"><pre><span></span><span class="n">PyPPL</span><span class="p">({</span>
+	<span class="s1">&#39;_flowchart&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;theme&#39;</span><span class="p">:</span> <span class="s1">&#39;dark&#39;</span><span class="p">}</span>
+<span class="p">})</span><span class="o">.</span><span class="n">star</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p8</span><span class="p">,</span> <span class="n">p9</span><span class="p">)</span><span class="o">.</span><span class="n">flowchart</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+<img alt="Pipeline-flowchart-dark" src="../drawFlowchart_pyppl_dark.png" /></p>
 <h2 id="define-your-own-theme">Define your own theme</h2>
 <p>You just need to define the style for each type of nodes (refer <a href="http://www.graphviz.org/doc/info/shapes.html">DOT node shapes</a> for detailed styles):
-You may also put the definition in the default configuration file (<code>~/.PyPPL.json</code>)</p>
-<pre><code class="python">PyPPL({
-    'flowchart': {
-        'theme': {
-            'base':  {
-                'shape':     'box',
-                'style':     'rounded,filled',
-                'fillcolor': '#555555',
-                'color':     '#ffffff',
-                'fontcolor': '#ffffff',
-            },
-            'start': {
-                'style': 'filled',
-                'color': '#59b95d', # green
-                'penwidth': 2,
-            },
-            'end': {
-                'style': 'filled',
-                'color': '#ea7d75', # red
-                'penwidth': 2,
-            },
-            'export': {
-                'fontcolor': '#db95e6', # purple
-            },
-            'skip': {
-                'fillcolor': '#eaeaea', # gray
-            },
-            'skip+': {
-                'fillcolor': '#e9e9e9', # gray
-            },
-            'resume': {
-                'fillcolor': '#1b5a2d', # light green
-            },
-            'aggr': {
-                'style': 'filled',
-                'color': '#eeeeee', # almost white
-            }
-        }
-    }
-}).star(p1, p8, p9).flowchart().run()
-</code></pre>
-
-<p>Explanations of node types:
+You may also put the definition in the default configuration file (<code>~/.PyPPL.json</code>)
+<div class="highlight"><pre><span></span><span class="n">PyPPL</span><span class="p">({</span>
+	<span class="s1">&#39;_flowchart&#39;</span><span class="p">:</span> <span class="p">{</span>
+		<span class="s1">&#39;theme&#39;</span><span class="p">:</span> <span class="p">{</span>
+			<span class="s1">&#39;base&#39;</span><span class="p">:</span>  <span class="p">{</span>
+				<span class="s1">&#39;shape&#39;</span><span class="p">:</span>     <span class="s1">&#39;box&#39;</span><span class="p">,</span>
+				<span class="s1">&#39;style&#39;</span><span class="p">:</span>     <span class="s1">&#39;rounded,filled&#39;</span><span class="p">,</span>
+				<span class="s1">&#39;fillcolor&#39;</span><span class="p">:</span> <span class="s1">&#39;#555555&#39;</span><span class="p">,</span>
+				<span class="s1">&#39;color&#39;</span><span class="p">:</span>     <span class="s1">&#39;#ffffff&#39;</span><span class="p">,</span>
+				<span class="s1">&#39;fontcolor&#39;</span><span class="p">:</span> <span class="s1">&#39;#ffffff&#39;</span><span class="p">,</span>
+			<span class="p">},</span>
+			<span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="p">{</span>
+				<span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="s1">&#39;filled&#39;</span><span class="p">,</span>
+				<span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;#59b95d&#39;</span><span class="p">,</span> <span class="c1"># green</span>
+				<span class="s1">&#39;penwidth&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+			<span class="p">},</span>
+			<span class="s1">&#39;end&#39;</span><span class="p">:</span> <span class="p">{</span>
+				<span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="s1">&#39;filled&#39;</span><span class="p">,</span>
+				<span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;#ea7d75&#39;</span><span class="p">,</span> <span class="c1"># red</span>
+				<span class="s1">&#39;penwidth&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+			<span class="p">},</span>
+			<span class="s1">&#39;export&#39;</span><span class="p">:</span> <span class="p">{</span>
+				<span class="s1">&#39;fontcolor&#39;</span><span class="p">:</span> <span class="s1">&#39;#db95e6&#39;</span><span class="p">,</span> <span class="c1"># purple</span>
+			<span class="p">},</span>
+			<span class="s1">&#39;skip&#39;</span><span class="p">:</span> <span class="p">{</span>
+				<span class="s1">&#39;fillcolor&#39;</span><span class="p">:</span> <span class="s1">&#39;#eaeaea&#39;</span><span class="p">,</span> <span class="c1"># gray</span>
+			<span class="p">},</span>
+			<span class="s1">&#39;skip+&#39;</span><span class="p">:</span> <span class="p">{</span>
+				<span class="s1">&#39;fillcolor&#39;</span><span class="p">:</span> <span class="s1">&#39;#e9e9e9&#39;</span><span class="p">,</span> <span class="c1"># gray</span>
+			<span class="p">},</span>
+			<span class="s1">&#39;resume&#39;</span><span class="p">:</span> <span class="p">{</span>
+				<span class="s1">&#39;fillcolor&#39;</span><span class="p">:</span> <span class="s1">&#39;#1b5a2d&#39;</span><span class="p">,</span> <span class="c1"># light green</span>
+			<span class="p">},</span>
+			<span class="s1">&#39;aggr&#39;</span><span class="p">:</span> <span class="p">{</span>
+				<span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="s1">&#39;filled&#39;</span><span class="p">,</span>
+				<span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;#eeeeee&#39;</span><span class="p">,</span> <span class="c1"># almost white</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">})</span><span class="o">.</span><span class="n">star</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p8</span><span class="p">,</span> <span class="n">p9</span><span class="p">)</span><span class="o">.</span><span class="n">flowchart</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+Explanations of node types:
 - <code>base</code>: The base node style
 - <code>start</code>: The style for starting processes
 - <code>end</code>: The style for starting processes
@@ -321,10 +321,10 @@ You may also put the definition in the default configuration file (<code>~/.PyPP
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../command-line-argument-parser/" class="btn btn-neutral float-right" title="Command line argument parser">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../configure-a-pipeline/" class="btn btn-neutral float-right" title="Pipeline configuration">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../configure-a-pipeline/" class="btn btn-neutral" title="Pipeline configuration"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../configure-your-logs/" class="btn btn-neutral" title="Log configuration"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -350,10 +350,10 @@ You may also put the definition in the default configuration file (<code>~/.PyPP
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../configure-a-pipeline/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../configure-your-logs/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../command-line-argument-parser/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../configure-a-pipeline/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

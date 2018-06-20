@@ -65,6 +65,8 @@
         
             <li><a class="toctree-l3" href="#folder-structure">Folder structure</a></li>
         
+            <li><a class="toctree-l3" href="#symbols-used-in-this-documentation">Symbols used in this documentation</a></li>
+        
         </ul>
     
 
@@ -103,7 +105,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../runners/">Runners</a>
+    <a class="" href="../runners/">Runners and running profiles</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../error-handling/">Error handling of processes</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -118,12 +125,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
+    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
 	    </li>
           
             <li class="toctree-l1">
 		
-    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
+    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -196,25 +203,26 @@
 The pipeline consists of channels and processes. A process may have many jobs. Each job uses the corresponding elements from the input channel of the process, and generates values for output channel.<br />
 Actually, what you need to do is just specify the first input channel, and then tell <code>PyPPL</code> the dependencies of the processes. The later processes will use the output channel of the processes they depend on. Of course, you can interfere by using functions in the input specification.</p>
 <h2 id="folder-structure">Folder structure</h2>
-<pre><code>./
+<div class="highlight"><pre><span></span>./
 |-- pipeline.py
 `-- workdir/
-    `-- PyPPL.&lt;id&gt;.&lt;tag&gt;.&lt;suffix&gt;/
-        `-- proc.settings
-        `-- &lt;job.index&gt;/
-            |-- input/
-            |-- output/
-            |-- job.cache
-            |-- job.script
-            |-- job.pid
-            |-- job.rc
-            |-- job.stdout
-            |-- job.stderr
-            |-- [job.script.submit]
-            |-- [job.script.local]
-            |-- [job.script.ssh]
-            `-- [job.script.sge]
-</code></pre>
+	`-- PyPPL.&lt;id&gt;.&lt;tag&gt;.&lt;suffix&gt;/
+		|-- lock
+		|-- proc.settings
+		`-- &lt;job.index&gt;/
+			|-- input/
+			|-- output/
+			|-- job.cache
+			|-- job.script
+			|-- job.pid
+			|-- job.rc
+			|-- job.stdout
+			|-- job.stderr
+			|-- [job.script.submit]
+			|-- [job.script.local]
+			|-- [job.script.ssh]
+			`-- [job.script.sge]
+</pre></div>
 
 <table>
 <thead>
@@ -238,12 +246,12 @@ Actually, what you need to do is just specify the first input channel, and then 
 <tr>
 <td><code>proc.settings/</code></td>
 <td>The settings of the process</td>
-<td></td>
+<td>A copy of proc settings</td>
 </tr>
 <tr>
 <td><code>&lt;job.index&gt;/</code></td>
 <td>The job directory</td>
-<td></td>
+<td>Starts with <code>1</code></td>
 </tr>
 <tr>
 <td><code>&lt;job.index&gt;/input/</code></td>
@@ -307,14 +315,17 @@ Actually, what you need to do is just specify the first input channel, and then 
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>Note</strong> You are encouraged to set <code>p.ppldir</code> <strong>BUT NOT</strong> <code>p.workdir</code>, as it contains a unique <code>suffix</code> that is automatically computed.<br />
-<strong>Note</strong> In this documentation:
-- <code>&lt;workdir&gt;</code> refers to <code>./workdir/PyPPL.&lt;id&gt;.&lt;tag&gt;.&lt;suffix&gt;/</code>, 
-- <code>&lt;indir&gt;</code> refers to <code>./workdir/PyPPL.&lt;id&gt;.&lt;tag&gt;.&lt;suffix&gt;/&lt;job.index&gt;/input/</code>
-- <code>&lt;outdir&gt;</code> refers to <code>./workdir/PyPPL.&lt;id&gt;.&lt;tag&gt;.&lt;suffix&gt;/&lt;job.index&gt;/output/</code> 
-- <code>pXXX</code> refers to a process instantiated from <code>pyppl.Proc</code> class.</p>
-</blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You are encouraged to set <code>p.ppldir</code> <strong>BUT NOT</strong> <code>p.workdir</code>, as it contains a unique <code>suffix</code> that is automatically computed.  </p>
+</div>
+<h2 id="symbols-used-in-this-documentation">Symbols used in this documentation</h2>
+<ul>
+<li><code>&lt;workdir&gt;</code> refers to <code>./workdir/PyPPL.&lt;id&gt;.&lt;tag&gt;.&lt;suffix&gt;/</code>,  </li>
+<li><code>&lt;indir&gt;</code> refers to <code>./workdir/PyPPL.&lt;id&gt;.&lt;tag&gt;.&lt;suffix&gt;/&lt;job.index&gt;/input/</code>  </li>
+<li><code>&lt;outdir&gt;</code> refers to <code>./workdir/PyPPL.&lt;id&gt;.&lt;tag&gt;.&lt;suffix&gt;/&lt;job.index&gt;/output/</code>  </li>
+<li><code>pXXX</code> or <code>p</code> refers to a process instantiated from <code>pyppl.Proc</code> class.</li>
+</ul>
               
             </div>
           </div>

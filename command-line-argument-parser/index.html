@@ -89,7 +89,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../runners/">Runners</a>
+    <a class="" href="../runners/">Runners and running profiles</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../error-handling/">Error handling of processes</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -104,12 +109,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
+    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
 	    </li>
           
             <li class="toctree-l1">
 		
-    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
+    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
 	    </li>
           
             <li class="toctree-l1 current">
@@ -198,38 +203,33 @@
 <!-- toc -->
 
 <p>This module is just for your convenience. You are free to use Python's built-in <code>argparse</code> module or just use <code>sys.argv</code>.</p>
-<p>To start with, just import it from <code>PyPPL</code>:</p>
-<pre><code class="python">from pyppl import params
-</code></pre>
-
+<p>To start with, just import it from <code>PyPPL</code>:
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyppl</span> <span class="kn">import</span> <span class="n">params</span>
+</pre></div></p>
 <h2 id="add-an-option">Add an option</h2>
-<pre><code class="python">params.opt = 'a'
-# or
-# params.opt.setValue('a')
-params.opt2.setType(list).setRequired()
+<p><div class="highlight"><pre><span></span><span class="n">params</span><span class="o">.</span><span class="n">opt</span> <span class="o">=</span> <span class="s1">&#39;a&#39;</span>
+<span class="c1"># or</span>
+<span class="c1"># params.opt.setValue(&#39;a&#39;)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">opt2</span><span class="o">.</span><span class="n">setType</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span><span class="o">.</span><span class="n">setRequired</span><span class="p">()</span>
 
-# then don't forget to parse the command line arguments:
-params.parse()
-</code></pre>
-
-<p>Then <code>python pipeline.py --param-opt b --param-opt2 1 2 3</code> will overwrite the value.<br />
+<span class="c1"># then don&#39;t forget to parse the command line arguments:</span>
+<span class="n">params</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
+</pre></div>
+Then <code>python pipeline.py --param-opt b --param-opt2 1 2 3</code> will overwrite the value.<br />
 <code>list</code> option can also be specified as <code>--param-opt2 1 --param-opt2 2 --param-opt2 3</code>
-To use the value:</p>
-<pre><code class="python">var = params.opt.value + '2'
-# var is 'b2'
-var2 = params.opt2.value + [4]
-# var2 is ['1', '2', '3', 4]
-</code></pre>
-
-<p>If you feel annoying using <code>params.xxx.value</code> to have the value of the option, you can convert the <code>params</code> object to a <code>box.Box</code> object (python-box):</p>
-<pre><code class="python">ps = params.toDict()
-</code></pre>
-
-<p>Then you can use <code>params.xxx</code> to get the value directly:</p>
-<pre><code class="python">var = ps.opt + '2'
-var2 = ps.opt2 + [4]
-</code></pre>
-
+To use the value:
+<div class="highlight"><pre><span></span><span class="n">var</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;2&#39;</span>
+<span class="c1"># var is &#39;b2&#39;</span>
+<span class="n">var2</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">opt2</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+<span class="c1"># var2 is [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, 4]</span>
+</pre></div></p>
+<p>If you feel annoying using <code>params.xxx.value</code> to have the value of the option, you can convert the <code>params</code> object to a <code>box.Box</code> object (python-box):
+<div class="highlight"><pre><span></span><span class="n">ps</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">toDict</span><span class="p">()</span>
+</pre></div>
+Then you can use <code>params.xxx</code> to get the value directly:
+<div class="highlight"><pre><span></span><span class="n">var</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">opt</span> <span class="o">+</span> <span class="s1">&#39;2&#39;</span>
+<span class="n">var2</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">opt2</span> <span class="o">+</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+</pre></div></p>
 <h2 id="set-attributes-of-an-option">Set attributes of an option</h2>
 <p>An option has server properties:
 - <code>desc</code>: The description of the option, shows in the help page. Default: <code>''</code>
@@ -238,72 +238,70 @@ var2 = ps.opt2 + [4]
 - <code>type</code>: The type of the option value. Default: <code>str</code>
 - <code>name</code>: The name of the option, then in command line, <code>--param-&lt;name&gt;</code> refers to the option.
 - <code>value</code>: The default value of the option.</p>
-<p>You can either set the value of an option by </p>
-<pre><code class="python">params.opt.required = True
-</code></pre>
-
-<p>or</p>
-<pre><code class="python">params.opt.setRequired(True)
-# params.opt.setDesc('Desctipion')
-# params.opt.setShow(False)
-# params.opt.setType(list)
-# params.opt.setName('opt1')
-# params.opt.setValue([1,2,3])
-# or they can be chained:
-# params.opt.setDesc('Desctipion') \
-#           .setShow(False)        \
-#           .setType(list)         \
-#           .setName('opt1')       \
-#           .setValue([1,2,3])
-</code></pre>
-
-<blockquote>
-<p><strong>NOTE</strong>: About the <code>type</code>:
-- To explicitly specify type of an option, you have to use the type itself, instead of the name of the type. That mean <code>str</code> instead of <code>"str"</code>
-- The type can be implied by: <code>params.opt = []</code> (implies <code>list</code>). But <code>params.opt.setValue('a')</code> or <code>params.opt.value = 1</code> won't change the type, instead, the value will be coerced to the type previously specified/implied.</p>
-</blockquote>
+<p>You can either set the value of an option by 
+<div class="highlight"><pre><span></span><span class="n">params</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+or
+<div class="highlight"><pre><span></span><span class="n">params</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">setRequired</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="c1"># params.opt.setDesc(&#39;Desctipion&#39;)</span>
+<span class="c1"># params.opt.setShow(False)</span>
+<span class="c1"># params.opt.setType(list)</span>
+<span class="c1"># params.opt.setName(&#39;opt1&#39;)</span>
+<span class="c1"># params.opt.setValue([1,2,3])</span>
+<span class="c1"># or they can be chained:</span>
+<span class="c1"># params.opt.setDesc(&#39;Desctipion&#39;) \</span>
+<span class="c1">#           .setShow(False)        \</span>
+<span class="c1">#           .setType(list)         \</span>
+<span class="c1">#           .setName(&#39;opt1&#39;)       \</span>
+<span class="c1">#           .setValue([1,2,3])</span>
+</pre></div></p>
+<div class="admonition note">
+<p class="admonition-title">About the <code>type</code></p>
+<ul>
+<li>To explicitly specify type of an option, you have to use the type itself, instead of the name of the type. That mean <code>str</code> instead of <code>"str"</code></li>
+<li>The type can be implied by: <code>params.opt = []</code> (implies <code>list</code>). But <code>params.opt.setValue('a')</code> or <code>params.opt.value = 1</code> won't change the type, instead, the value will be coerced to the type previously specified/implied.</li>
+</ul>
+</div>
 <h2 id="load-params-from-a-dict">Load params from a dict</h2>
-<p>You can define a <code>dict</code>, and then load it to <code>params</code>:</p>
-<pre><code class="python">d2load = {
-    'p1': 1,
-    'p1.required': True,
-    'p2': [1,2,3],
-    'p2.show': True,
-    'p3': 2.3,
-    'p3.desc': 'The p3 params',
-    'p3.required': True,
-    'p3.show': True
-}
-params.loadDict (d2load)
-# params.p1.value    == 1
-# params.p1.required == True
-# params.p1.show     == False
-# params.p1.type     == int
-# params.p2.value    == [1,2,3]
-# params.p2.required == False
-# params.p2.show     == True
-# params.p2.type     == list
-# params.p3.value    == 2.3
-# params.p3.required == True
-# params.p3.show     == False
-# params.p3.type     == float
-</code></pre>
-
-<p>Note that by default, the options from the <code>dict</code> will be hidden from the help page. If you want to show some of them, just set <code>p2.show = True</code>, or you want to show them all: <code>params.loadDict(d2load, show = True)</code></p>
+<p>You can define a <code>dict</code>, and then load it to <code>params</code>:
+<div class="highlight"><pre><span></span><span class="n">d2load</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;p1&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;p1.required&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="s1">&#39;p2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span>
+    <span class="s1">&#39;p2.show&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="s1">&#39;p3&#39;</span><span class="p">:</span> <span class="mf">2.3</span><span class="p">,</span>
+    <span class="s1">&#39;p3.desc&#39;</span><span class="p">:</span> <span class="s1">&#39;The p3 params&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;p3.required&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="s1">&#39;p3.show&#39;</span><span class="p">:</span> <span class="bp">True</span>
+<span class="p">}</span>
+<span class="n">params</span><span class="o">.</span><span class="n">loadDict</span> <span class="p">(</span><span class="n">d2load</span><span class="p">)</span>
+<span class="c1"># params.p1.value    == 1</span>
+<span class="c1"># params.p1.required == True</span>
+<span class="c1"># params.p1.show     == False</span>
+<span class="c1"># params.p1.type     == int</span>
+<span class="c1"># params.p2.value    == [1,2,3]</span>
+<span class="c1"># params.p2.required == False</span>
+<span class="c1"># params.p2.show     == True</span>
+<span class="c1"># params.p2.type     == list</span>
+<span class="c1"># params.p3.value    == 2.3</span>
+<span class="c1"># params.p3.required == True</span>
+<span class="c1"># params.p3.show     == False</span>
+<span class="c1"># params.p3.type     == float</span>
+</pre></div>
+Note that by default, the options from the <code>dict</code> will be hidden from the help page. If you want to show some of them, just set <code>p2.show = True</code>, or you want to show them all: <code>params.loadDict(d2load, show = True)</code></p>
 <h2 id="load-params-from-a-configuration-file">Load params from a configuration file</h2>
 <p>If the configuration file has a name ending with '.json', then <code>json.load</code> will be used to load the file into a <code>dict</code>, and <code>params.loadDict</code> will be used to load it to <code>params</code></p>
-<p>Else python's <code>ConfigParse</code> will be used. All params in the configuration file should be under one section with whatever name:</p>
-<pre><code class="ini">[Config]
-p1: 1
-p1.required: True
-p2: [1,2,3]
-p2.show: True
-p3: 2.3
-p3.desc = 'The p3 params'
-p3.required: True
-p3.show: True
-</code></pre>
-
+<p>Else python's <code>ConfigParse</code> will be used. All params in the configuration file should be under one section with whatever name:
+<div class="highlight"><pre><span></span><span class="k">[Config]</span>
+<span class="na">p1: 1</span>
+<span class="na">p1.required: True</span>
+<span class="na">p2: [1,2,3]</span>
+<span class="na">p2.show: True</span>
+<span class="na">p3: 2.3</span>
+<span class="na">p3.desc</span> <span class="o">=</span> <span class="s">&#39;The p3 params&#39;</span>
+<span class="na">p3.required: True</span>
+<span class="na">p3.show: True</span>
+</pre></div></p>
 <p>Similarly, you can set the default value for <code>show</code> property by: <code>params.loadCfgfile("params.config", show=True)</code></p>
 <h2 id="set-other-attributes-of-params">Set other attributes of params</h2>
 <ul>
@@ -330,7 +328,7 @@ p3.show: True
         <a href="../aggregations/" class="btn btn-neutral float-right" title="Aggregations">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../draw-flowchart-of-a-pipeline/" class="btn btn-neutral" title="Pipeline flowchart"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../configure-a-pipeline/" class="btn btn-neutral" title="Pipeline configuration"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -356,7 +354,7 @@ p3.show: True
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../draw-flowchart-of-a-pipeline/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../configure-a-pipeline/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
         <span style="margin-left: 15px"><a href="../aggregations/" style="color: #fcfcfc">Next &raquo;</a></span>

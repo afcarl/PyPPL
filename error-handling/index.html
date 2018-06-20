@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>FAQ - PyPPL</title>
+  <title>Error handling of processes - PyPPL</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,9 +17,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "FAQ";
-    var mkdocs_page_input_path = "faq.md";
-    var mkdocs_page_url = "/faq/";
+    var mkdocs_page_name = "Error handling of processes";
+    var mkdocs_page_input_path = "error-handling.md";
+    var mkdocs_page_url = "/error-handling/";
   </script>
   
   <script src="../js/jquery-2.1.1.min.js"></script>
@@ -92,9 +92,21 @@
     <a class="" href="../runners/">Runners and running profiles</a>
 	    </li>
           
-            <li class="toctree-l1">
+            <li class="toctree-l1 current">
 		
-    <a class="" href="../error-handling/">Error handling of processes</a>
+    <a class="current" href="./">Error handling of processes</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#error-handling-of-processes">Error handling of processes</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#set-expectations-of-a-process-results">Set expectations of a process results</a></li>
+        
+        </ul>
+    
+
+    </ul>
 	    </li>
           
             <li class="toctree-l1">
@@ -137,15 +149,9 @@
     <a class="" href="../api/">API</a>
 	    </li>
           
-            <li class="toctree-l1 current">
+            <li class="toctree-l1">
 		
-    <a class="current" href="./">FAQ</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l2"><a href="#faq">FAQ</a></li>
-    
-
-    </ul>
+    <a class="" href="../faq/">FAQ</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -175,7 +181,7 @@
     
       
     
-    <li>FAQ</li>
+    <li>Error handling of processes</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -185,26 +191,22 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="faq">FAQ</h1>
-<p><strong>Q: How should I migrate from 0.8.x?</strong>
-- First letters of class names are capitalized (i.e. <code>proc</code> -&gt; <code>Proc</code>, <code>aggr</code> -&gt; <code>Aggr</code>). Note that previous class <code>pyppl</code> was changed to <code>PyPPL</code>.
-- Default configuration files were changed to <code>~/.PyPPL.json</code> and <code>~/.PyPPL</code>
-- Log configurations were grouped to <code>{"log": {...}}</code> instead of <code>{"logtheme": ..., "loglevels": ...}</code>
-- Flowchart is themeable now: in configuration file: <code>{"flowchart": {...}}</code>
-- Templating enhanced from previous placeholders (Jinja2 supported). See <a href="https://pwwang.gitbooks.io/pyppl/content/placeholders.html">templating</a>
-- Input and output placeholders are now under <code>in</code> and <code>out</code> namespaces, respectively.
-- <code>updateArgs</code> is merged into <code>set</code> for <code>Aggr</code>.
-- Module <code>doct</code> removed, <code>python-box</code> is used instead.</p>
-<p><strong>Q: Do I have to use the variable name as the process id?</strong></p>
-<p>A: No, you can use a different one by <code>pWhatever = Proc (id=pYourId)</code>, or <code>pWhatever = Proc ()</code>, and then change the id by <code>pWhatever.id = 'pYourId'</code></p>
-<p><strong>Q: What's the difference between </strong><code>input</code><strong> and </strong><code>args</code><strong>?</strong></p>
-<p>A: Basically, <code>args</code> are supposed to be arguments shared among all jobs in the process. Files in <code>args</code> are not linked in the <code>job.indir</code> folder.</p>
-<p><strong>Q: Does a </strong><code>Proc</code><strong> remain the same after it's used to construct an </strong><code>Aggr</code><strong>?</strong></p>
-<p>A: No, it will be a copy of the original one. So the original be used somewhere else.</p>
-<p><strong>Q: Can I dry-run a process?</strong>  </p>
-<p>A: Yes, just use the dry  runner: <code>p.runner = "dry"</code>. The runner will just create empty files/directories for output, and skip to run the script.</p>
-<p><strong>Q: Can I disable the logs on the terminal?</strong>  </p>
-<p>A: Yes, just set <code>{"log": {"levels": None}}</code> in pipeline configurations.</p>
+                <h1 id="error-handling-of-processes">Error handling of processes</h1>
+<p>You can ask <code>PyPPL</code> to terminate, retry or ignore a job that fails to run.<br />
+When a job finishes, it should generate a <code>job.rc</code> file containing the return code. When compare with the valid return codes <code>pXXX.rc</code>, the error triggered if it is not in <code>pXXX.rc</code>. <code>pXXX.errhow</code> determines what's next if errors happen. </p>
+<ul>
+<li><code>"terminate"</code>: when errors happen, terminate the entire pipeline</li>
+<li><code>"ignore"</code>: ignore the errors, continuing run the next process</li>
+<li><code>"retry"</code>: re-submit and run the job again. <code>pXXX.errntry</code> defines how many time to retry.</li>
+</ul>
+<h2 id="set-expectations-of-a-process-results">Set expectations of a process results</h2>
+<p>You can use commands to check whether you have expected output. For example:
+<div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">Proc</span> <span class="p">()</span>
+<span class="n">p</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;input&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">}</span>
+<span class="n">p</span><span class="o">.</span><span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;echo {{in.input}}&quot;</span>
+<span class="c1"># check the stdout</span>
+<span class="n">p</span><span class="o">.</span><span class="n">expect</span> <span class="o">=</span> <span class="s2">&quot;grep 1 {{job.outfile}}&quot;</span>
+</pre></div></p>
               
             </div>
           </div>
@@ -212,10 +214,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../change-log/" class="btn btn-neutral float-right" title="Change log">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../set-other-properties-of-a-process/" class="btn btn-neutral float-right" title="Other attributes of a process">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../api/" class="btn btn-neutral" title="API"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../runners/" class="btn btn-neutral" title="Runners and running profiles"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -241,10 +243,10 @@
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../api/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../runners/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../change-log/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../set-other-properties-of-a-process/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

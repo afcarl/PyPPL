@@ -89,7 +89,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../runners/">Runners</a>
+    <a class="" href="../runners/">Runners and running profiles</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../error-handling/">Error handling of processes</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -104,12 +109,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
+    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
 	    </li>
           
             <li class="toctree-l1">
 		
-    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
+    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -194,47 +199,47 @@
 <!-- toc -->
 
 <p>When you are debuggin a processes, specially when you are modify input, output and script, the suffix a process will change. Then there will be several <code>&lt;workdir&gt;</code> created in <code>&lt;ppldir&gt;</code>. The command line tool helps to maintain and clean up the <code>&lt;workdir&gt;</code>s</p>
-<pre><code class="bash">&gt; bin/pyppl --help
-usage: pyppl [-h] [-w WORKDIR] {clean,list,compare} ...
+<div class="highlight"><pre><span></span>&gt; bin/pyppl --help
+usage: pyppl <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-w WORKDIR<span class="o">]</span> <span class="o">{</span>clean,list,compare<span class="o">}</span> ...
 
-A set of CLI tools for pyppl.
+A <span class="nb">set</span> of CLI tools <span class="k">for</span> pyppl.
 
 positional arguments:
-  {clean,list,compare}
+  <span class="o">{</span>clean,list,compare<span class="o">}</span>
     clean               Clean a workdir
     list                List the status of a workdir
     compare             Compare the settings of two processes.
 
 optional arguments:
-  -h, --help            show this help message and exit
+  -h, --help            show this <span class="nb">help</span> message and <span class="nb">exit</span>
   -w WORKDIR, --workdir WORKDIR
                         The path of workdir, default: ./workdir
-</code></pre>
+</pre></div>
 
 <p><code>pyppl</code> has a common option <code>-w</code> or <code>--workdir</code> to specify the work directory with the  processes you want to list, clean or compare. By default, it looks at the processes in <code>./workdir</code></p>
 <h2 id="list-processes">List processes</h2>
-<p><img alt="pyppl-cli" src="https://raw.githubusercontent.com/pwwang/pyppl/master/docs/pyppl-cli-list.png" /></p>
+<p><img alt="pyppl-cli" src="../pyppl-cli-list.png" /></p>
 <p><code>pyppl list</code> command will list the processes in<code>./workdir</code>. It will group the processes with same <code>id</code> and <code>tag</code>, and compare their time start to run. The latest one will show at the first place, follows the second latest, ... If a <code>proc.settings</code> cannot be found in the process directory, it will be shown in red.</p>
 <h2 id="clean-processes">Clean processes</h2>
 <p><img alt="pyppl-clean" src="https://raw.githubusercontent.com/pwwang/pyppl/master/docs/pyppl-cli-clean.png" /></p>
 <p><code>pyppl list</code> command will ask whether you want to remove the process directory for the older processes with the same <code>id</code> and <code>tag</code>.</p>
 <p>You can remove all those older process directories without confirmation by <code>pyppl clean --force</code></p>
-<blockquote>
-<p><strong>CAUTION</strong> Be careful when you have multiple pipelines in <code>./workdir</code>. 
-For a single pipeline, it does allow you have processes with same <code>id</code> and <code>tag</code>. However, for multiple pipelines, you may have. And if the two processes have the same <code>ppldir</code> (i.e. <code>./workdir</code>), they will have directories with the same <code>id</code> and <code>tag</code>, but different <code>suffix</code>. In this case, if you use <code>pyppl clean --force</code>, it will only try to keep only the latest one.
-So the best way is to set different tags for the processes with same ids in different pipelines.
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>Be careful when you have multiple pipelines in <code>./workdir</code>. </p>
+<p>For a single pipeline, it does allow you have processes with same <code>id</code> and <code>tag</code>. However, for multiple pipelines, you may have. And if the two processes have the same <code>ppldir</code> (i.e. <code>./workdir</code>), they will have directories with the same <code>id</code> and <code>tag</code>, but different <code>suffix</code>. In this case, if you use <code>pyppl clean --force</code>, it will only try to keep only the latest one.</p>
+<p>So the best way is to set different tags for the processes with same ids in different pipelines.
 Or you can do it without <code>--force</code> and keep the ones you want.</p>
-</blockquote>
+</div>
 <h2 id="compare-the-settings-of-two-pipeines">Compare the settings of two pipeines</h2>
 <p><img alt="pyppl-compare" src="https://raw.githubusercontent.com/pwwang/pyppl/master/docs/pyppl-cli-compare.png" /></p>
 <p><code>pyppl compare</code> uses python's <code>difflib</code> to compare the <code>proc.settings</code> files in the directories of two processes. it can take a process group name (i.e. <code>-p pSort.notag</code>, in this case, actually, the tag can be omitted if it is <code>notag</code>, so you can use <code>-p pSort</code>) to compare the top 2 latest processes or two process names with suffices (i.e. <code>-p1 pSort.notag.4HIhyVbp -p2 pSort.notag.7hNBe2uT</code>. </p>
-<p>You can also specify the direct path of process groups/directories:</p>
-<pre><code class="sh">pyppl -p ./workdir/PyPPL.pSort.notag 
-# or mixed
+<p>You can also specify the direct path of process groups/directories:
+<div class="highlight"><pre><span></span>pyppl -p ./workdir/PyPPL.pSort.notag 
+<span class="c1"># or mixed</span>
 pyppl -p1 ./workdir/PyPPL.pSort.notag.4HIhyVbp -p2 pSort.notag.7hNBe2uT 
-</code></pre>
-
-<p>The direct path will ignore the <code>workdir</code> specified by <code>-w</code>.  </p>
+</pre></div>
+The direct path will ignore the <code>workdir</code> specified by <code>-w</code>.  </p>
               
             </div>
           </div>

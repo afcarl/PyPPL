@@ -89,7 +89,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../runners/">Runners</a>
+    <a class="" href="../runners/">Runners and running profiles</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../error-handling/">Error handling of processes</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -102,30 +107,26 @@
     <a class="" href="../configure-your-logs/">Log configuration</a>
 	    </li>
           
+            <li class="toctree-l1">
+		
+    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
+	    </li>
+          
             <li class="toctree-l1 current">
 		
     <a class="current" href="./">Pipeline configuration</a>
     <ul class="subnav">
             
-    <li class="toctree-l2"><a href="#configure-your-pipeline">Configure your pipeline</a></li>
+    <li class="toctree-l2"><a href="#full-pipeline-configuration">Full pipeline configuration</a></li>
     
         <ul>
         
-            <li><a class="toctree-l3" href="#use-a-configuration-file">Use a configuration file</a></li>
-        
             <li><a class="toctree-l3" href="#priority-of-configuration-options">Priority of configuration options</a></li>
-        
-            <li><a class="toctree-l3" href="#starting-processes">Starting processes</a></li>
         
         </ul>
     
 
     </ul>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -190,80 +191,68 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="configure-your-pipeline">Configure your pipeline</h1>
-<!-- toc -->
-
-<p>{% raw %}
-To configure your pipeline, you just pass the configurations (a <code>dict</code>) to the constructor:</p>
-<pre><code class="python">ppl = PyPPL(config)
-</code></pre>
-
-<p>Here is the full structure of the configurations (<strong><code>yaml</code> configuration file is also supported since <code>0.9.4</code></strong>):</p>
-<pre><code class="json">{
-    &quot;log&quot;: {
-        &quot;levels&quot;: &quot;basic&quot;,  // the log levels
-        &quot;theme&quot;: true,    // use colored log information
-        &quot;lvldiff&quot;: [&quot;+DEBUG&quot;],  // modify the loglevels group
-        &quot;file&quot;: false,    // disable logfile, or specify a different logfile
-    },
-    &quot;flowchart&quot;: {
-        &quot;theme&quot;: &quot;default&quot;,
-        &quot;dot&quot;: &quot;dot -Tsvg {{dotfile}} -o {{fcfile}}&quot;
-    },
-    &quot;proc&quot;: {            // shared configuration of processes
-        &quot;forks&quot;: 10,
-        &quot;runner&quot;: &quot;sge&quot;,
-        &quot;sgeRunner&quot;: {
-            // sge options
-        }
-    },
-    &quot;profile1&quot; : {
-        &quot;forks&quot;: 20,
-        &quot;runner&quot;: &quot;ssh&quot;,
-        &quot;sshRunner&quot;: {
-            // ssh options
-        }
-    },
-    &quot;profile2&quot;: {...},
-    &quot;profile3&quot;: {...},
-    ...
-}
-</code></pre>
-
-<ul>
-<li>For log configuration please refer to <a href="https://pwwang.gitbooks.io/pyppl/configure-your-logs.html">configure your logs</a></li>
-<li>For flowchart configuration please refer to <a href="https://pwwang.gitbooks.io/pyppl/draw-flowchart-of-a-pipeline.html">pipeline flowchart</a></li>
-<li><code>proc</code> defines the base running profile for processes in this pipeline. <a href="https://pwwang.gitbooks.io/pyppl/content/set-other-properties-of-a-process.html">All the properties</a> of a process can be set here, but just some common one are recommended. Obviously, <code>input</code> is not suitable to be set here, except some extreme cases.</li>
-<li><code>profiles</code> defines some profiles that may be shared by the processes. To use a profile, just specify the profile name to <code>run</code>: <code>PyPPL(config).start(process).run(&lt;profile&gt;)</code>.</li>
-</ul>
-<blockquote>
-<p><strong>Info</strong> Settings for <code>profiles</code> are actually the same as for <code>proc</code>. They just make you easy to switch the profiles back and forth. For example, you want to run with sge runner this time, but ssh runner next time, what you need to do is just change from <code>...run("profile_sge")</code> to <code>...run("profile_ssh")</code>
-<strong>Note</strong> You may also use the runner name as a profile. That means, following profiles are implied in the configuration:</p>
-</blockquote>
-<pre><code class="json">{
-    &quot;sge&quot;  : {&quot;runner&quot;: &quot;sge&quot;},
-    &quot;ssh&quot;  : {&quot;runner&quot;: &quot;ssh&quot;},
-    &quot;slurm&quot;: {&quot;runner&quot;: &quot;slurm&quot;},
-    &quot;local&quot;: {&quot;runner&quot;: &quot;local&quot;},
-    &quot;dry&quot;  : {&quot;runner&quot;: &quot;dry&quot;},
-}
-</code></pre>
-
-<blockquote>
-<p><strong>Caution</strong> You cannot define profiles with names <code>flowchart</code> and <code>log</code></p>
-</blockquote>
-<h2 id="use-a-configuration-file">Use a configuration file</h2>
-<p><code>PyPPL</code> will look for configuration files at <code>~/.PyPPL</code> and <code>~/.PyPPL.json</code> if both or either of them exist. If both of them exist, <code>~/.PyPPL.json</code> has higher priority, which means the options will be overwritten in <code>~/.PyPPL</code> by those in <code>~/.PyPPL.json</code>. But to avoid confusion, you'd better just use either of them.</p>
-<p>You can also use another configuration file explictly (say, <code>/a/b/pyppl.config.json</code>), and then specify it to <code>PyPPL</code> constructor:</p>
-<pre><code class="python">PyPPL({}, &quot;/a/b/pyppl.config.json&quot;)
-# or 
-PyPPL (cfgfile = &quot;/a/b/pyppl.config.json&quot;)
-</code></pre>
-
-<p>In this case, <code>/a/b/pyppl.config.json</code> has the highest priority of all configuration files.
-All other options will be inherited from <code>~/.PyPPL.json</code> and them <code>~/.PyPPL</code>.</p>
+                <h1 id="full-pipeline-configuration">Full pipeline configuration</h1>
+<p>To configure your pipeline, you just pass the configurations (a <code>dict</code>) to the constructor:
+<div class="highlight"><pre><span></span><span class="n">ppl</span> <span class="o">=</span> <span class="n">PyPPL</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+Here is the full structure of the configurations (<strong><code>yaml</code> configuration file is also supported since <code>0.9.4</code></strong>):
+<div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;_log&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;basic&quot;</span><span class="p">,</span>  <span class="err">//</span> <span class="err">the</span> <span class="err">log</span> <span class="err">levels</span>
+        <span class="nt">&quot;theme&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>    <span class="err">//</span> <span class="err">use</span> <span class="err">colored</span> <span class="err">log</span> <span class="err">information</span>
+        <span class="nt">&quot;lvldiff&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;+DEBUG&quot;</span><span class="p">],</span>  <span class="err">//</span> <span class="err">modify</span> <span class="err">the</span> <span class="err">loglevels</span> <span class="err">group</span>
+        <span class="nt">&quot;file&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>    <span class="err">//</span> <span class="err">disable</span> <span class="err">logfile,</span> <span class="err">or</span> <span class="err">specify</span> <span class="err">a</span> <span class="err">different</span> <span class="err">logfile</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;_flowchart&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;theme&quot;</span><span class="p">:</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;dot&quot;</span><span class="p">:</span> <span class="s2">&quot;dot -Tsvg {{dotfile}} -o {{fcfile}}&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;proc&quot;</span><span class="p">:</span> <span class="p">{</span>            <span class="err">//</span> <span class="err">shared</span> <span class="err">configuration</span> <span class="err">of</span> <span class="err">processes</span>
+        <span class="nt">&quot;forks&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="nt">&quot;runner&quot;</span><span class="p">:</span> <span class="s2">&quot;sge&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;sgeRunner&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="err">//</span> <span class="err">sge</span> <span class="err">options</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;profile1&quot;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;forks&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="nt">&quot;runner&quot;</span><span class="p">:</span> <span class="s2">&quot;ssh&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;sshRunner&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="err">//</span> <span class="err">ssh</span> <span class="err">options</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;profile2&quot;</span><span class="p">:</span> <span class="p">{</span><span class="err">...</span><span class="p">},</span>
+    <span class="nt">&quot;profile3&quot;</span><span class="p">:</span> <span class="p">{</span><span class="err">...</span><span class="p">},</span>
+    <span class="err">...</span>
+<span class="p">}</span>
+</pre></div>
+- For log configuration please refer to <a href="https://pwwang.github.io/PyPPL/configure-your-logs.html">configure your logs</a>
+- For flowchart configuration please refer to <a href="https://pwwang.github.io/PyPPL/draw-flowchart-of-a-pipeline.html">pipeline flowchart</a>
+- <code>proc</code> defines the base running profile for processes in this pipeline. <a href="https://pwwang.github.io/PyPPL/content/set-other-properties-of-a-process.html">All the properties</a> of a process can be set here, but just some common one are recommended. Obviously, <code>input</code> is not suitable to be set here, except some extreme cases.
+- <code>profiles</code> defines some profiles that may be shared by the processes. To use a profile, just specify the profile name to <code>run</code>: <code>PyPPL(config).start(process).run(&lt;profile&gt;)</code>.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Settings for <code>profiles</code> are actually the same as for <code>proc</code>. They just make you easy to switch the profiles back and forth. For example, you want to run with sge runner this time, but ssh runner next time, what you need to do is just change from <code>...run("profile_sge")</code> to <code>...run("profile_ssh")</code></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You may also use the runner name as a profile. That means, following profiles are implied in the configuration:
+<div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;sge&quot;</span>  <span class="p">:</span> <span class="p">{</span><span class="nt">&quot;runner&quot;</span><span class="p">:</span> <span class="s2">&quot;sge&quot;</span><span class="p">},</span>
+    <span class="nt">&quot;ssh&quot;</span>  <span class="p">:</span> <span class="p">{</span><span class="nt">&quot;runner&quot;</span><span class="p">:</span> <span class="s2">&quot;ssh&quot;</span><span class="p">},</span>
+    <span class="nt">&quot;slurm&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;runner&quot;</span><span class="p">:</span> <span class="s2">&quot;slurm&quot;</span><span class="p">},</span>
+    <span class="nt">&quot;local&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;runner&quot;</span><span class="p">:</span> <span class="s2">&quot;local&quot;</span><span class="p">},</span>
+    <span class="nt">&quot;dry&quot;</span>  <span class="p">:</span> <span class="p">{</span><span class="nt">&quot;runner&quot;</span><span class="p">:</span> <span class="s2">&quot;dry&quot;</span><span class="p">},</span>
+<span class="p">}</span>
+</pre></div></p>
+</div>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>You cannot define profiles with names <code>flowchart</code> and <code>log</code></p>
+</div>
 <h2 id="priority-of-configuration-options">Priority of configuration options</h2>
-<p>Now you have 3 ways to set attributes for a process: 
+<p>See <a href="https://pwwang.github.io/PyPPL/runners/#defining-running-profiles">here</a> for use of configuration files.<br />
+Now you have 3 ways to set attributes for a process: 
 - directly set the process attributes <em>(1)</em>, 
 - set in the first argument (<code>config</code>) of <code>PyPPL</code> constructor <em>(2)</em>, 
 - set in a configuration file <code>/a/b/pyppl.config.json</code> <em>(3)</em>,
@@ -272,59 +261,44 @@ All other options will be inherited from <code>~/.PyPPL.json</code> and them <co
 <p><strong>The priority is: (1) &gt; (2) &gt; (3) &gt; (4) &gt; (5).</strong>
 Once you set the property of the process, it will never be changed by <code>PyPPL</code> constructor or the configuration file. But the first argument can overwrite the options in configuration files.
 Here are an examples to illustrate the priority:</p>
-<p><strong> Example 1:</strong></p>
-<pre><code class="python"># ~/.PyPPL.json
-&quot;&quot;&quot;
-{
-    &quot;proc&quot;: {&quot;forks&quot;: 5}
-}
-&quot;&quot;&quot;
+<p><strong> Example 1:</strong>
+<div class="highlight"><pre><span></span><span class="c1"># ~/.PyPPL.json</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">{</span>
+<span class="sd">    &quot;proc&quot;: {&quot;forks&quot;: 5}</span>
+<span class="sd">}</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
-p = Proc()
-p.forks = 1
+<span class="n">p</span> <span class="o">=</span> <span class="n">Proc</span><span class="p">()</span>
+<span class="n">p</span><span class="o">.</span><span class="n">forks</span> <span class="o">=</span> <span class="mi">1</span>
 
-ppl = PyPPL({&quot;proc&quot;: {forks: 10}})
+<span class="n">ppl</span> <span class="o">=</span> <span class="n">PyPPL</span><span class="p">({</span><span class="s2">&quot;proc&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">forks</span><span class="p">:</span> <span class="mi">10</span><span class="p">}})</span>
 
-# p.forks == 1
-</code></pre>
+<span class="c1"># p.forks == 1</span>
+</pre></div>
+<strong> Example 2:</strong>
+<div class="highlight"><pre><span></span><span class="c1"># we also have ~/.PyPPL.json as previous example</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">Proc</span><span class="p">()</span>
 
-<p><strong> Example 2:</strong></p>
-<pre><code class="python"># we also have ~/.PyPPL.json as previous example
-p = Proc()
+<span class="n">ppl</span> <span class="o">=</span> <span class="n">PyPPL</span><span class="p">({</span><span class="s2">&quot;proc&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">forks</span><span class="p">:</span> <span class="mi">10</span><span class="p">}})</span>
 
-ppl = PyPPL({&quot;proc&quot;: {forks: 10}})
+<span class="c1"># p.forks == 10</span>
+</pre></div>
+<strong> Example 3:</strong>
+<div class="highlight"><pre><span></span><span class="c1"># we also have ~/.PyPPL.json as previous example</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">Proc</span><span class="p">()</span>
 
-# p.forks == 10
-</code></pre>
+<span class="n">ppl</span> <span class="o">=</span> <span class="n">PyPPL</span><span class="p">()</span>
 
-<p><strong> Example 3:</strong></p>
-<pre><code class="python"># we also have ~/.PyPPL.json as previous example
-p = Proc()
-
-ppl = PyPPL()
-
-# p.forks == 5
-</code></pre>
-
-<h2 id="starting-processes">Starting processes</h2>
-<p>It's very easy to set the starting processes of the pipeline, just pass them to <code>start</code> function. A pipeline can have multiple starting processes:</p>
-<pre><code class="python">PyPPL().start(p1,p2,p3).run()
-</code></pre>
-
-<p>You may also use a common id to set a set of processes:</p>
-<pre><code class="python">p1 = Proc(newid = 'p', tag = '1st')
-p2 = Proc(newid = 'p', tag = '2nd')
-p3 = Proc(newid = 'p', tag = '3rd')
-# all p1, p2, p3 will be starting processes
-PyPPL().start('p').run()
-</code></pre>
-
-<blockquote>
-<p><strong>Caution</strong> 
-1. If a process is depending on other processes, you are not supposed to set it as starting process. Of course you can, but make sure the input channel can be normally constructed.
-2. If a process is not depending on any other processes, you have to set it as starting process. Otherwise, it won't start to run.</p>
-</blockquote>
-<p>{% endraw %}</p>
+<span class="c1"># p.forks == 5</span>
+</pre></div></p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<ol>
+<li>If a process is depending on other processes, you are not supposed to set it as starting process. Of course you can, but make sure the input channel can be normally constructed.</li>
+<li>If a process is not depending on any other processes, you have to set it as starting process. Otherwise, it won't start to run.</li>
+</ol>
+</div>
               
             </div>
           </div>
@@ -332,10 +306,10 @@ PyPPL().start('p').run()
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../draw-flowchart-of-a-pipeline/" class="btn btn-neutral float-right" title="Pipeline flowchart">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../command-line-argument-parser/" class="btn btn-neutral float-right" title="Command line argument parser">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../configure-your-logs/" class="btn btn-neutral" title="Log configuration"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../draw-flowchart-of-a-pipeline/" class="btn btn-neutral" title="Pipeline flowchart"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -361,10 +335,10 @@ PyPPL().start('p').run()
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../configure-your-logs/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../draw-flowchart-of-a-pipeline/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../draw-flowchart-of-a-pipeline/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../command-line-argument-parser/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

@@ -89,7 +89,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../runners/">Runners</a>
+    <a class="" href="../runners/">Runners and running profiles</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../error-handling/">Error handling of processes</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -104,12 +109,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
+    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
 	    </li>
           
             <li class="toctree-l1">
 		
-    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
+    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -201,121 +206,118 @@
 
 <p>Imagine that you have a set of processes predefined, and every time when you deal with similar problems (i.e. format a file and plot the data or some next generation sequencing data analysis), you will consistently use those processes, then you have to configure and call them every time. </p>
 <p>Aggregations are designed for this kind of situations, you can just define an aggregations with those processes, and adjust the dependencies, input and arguments, you will be able to re-use the aggregation with very less configuration.</p>
-<p>For example:</p>
-<pre><code class="python">pTrimmomaticPE.input             = &lt;input channel&gt;
-pAlignPEByBWA.depends            = pTrimmomaticPE
-pSortSam.depends                 = pAlignPEByBWA
-pMarkDuplicates.depends          = pSortSam
-pIndexBam.depends                = pMarkDuplicates
-pRealignerTargetCreator.depends  = pIndexBam
-pIndelRealigner.depends          = pIndexBam, pRealignerTargetCreator
-pBaseRecalibrator.depends        = pIndelRealigner
-pPrintReads.depends              = pIndelRealigner, pBaseRecalibrator
-pPrintReads.exportdir            = exdir
+<p>For example:
+<div class="highlight"><pre><span></span><span class="n">pTrimmomaticPE</span><span class="o">.</span><span class="n">input</span>             <span class="o">=</span> <span class="o">&lt;</span><span class="nb">input</span> <span class="n">channel</span><span class="o">&gt;</span>
+<span class="n">pAlignPEByBWA</span><span class="o">.</span><span class="n">depends</span>            <span class="o">=</span> <span class="n">pTrimmomaticPE</span>
+<span class="n">pSortSam</span><span class="o">.</span><span class="n">depends</span>                 <span class="o">=</span> <span class="n">pAlignPEByBWA</span>
+<span class="n">pMarkDuplicates</span><span class="o">.</span><span class="n">depends</span>          <span class="o">=</span> <span class="n">pSortSam</span>
+<span class="n">pIndexBam</span><span class="o">.</span><span class="n">depends</span>                <span class="o">=</span> <span class="n">pMarkDuplicates</span>
+<span class="n">pRealignerTargetCreator</span><span class="o">.</span><span class="n">depends</span>  <span class="o">=</span> <span class="n">pIndexBam</span>
+<span class="n">pIndelRealigner</span><span class="o">.</span><span class="n">depends</span>          <span class="o">=</span> <span class="n">pIndexBam</span><span class="p">,</span> <span class="n">pRealignerTargetCreator</span>
+<span class="n">pBaseRecalibrator</span><span class="o">.</span><span class="n">depends</span>        <span class="o">=</span> <span class="n">pIndelRealigner</span>
+<span class="n">pPrintReads</span><span class="o">.</span><span class="n">depends</span>              <span class="o">=</span> <span class="n">pIndelRealigner</span><span class="p">,</span> <span class="n">pBaseRecalibrator</span>
+<span class="n">pPrintReads</span><span class="o">.</span><span class="n">exportdir</span>            <span class="o">=</span> <span class="n">exdir</span>
 
-pMarkDuplicates.args.params.tmpdir   = &quot;/local2/tmp/&quot;
-pAlignPEByBWA.args.reffile           = reffile
-pRealignerTargetCreator.args.reffile = reffile
-pRealignerTargetCreator.args.params.tmpdir='/local2/tmp/'
-pIndelRealigner.args.reffile         = reffile
-pIndelRealigner.args.params.tmpdir   = '/local2/tmp/'
-pBaseRecalibrator.args.reffile       = reffile
-pBaseRecalibrator.args.knownSites    = dbsnp
-pBaseRecalibrator.args.params.tmpdir ='/local2/tmp/'
-pPrintReads.args.reffile             = reffile
-pPrintReads.args.params              = '/local2/tmp/'
+<span class="n">pMarkDuplicates</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">tmpdir</span>   <span class="o">=</span> <span class="s2">&quot;/local2/tmp/&quot;</span>
+<span class="n">pAlignPEByBWA</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">reffile</span>           <span class="o">=</span> <span class="n">reffile</span>
+<span class="n">pRealignerTargetCreator</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">reffile</span> <span class="o">=</span> <span class="n">reffile</span>
+<span class="n">pRealignerTargetCreator</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">tmpdir</span><span class="o">=</span><span class="s1">&#39;/local2/tmp/&#39;</span>
+<span class="n">pIndelRealigner</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">reffile</span>         <span class="o">=</span> <span class="n">reffile</span>
+<span class="n">pIndelRealigner</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">tmpdir</span>   <span class="o">=</span> <span class="s1">&#39;/local2/tmp/&#39;</span>
+<span class="n">pBaseRecalibrator</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">reffile</span>       <span class="o">=</span> <span class="n">reffile</span>
+<span class="n">pBaseRecalibrator</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">knownSites</span>    <span class="o">=</span> <span class="n">dbsnp</span>
+<span class="n">pBaseRecalibrator</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span><span class="s1">&#39;/local2/tmp/&#39;</span>
+<span class="n">pPrintReads</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">reffile</span>             <span class="o">=</span> <span class="n">reffile</span>
+<span class="n">pPrintReads</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">params</span>              <span class="o">=</span> <span class="s1">&#39;/local2/tmp/&#39;</span>
 
-PyPPL({
-    'proc': {
-        'forks': 100,
-        'runner': 'sge',
-        'sgeRunner': {
-            'sge.q': 'lg-mem'
-        }
-    }
-}).start(pTrimmomaticPE).run()
-</code></pre>
-
-<p>This is a very commonly used Whole Genome Sequencing data cleanup pipeline from the raw reads according to the <a href="https://software.broadinstitute.org/gatk/best-practices/">GATK best practice</a>. And it will be used pretty much every time when the raw read files come. </p>
-<p>With an aggregation defined, you don't need to configure and call those processes every time:</p>
-<pre><code class="python">from pyppl import Aggr
-from bioprocs import params
-# some paramters defined in params
-aFastqPE2Bam = Aggr (
-    pTrimmomaticPE,
-    pAlignPEByBWA,
-    pSortSam,
-    pMarkDuplicates,
-    pIndexBam,
-    pRealignerTargetCreator,
-    pIndelRealigner,
-    pBaseRecalibrator,
-    pPrintReads
-)
-# dependency adjustment
-aFastqPE2Bam.pIndelRealigner.depends   = aFastqPE2Bam.pIndexBam, aFastqPE2Bam.pRealignerTargetCreator
-aFastqPE2Bam.pPrintReads.depends       = aFastqPE2Bam.pIndelRealigner, aFastqPE2Bam.pBaseRecalibrator
-# input adjustment
-# args adjustment
-aFastqPE2Bam.pMarkDuplicates.args.params.tmpdir       = params.tmpdir
-aFastqPE2Bam.pAlignPEByBWA.args.reffile               = params.hg19fa
-aFastqPE2Bam.pRealignerTargetCreator.args.reffile     = params.hg19fa
-aFastqPE2Bam.pRealignerTargetCreator.args.params.tmpdir= params.tmpdir
-aFastqPE2Bam.pIndelRealigner.args.reffile             = params.hg19fa
-aFastqPE2Bam.pIndelRealigner.args.params.tmpdir       = params.tmpdir
-aFastqPE2Bam.pBaseRecalibrator.args.reffile           = params.hg19fa
-aFastqPE2Bam.pBaseRecalibrator.args.knownSites        = params.dbsnp
-aFastqPE2Bam.pBaseRecalibrator.args.params.tmpdir     = params.tmpdir
-aFastqPE2Bam.pPrintReads.args.reffile                 = params.hg19fa
-aFastqPE2Bam.pPrintReads.args.params.tmpdir           = params.tmpdir
-</code></pre>
-
-<p>Then every time you just need to call the aggregation:</p>
-<pre><code class="python">aFastqPE2Bam.input = channel.fromPairs ( datadir + '/*.fastq.gz' )
-aFastqPE2Bam.exdir = exdir
-PyPPL({
-    'proc': {
-        'sgeRunner': {
-            'sge.q' : '1-day'
-        }
-    }
-}).start(aFastqPE2Bam).run()
-</code></pre>
-
+<span class="n">PyPPL</span><span class="p">({</span>
+    <span class="s1">&#39;proc&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;forks&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+        <span class="s1">&#39;runner&#39;</span><span class="p">:</span> <span class="s1">&#39;sge&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;sgeRunner&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;sge.q&#39;</span><span class="p">:</span> <span class="s1">&#39;lg-mem&#39;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">})</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">pTrimmomaticPE</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+This is a very commonly used Whole Genome Sequencing data cleanup pipeline from the raw reads according to the <a href="https://software.broadinstitute.org/gatk/best-practices/">GATK best practice</a>. And it will be used pretty much every time when the raw read files come. </p>
+<p>With an aggregation defined, you don't need to configure and call those processes every time:
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyppl</span> <span class="kn">import</span> <span class="n">Aggr</span>
+<span class="kn">from</span> <span class="nn">bioprocs</span> <span class="kn">import</span> <span class="n">params</span>
+<span class="c1"># some paramters defined in params</span>
+<span class="n">aFastqPE2Bam</span> <span class="o">=</span> <span class="n">Aggr</span> <span class="p">(</span>
+<span class="err">    </span><span class="n">pTrimmomaticPE</span><span class="p">,</span>
+<span class="err">    </span><span class="n">pAlignPEByBWA</span><span class="p">,</span>
+<span class="err">    </span><span class="n">pSortSam</span><span class="p">,</span>
+<span class="err">    </span><span class="n">pMarkDuplicates</span><span class="p">,</span>
+<span class="err">    </span><span class="n">pIndexBam</span><span class="p">,</span>
+<span class="err">    </span><span class="n">pRealignerTargetCreator</span><span class="p">,</span>
+<span class="err">    </span><span class="n">pIndelRealigner</span><span class="p">,</span>
+<span class="err">    </span><span class="n">pBaseRecalibrator</span><span class="p">,</span>
+<span class="err">    </span><span class="n">pPrintReads</span>
+<span class="p">)</span>
+<span class="c1"># dependency adjustment</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pIndelRealigner</span><span class="o">.</span><span class="n">depends</span>   <span class="o">=</span> <span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pIndexBam</span><span class="p">,</span> <span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pRealignerTargetCreator</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pPrintReads</span><span class="o">.</span><span class="n">depends</span>       <span class="o">=</span> <span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pIndelRealigner</span><span class="p">,</span> <span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pBaseRecalibrator</span>
+<span class="c1"># input adjustment</span>
+<span class="c1"># args adjustment</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pMarkDuplicates</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">tmpdir</span>       <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">tmpdir</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pAlignPEByBWA</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">reffile</span>               <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">hg19fa</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pRealignerTargetCreator</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">reffile</span>     <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">hg19fa</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pRealignerTargetCreator</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">tmpdir</span><span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">tmpdir</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pIndelRealigner</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">reffile</span>             <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">hg19fa</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pIndelRealigner</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">tmpdir</span>       <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">tmpdir</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pBaseRecalibrator</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">reffile</span>           <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">hg19fa</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pBaseRecalibrator</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">knownSites</span>        <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">dbsnp</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pBaseRecalibrator</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">tmpdir</span>     <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">tmpdir</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pPrintReads</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">reffile</span>                 <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">hg19fa</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pPrintReads</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">tmpdir</span>           <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">tmpdir</span>
+</pre></div></p>
+<p>Then every time you just need to call the aggregation:
+<div class="highlight"><pre><span></span><span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">fromPairs</span> <span class="p">(</span> <span class="n">datadir</span> <span class="o">+</span> <span class="s1">&#39;/*.fastq.gz&#39;</span> <span class="p">)</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">exdir</span> <span class="o">=</span> <span class="n">exdir</span>
+<span class="n">PyPPL</span><span class="p">({</span>
+<span class="err">    </span><span class="s1">&#39;proc&#39;</span><span class="p">:</span> <span class="p">{</span>
+<span class="err">        </span><span class="s1">&#39;sgeRunner&#39;</span><span class="p">:</span> <span class="p">{</span>
+<span class="err">            </span><span class="s1">&#39;sge.q&#39;</span> <span class="p">:</span> <span class="s1">&#39;1-day&#39;</span>
+<span class="err">        </span><span class="p">}</span>
+<span class="err">    </span><span class="p">}</span>
+<span class="p">})</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">aFastqPE2Bam</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div></p>
 <h2 id="initialize-an-aggregation">Initialize an aggregation</h2>
 <p>Like previous example shows, you just need to give the constructor all the processes to construct an aggretation. However, there are several things need to be noticed:</p>
 <ol>
 <li>The dependencies are automatically constructed by the order of the processes. 
-   <code>python
-   a = Aggr (p1, p2, p3)
-   # The dependencies will be p1 -&gt; p2 -&gt; p3</code></li>
+   <div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">Aggr</span> <span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">)</span>
+<span class="c1"># The dependencies will be p1 -&gt; p2 -&gt; p3</span>
+</pre></div></li>
 <li>The starting and ending processes are defined as the first and last processes, respectively. If you need to modify the dependencies, keep that in mind whether the starting and ending processes are changed.
-    <code>python
-    a = Aggr (p1, p2, p3)
-    # a.starts == [p1]
-    # a.ends   == [p3]
-    #                                / p2
-    # change the dependencies to  p1      &gt;
-    #                                \ p3
-    # both p2, p3 depend on p1, and p3 depends on p2
-    a.p3.depends = p1, p2
-    # but remember the ending processes are changed from [p3] to [p2, p3]
-    a.ends = [p2, p3]</code>
+    <div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">Aggr</span> <span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">)</span>
+<span class="c1"># a.starts == [p1]</span>
+<span class="c1"># a.ends   == [p3]</span>
+<span class="c1">#                                / p2</span>
+<span class="c1"># change the dependencies to  p1      &gt;</span>
+<span class="c1">#                                \ p3</span>
+<span class="c1"># both p2, p3 depend on p1, and p3 depends on p2</span>
+<span class="n">a</span><span class="o">.</span><span class="n">p3</span><span class="o">.</span><span class="n">depends</span> <span class="o">=</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span>
+<span class="c1"># but remember the ending processes are changed from [p3] to [p2, p3]</span>
+<span class="n">a</span><span class="o">.</span><span class="n">ends</span> <span class="o">=</span> <span class="p">[</span><span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">]</span>
+</pre></div>
     You can also specify the dependencies manually:
-    <code>python
-    a = Aggr (p1, p2, p3, depends = False)
-    a.p2.depends = p1
-    a.p3.depends = p1, p2
-    a.starts = [p1]
-    a.ends   = [p2, p3]</code></li>
+    <div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">Aggr</span> <span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">,</span> <span class="n">depends</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+<span class="n">a</span><span class="o">.</span><span class="n">p2</span><span class="o">.</span><span class="n">depends</span> <span class="o">=</span> <span class="n">p1</span>
+<span class="n">a</span><span class="o">.</span><span class="n">p3</span><span class="o">.</span><span class="n">depends</span> <span class="o">=</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span>
+<span class="n">a</span><span class="o">.</span><span class="n">starts</span> <span class="o">=</span> <span class="p">[</span><span class="n">p1</span><span class="p">]</span>
+<span class="n">a</span><span class="o">.</span><span class="n">ends</span>   <span class="o">=</span> <span class="p">[</span><span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">]</span>
+</pre></div></li>
 <li>If you have one process used twice in the aggregation, copy it with a different id:
-   <code>python
-   a = Aggr(
-       p1,
-       p2,
-       p1.copy(newid = 'p1copy')
-   )
-   # then to access the 2nd p1: a.p1copy</code></li>
+   <div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">Aggr</span><span class="p">(</span>
+    <span class="n">p1</span><span class="p">,</span>
+    <span class="n">p2</span><span class="p">,</span>
+    <span class="n">p1</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">newid</span> <span class="o">=</span> <span class="s1">&#39;p1copy&#39;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="c1"># then to access the 2nd p1: a.p1copy</span>
+</pre></div></li>
 <li>Each process is copied by aggregation, so the original one can still be used.</li>
 <li>The tag of each process is regenerated by the id of the aggregation.</li>
 </ol>
@@ -323,25 +325,21 @@ PyPPL({
 <p><code>aggr.addProc(p, where=None)</code>
 You can add a process, and also define whether to put it in <code>starts</code>, <code>ends</code>, <code>both</code> or <code>None</code>.</p>
 <h2 id="delegate-attributes-of-processes-to-an-aggregation">Delegate attributes of processes to an aggregation</h2>
-<p>You can Delegate the attributes directly for a process to an aggregation:</p>
-<pre><code class="python">aFastqPE2Bam.delegate('args.reffile', 'pAlignPEByBWA')
-</code></pre>
-
-<p>Then when you want to set <code>args.reffile</code> for <code>pAlignPEByBWA</code>, you can just do:</p>
-<pre><code class="python">aFastqPE2Bam.args.reffile = '/path/to/hg19.fa'
-</code></pre>
-
-<p>You may use <code>starts/ends</code> represents the start/end processes.
-You may also set an alias for the attribute:</p>
-<pre><code class="python">aFastqPE2Bam.delegate('align_ref', 'pAlignPEByBWA', 'args.reffile')
-</code></pre>
-
-<p>Then to set the value:</p>
-<pre><code class="python">aFastqPE2Bam.align_ref = '/path/to/hg19.fa'
-</code></pre>
-
+<p>You can Delegate the attributes directly for a process to an aggregation:
+<div class="highlight"><pre><span></span><span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">delegate</span><span class="p">(</span><span class="s1">&#39;args.reffile&#39;</span><span class="p">,</span> <span class="s1">&#39;pAlignPEByBWA&#39;</span><span class="p">)</span>
+</pre></div>
+Then when you want to set <code>args.reffile</code> for <code>pAlignPEByBWA</code>, you can just do:
+<div class="highlight"><pre><span></span><span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">reffile</span> <span class="o">=</span> <span class="s1">&#39;/path/to/hg19.fa&#39;</span>
+</pre></div>
+You may use <code>starts/ends</code> represents the start/end processes.
+You may also set an alias for the attribute:
+<div class="highlight"><pre><span></span><span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">delegate</span><span class="p">(</span><span class="s1">&#39;align_ref&#39;</span><span class="p">,</span> <span class="s1">&#39;pAlignPEByBWA&#39;</span><span class="p">,</span> <span class="s1">&#39;args.reffile&#39;</span><span class="p">)</span>
+</pre></div>
+Then to set the value:
+<div class="highlight"><pre><span></span><span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">align_ref</span> <span class="o">=</span> <span class="s1">&#39;/path/to/hg19.fa&#39;</span>
+</pre></div></p>
 <h2 id="set-an-aggregation-as-start-aggregation-for-a-pipeline">Set an aggregation as start aggregation for a pipeline</h2>
-<p>You can do it just like setting a process as the starting process of pipeline (see <a href="https://pwwang.gitbooks.io/pyppl/configure-a-pipeline.html#starting-processes">here</a>). Actually the starting processes in the aggregation (<code>aggr.starts</code>) will be set as the starting processes of the pipeline.</p>
+<p>You can do it just like setting a process as the starting process of pipeline (see <a href="../configure-a-pipeline/#starting-processes">here</a>). Actually the starting processes in the aggregation (<code>aggr.starts</code>) will be set as the starting processes of the pipeline.</p>
 <h2 id="the-dependency-of-aggregations-and-processes">The dependency of aggregations and processes</h2>
 <p>An aggregation can depend on aggregations and/or processes, you just treat the aggregations as processes. A process can also depend on aggregations and/or processes. </p>
 <table>
@@ -363,32 +361,31 @@ You may also set an alias for the attribute:</p>
 <td><code>Aggr</code> (<code>a</code>)</td>
 <td><code>p</code> depends on <code>a.ends</code></td>
 </tr>
-<tr>
-<td>&gt; <strong>Note</strong> You have to specify <code>depends</code> for start processes of an aggregation.</td>
-<td></td>
-<td></td>
-</tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You have to specify <code>depends</code> for start processes of an aggregation.</p>
+</div>
 <h2 id="copy-an-aggregation">Copy an aggregation</h2>
 <p><code>Aggr.copy(tag = 'notag', copyDeps = True, newid = None)</code>
 You may copy an aggregation, all the processes in the aggregation will be copied, and the dependencies will be switched to the corresponding copied processes, as well as the starting and ending processes, if <code>copyDeps == True</code>. </p>
-<p>You can keep the ids of processes unchanged but give a new tag and also give the aggregation an new id instead of the variable name:</p>
-<pre><code class="python">a = Aggr(p1, p2, p3)
-# access the processes:
-# a.p1, a.p2, a.p3
-a2 = a.copy('copied')
-# a2.procs == [
-# &lt;proc with id &quot;p1&quot; and tag &quot;copied&quot;&gt;,
-# &lt;proc with id &quot;p2&quot; and tag &quot;copied&quot;&gt;,
-# &lt;proc with id &quot;p3&quot; and tag &quot;copied&quot;&gt;,
-# ]
-# a2.id == 'a2'
-# to access the processes:
-# a2.p1, a2.p2, a2.p3
-a2 = a.copy('copied', newid = 'newAggr')
-# a2.id == 'newAggr'
-</code></pre>
+<p>You can keep the ids of processes unchanged but give a new tag and also give the aggregation an new id instead of the variable name:
+<div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">Aggr</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">)</span>
+<span class="c1"># access the processes:</span>
+<span class="c1"># a.p1, a.p2, a.p3</span>
+<span class="n">a2</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="s1">&#39;copied&#39;</span><span class="p">)</span>
+<span class="c1"># a2.procs == [</span>
+<span class="c1"># &lt;proc with id &quot;p1&quot; and tag &quot;copied&quot;&gt;,</span>
+<span class="c1"># &lt;proc with id &quot;p2&quot; and tag &quot;copied&quot;&gt;,</span>
+<span class="c1"># &lt;proc with id &quot;p3&quot; and tag &quot;copied&quot;&gt;,</span>
+<span class="c1"># ]</span>
+<span class="c1"># a2.id == &#39;a2&#39;</span>
+<span class="c1"># to access the processes:</span>
+<span class="c1"># a2.p1, a2.p2, a2.p3</span>
+<span class="n">a2</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="s1">&#39;copied&#39;</span><span class="p">,</span> <span class="nb">id</span> <span class="o">=</span> <span class="s1">&#39;newAggr&#39;</span><span class="p">)</span>
+<span class="c1"># a2.id == &#39;newAggr&#39;</span>
+</pre></div></p>
               
             </div>
           </div>

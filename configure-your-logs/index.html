@@ -89,7 +89,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../runners/">Runners</a>
+    <a class="" href="../runners/">Runners and running profiles</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../error-handling/">Error handling of processes</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -124,12 +129,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
+    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
 	    </li>
           
             <li class="toctree-l1">
 		
-    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
+    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -195,10 +200,7 @@
             <div class="section">
               
                 <h1 id="configure-your-logs">Configure your logs</h1>
-<!-- toc -->
-
-<p>{% raw %}
-<code>PyPPL</code> has fancy logs. You can define how they look like (theme) and what messages to show (levels).</p>
+<p><code>PyPPL</code> has fancy logs. You can define how they look like (theme) and what messages to show (levels).</p>
 <h2 id="built-in-log-themes">Built-in log themes</h2>
 <p>We have some built-in themes:</p>
 <p>greenOnBlack (default):
@@ -216,228 +218,93 @@ blueOnBlack:
 <p>If you don't like them, you can also disable them:
 <img alt="noThemeOnBlack" src="https://raw.githubusercontent.com/pwwang/pyppl/master/docs/noThemeOnBlack.png" />
 <img alt="noThemeOnWhite" src="https://raw.githubusercontent.com/pwwang/pyppl/master/docs/noThemeOnWhite.png" /></p>
-<p>To use them, just specify the name in your pipeline configuration file:</p>
-<pre><code class="json">{
-    &quot;log&quot;: {
-        &quot;theme&quot;: &quot;magentaOnWhite&quot;
-    }
-}
-</code></pre>
-
-<p>Or when you initialize a pipeline:</p>
-<pre><code class="python">PyPPL({&quot;log&quot;: {&quot;theme&quot;: &quot;magentaOnWhite&quot;}}).start(...).run()
-</code></pre>
-
-<p>If you want to disable the theme, just set <code>"theme"</code> to <code>False</code> (<code>false</code> for <code>json</code>)
+<p>To use them, just specify the name in your pipeline configuration file:
+<div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;_log&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;theme&quot;</span><span class="p">:</span> <span class="s2">&quot;magentaOnWhite&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+Or when you initialize a pipeline:
+<div class="highlight"><pre><span></span><span class="n">PyPPL</span><span class="p">({</span><span class="s2">&quot;_log&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;theme&quot;</span><span class="p">:</span> <span class="s2">&quot;magentaOnWhite&quot;</span><span class="p">}})</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+If you want to disable the theme, just set <code>"theme"</code> to <code>False</code> (<code>false</code> for <code>json</code>)
 If you set <code>theme</code> to <code>True</code>, then default theme <code>greenOnBlack</code> is used.</p>
 <h2 id="levels-of-pyppl-logs">Levels of pyppl logs</h2>
 <p>Please note that the levels are different from those of python's <code>logging</code> module. For <code>logging</code> module has <a href="https://docs.python.org/2/library/logging.html#logging-levels">6 levels</a>, with different int values. However, pyppl's log has many levels, or more suitable, flags, which don't have corresponding values. They are somehow equal, but some of them always print out unless you ask them not to.</p>
-<table>
-<thead>
-<tr>
-<th>Log level</th>
-<th>Belongs to groups</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>PROCESS</code></td>
-<td><code>all, basic, normal, nodebug</code></td>
-<td>Mark when a process initiates</td>
-</tr>
-<tr>
-<td><code>DEPENDS</code></td>
-<td><code>all, basic, normal, nodebug</code></td>
-<td>Show dependencies of a process</td>
-</tr>
-<tr>
-<td><code>STDOUT</code></td>
-<td><code>all, basic, normal, nodebug</code></td>
-<td>Show the STDOUT from a process</td>
-</tr>
-<tr>
-<td><code>STDERR</code></td>
-<td><code>all, basic, normal, nodebug</code></td>
-<td>Show the STDERR from a process</td>
-</tr>
-<tr>
-<td><code>ERROR</code></td>
-<td><code>all, basic, normal, nodebug</code></td>
-<td>Show errors</td>
-</tr>
-<tr>
-<td><code>INFO</code></td>
-<td><code>all, basic, normal, nodebug</code></td>
-<td>Some information</td>
-</tr>
-<tr>
-<td><code>DONE</code></td>
-<td><code>all, basic, normal, nodebug</code></td>
-<td>Mark when a process is done</td>
-</tr>
-<tr>
-<td><code>RUNNING</code></td>
-<td><code>all, basic, normal, nodebug</code></td>
-<td>Mark when a process starts to run</td>
-</tr>
-<tr>
-<td><code>CACHED</code></td>
-<td><code>all, basic, normal, nodebug</code></td>
-<td>Mark when a process is cached</td>
-</tr>
-<tr>
-<td><code>EXPORT</code></td>
-<td><code>all, basic, normal, nodebug</code></td>
-<td>Mark when a job is exporting output files</td>
-</tr>
-<tr>
-<td><code>PYPPL</code></td>
-<td><code>all, basic, normal, nodebug</code></td>
-<td>When pipeline starts</td>
-</tr>
-<tr>
-<td><code>TIPS</code></td>
-<td><code>all, basic, normal, nodebug</code></td>
-<td>Show tips</td>
-</tr>
-<tr>
-<td><code>CONFIG</code></td>
-<td><code>all, basic, normal, nodebug</code></td>
-<td>Show configuration is read from file</td>
-</tr>
-<tr>
-<td><code>CMDOUT</code></td>
-<td><code>all, basic, normal, nodebug</code></td>
-<td>Show the STDOUT for <code>beforeCmd</code>/<code>afterCmd</code></td>
-</tr>
-<tr>
-<td><code>CMDERR</code></td>
-<td><code>all, basic, normal, nodebug</code></td>
-<td>Show the STDERR for <code>beforeCmd</code>/<code>afterCmd</code></td>
-</tr>
-<tr>
-<td><code>RETRY</code></td>
-<td><code>all, basic, normal, nodebug</code></td>
-<td>Mark when a job retries</td>
-</tr>
-<tr>
-<td><code>INPUT</code></td>
-<td><code>all, normal, nodebug</code></td>
-<td>Show the input for a job</td>
-</tr>
-<tr>
-<td><code>OUTPUT</code></td>
-<td><code>all, normal, nodebug</code></td>
-<td>Show the output for a job</td>
-</tr>
-<tr>
-<td><code>BRINGS</code></td>
-<td><code>all, normal, nodebug</code></td>
-<td>Show the bring-in files</td>
-</tr>
-<tr>
-<td><code>SUBMIT</code></td>
-<td><code>all, basic, normal, nodebug</code></td>
-<td>Mark when a job is being submitting</td>
-</tr>
-<tr>
-<td><code>P.PROPS</code></td>
-<td><code>all, normal, nodebug</code></td>
-<td>Show some properties of a process</td>
-</tr>
-<tr>
-<td><code>P.ARGS</code></td>
-<td><code>all, nodebug</code></td>
-<td>Show the args of a process</td>
-</tr>
-<tr>
-<td><code>JOBDONE</code></td>
-<td><code>all, nodebug</code></td>
-<td>Mark when a job is done</td>
-</tr>
-<tr>
-<td>&gt;<strong>NOTE</strong> The log levels are a little bit different from here, please see <a href="https://pwwang.gitbooks.io/pyppl/write-your-script.html#debug-your-script">debug your script</a>.</td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>You may also specify the group name in your pipeline configuration file:</p>
-<pre><code class="json">{
-    &quot;log&quot;: {
-        &quot;levels&quot;: &quot;nodebug&quot;
-    }
-}
-</code></pre>
-
-<p>Or when you initialize a pipeline:</p>
-<pre><code class="python">PyPPL({&quot;log&quot;: {&quot;levels&quot;: &quot;nodebug&quot;}}).start(...).run()
-</code></pre>
-
-<p>You can also explicitly define a set of messages with different levels to show in the logs:</p>
-<pre><code class="json">{
-    &quot;log&quot;: {&quot;levels&quot;: [&quot;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&quot;, &quot;RUNNING&quot;, &quot;CACHED&quot;]}
-}
-</code></pre>
-
-<p>Even you can modify the base groups:</p>
-<pre><code class="json">{
-    &quot;log&quot;: {
-        &quot;levels&quot;: &quot;normal&quot;,
-        &quot;lvldiff&quot;: [&quot;+DEBUG&quot;, &quot;P.ARGS&quot;, &quot;-SUBMIT&quot;]
-    }
-}
-</code></pre>
-
-<p>Then the <code>DEBUG</code>, <code>P.ARGS</code> messages will show, and <code>SUBMIT</code> will hide.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The log levels are a little bit different from here, please see <a href="https://pwwang.github.io/PyPPL/write-your-script.html#debug-your-script">debug your script</a>.</p>
+</div>
+<p>You may also specify the group name in your pipeline configuration file:
+<div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;_log&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;nodebug&quot;</span>
+    <span class="p">},</span>
+    <span class="err">//</span> <span class="err">running</span> <span class="err">profiles</span> <span class="err">...</span>
+<span class="p">}</span>
+</pre></div>
+Or when you initialize a pipeline:
+<div class="highlight"><pre><span></span><span class="n">PyPPL</span><span class="p">({</span><span class="s2">&quot;_log&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;nodebug&quot;</span><span class="p">}})</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div></p>
+<p>You can also explicitly define a set of messages with different levels to show in the logs:
+<div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;_log&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;levels&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;PROCESS&quot;</span><span class="p">,</span> <span class="s2">&quot;RUNNING&quot;</span><span class="p">,</span> <span class="s2">&quot;CACHED&quot;</span><span class="p">]}</span>
+<span class="p">}</span>
+</pre></div></p>
+<p>Even you can modify the base groups:
+<div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;_log&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;lvldiff&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;+DEBUG&quot;</span><span class="p">,</span> <span class="s2">&quot;P.ARGS&quot;</span><span class="p">,</span> <span class="s2">&quot;-SUBMIT&quot;</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+Then the <code>DEBUG</code>, <code>P.ARGS</code> messages will show, and <code>SUBMIT</code> will hide.</p>
 <h2 id="define-your-theme">Define your theme</h2>
 <p>Let's see how the built-in theme looks like first:
-in <code>pyppl/logger.py</code>:</p>
-<pre><code class="python">themes = {
-  'greenOnBlack': {
-    'PROCESS' : [colors.bold + colors.cyan, colors.bold + colors.underline + colors.cyan],
-    'DONE'    : colors.bold + colors.green,
-    'DEBUG'   : colors.bold + colors.black,
-    'DEPENDS' : colors.magenta,
-    'PROCESS' : [colors.bold + colors.cyan, colors.bold + colors.underline + colors.cyan],
-    'in:SUBMIT,JOBDONE,INFO,P.PROPS,OUTPUT,EXPORT,INPUT,P.ARGS,BRINGS': colors.green,
-    'has:ERR' : colors.red,
-    'in:WARNING,RETRY' : colors.bold + colors.yellow,
-    'in:CACHED,RUNNING': colors.yellow,
-    ''        : colors.white
-  },
-  # other themes
-}
-</code></pre>
-
-<p>For the keys, you may either directly use the level name or have some prefix to define how to match the level names:
+in <code>pyppl/logger.py</code>:
+<div class="highlight"><pre><span></span><span class="n">themes</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s1">&#39;greenOnBlack&#39;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s1">&#39;PROCESS&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="n">colors</span><span class="o">.</span><span class="n">bold</span> <span class="o">+</span> <span class="n">colors</span><span class="o">.</span><span class="n">cyan</span><span class="p">,</span> <span class="n">colors</span><span class="o">.</span><span class="n">bold</span> <span class="o">+</span> <span class="n">colors</span><span class="o">.</span><span class="n">underline</span> <span class="o">+</span> <span class="n">colors</span><span class="o">.</span><span class="n">cyan</span><span class="p">],</span>
+    <span class="s1">&#39;DONE&#39;</span>    <span class="p">:</span> <span class="n">colors</span><span class="o">.</span><span class="n">bold</span> <span class="o">+</span> <span class="n">colors</span><span class="o">.</span><span class="n">green</span><span class="p">,</span>
+    <span class="s1">&#39;DEBUG&#39;</span>   <span class="p">:</span> <span class="n">colors</span><span class="o">.</span><span class="n">bold</span> <span class="o">+</span> <span class="n">colors</span><span class="o">.</span><span class="n">black</span><span class="p">,</span>
+    <span class="s1">&#39;DEPENDS&#39;</span> <span class="p">:</span> <span class="n">colors</span><span class="o">.</span><span class="n">magenta</span><span class="p">,</span>
+    <span class="s1">&#39;PROCESS&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="n">colors</span><span class="o">.</span><span class="n">bold</span> <span class="o">+</span> <span class="n">colors</span><span class="o">.</span><span class="n">cyan</span><span class="p">,</span> <span class="n">colors</span><span class="o">.</span><span class="n">bold</span> <span class="o">+</span> <span class="n">colors</span><span class="o">.</span><span class="n">underline</span> <span class="o">+</span> <span class="n">colors</span><span class="o">.</span><span class="n">cyan</span><span class="p">],</span>
+    <span class="s1">&#39;in:SUBMIT,JOBDONE,INFO,P.PROPS,OUTPUT,EXPORT,INPUT,P.ARGS,BRINGS&#39;</span><span class="p">:</span> <span class="n">colors</span><span class="o">.</span><span class="n">green</span><span class="p">,</span>
+    <span class="s1">&#39;has:ERR&#39;</span> <span class="p">:</span> <span class="n">colors</span><span class="o">.</span><span class="n">red</span><span class="p">,</span>
+    <span class="s1">&#39;in:WARNING,RETRY&#39;</span> <span class="p">:</span> <span class="n">colors</span><span class="o">.</span><span class="n">bold</span> <span class="o">+</span> <span class="n">colors</span><span class="o">.</span><span class="n">yellow</span><span class="p">,</span>
+    <span class="s1">&#39;in:CACHED,RUNNING&#39;</span><span class="p">:</span> <span class="n">colors</span><span class="o">.</span><span class="n">yellow</span><span class="p">,</span>
+    <span class="s1">&#39;&#39;</span>        <span class="p">:</span> <span class="n">colors</span><span class="o">.</span><span class="n">white</span>
+  <span class="p">},</span>
+  <span class="c1"># other themes</span>
+<span class="p">}</span>
+</pre></div>
+For the keys, you may either directly use the level name or have some prefix to define how to match the level names:
 - <code>in:</code> matches the messages with level name in the following list, which is separated by comma (<code>,</code>).
 - <code>has:</code> matches the messages with level name containing the following string.
 - <code>starts:</code> matches the messages with level name starting with the following string.
 - <code>re</code>: uses the following string as regular expression to match<br />
 Then empty string key (<code>''</code>) defines the colors to use for the messages that can not match any of the above rules.</p>
 <p>For the values, basically it's a 2-element list, where the first one defines the color to show the level name; and the second is the color to render the message. If only one color offered, it will be used for both level name and message.</p>
-<p>If you just want to modify the built-in themes, you can do it before you specify it to the pyppl constructor:</p>
-<pre><code class="python">from PyPPL import logger, PyPPL
-logger.themes['greenOnBlack']['DONE'] = logger.colors.cyan
-# ... define some procs
-PyPPL({'log':{'theme': 'greenOnBlack'}}).start(...).run()
-</code></pre>
-
-<p>Yes, of course, you can also define a completely new theme:</p>
-<pre><code class="python">from pyppl import logger, PyPPL
-# ... define procs
-PyPPL({'log': 
-    {'theme': {
-        'DONE': logger.colors.green,
-        'DEBUG': logger.colors.black,
-        'starts:LOG': logger.colors.bgwhite + logger.colors.black,
-        # ...
-    }}
-}).start(...).run()
-</code></pre>
-
+<p>If you just want to modify the built-in themes, you can do it before you specify it to the pyppl constructor:
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PyPPL</span> <span class="kn">import</span> <span class="n">logger</span><span class="p">,</span> <span class="n">PyPPL</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">themes</span><span class="p">[</span><span class="s1">&#39;greenOnBlack&#39;</span><span class="p">][</span><span class="s1">&#39;DONE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">cyan</span>
+<span class="c1"># ... define some procs</span>
+<span class="n">PyPPL</span><span class="p">({</span><span class="s1">&#39;_log&#39;</span><span class="p">:{</span><span class="s1">&#39;theme&#39;</span><span class="p">:</span> <span class="s1">&#39;greenOnBlack&#39;</span><span class="p">}})</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div></p>
+<p>Yes, of course, you can also define a completely new theme:
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyppl</span> <span class="kn">import</span> <span class="n">logger</span><span class="p">,</span> <span class="n">PyPPL</span>
+<span class="c1"># ... define procs</span>
+<span class="n">PyPPL</span><span class="p">({</span><span class="s1">&#39;_log&#39;</span><span class="p">:</span> 
+    <span class="p">{</span><span class="s1">&#39;theme&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;DONE&#39;</span><span class="p">:</span> <span class="n">logger</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">green</span><span class="p">,</span>
+        <span class="s1">&#39;DEBUG&#39;</span><span class="p">:</span> <span class="n">logger</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">black</span><span class="p">,</span>
+        <span class="s1">&#39;starts:LOG&#39;</span><span class="p">:</span> <span class="n">logger</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">bgwhite</span> <span class="o">+</span> <span class="n">logger</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">black</span><span class="p">,</span>
+        <span class="c1"># ...</span>
+    <span class="p">}}</span>
+<span class="p">})</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div></p>
 <p>Available colors in <code>logger.colors</code>:</p>
 <table>
 <thead>
@@ -509,46 +376,41 @@ PyPPL({'log':
 <li>An empty string; 2. End of coloring; 3. Show bold characters; 4. Show underline characters.</li>
 </ol>
 <p>You can also use the directly terminal escape sequences, like <code>\033[30m</code> for black (check <a href="https://en.wikipedia.org/wiki/ANSI_escape_code">here</a>).</p>
-<p>If you define a theme in a configuration file, you may use the escape sequences or also use the color names:</p>
-<pre><code class="json">{
-    &quot;log&quot;: {&quot;theme&quot;: {
-        &quot;DONE&quot;: &quot;{{colors.green}}&quot;,
-        &quot;DEBUG&quot;: &quot;{{colors.black}}&quot;,
-        &quot;starts:LOG&quot;: &quot;{{colors.bgwhite}}{{colors.black}}&quot;,
-        # ...
-    }}
-}
-</code></pre>
-
+<p>If you define a theme in a configuration file, you may use the escape sequences or also use the color names:
+<div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;_log&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;theme&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;DONE&quot;</span><span class="p">:</span> <span class="s2">&quot;{{colors.green}}&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;DEBUG&quot;</span><span class="p">:</span> <span class="s2">&quot;{{colors.black}}&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;starts:LOG&quot;</span><span class="p">:</span> <span class="s2">&quot;{{colors.bgwhite}}{{colors.black}}&quot;</span><span class="p">,</span>
+        <span class="err">#</span> <span class="err">...</span>
+    <span class="p">}}</span>
+<span class="p">}</span>
+</pre></div></p>
 <h2 id="log-to-file">Log to file</h2>
-<p>By default, pyppl will not log to a file until you set a file path to <code>{"log": {"file": "/path/to/logfile"}}</code> in the configuration. Or you can specfiy <code>False</code> to it to disable logging to file. If you set it to <code>True</code>, a default log file will be used, which is: <code>"./pipeline.pyppl.log"</code> if your pipeline is from file: <code>./pipeline.py</code></p>
+<p>By default, pyppl will not log to a file until you set a file path to <code>{"_log": {"file": "/path/to/logfile"}}</code> in the configuration. Or you can specfiy <code>False</code> to it to disable logging to file. If you set it to <code>True</code>, a default log file will be used, which is: <code>"./pipeline.pyppl.log"</code> if your pipeline is from file: <code>./pipeline.py</code></p>
 <blockquote>
 <p><strong>NOTE</strong> Filters and themes are not applied to handler to log to file. So you can always find all logs in the log file if your have it enabled.</p>
 </blockquote>
 <h2 id="progress-bar">Progress bar</h2>
-<p>Job status and progress are indicated in the log with progress bar:</p>
-<pre><code>[==============================xxxxx!!!!!&gt;&gt;&gt;&gt;&gt;-----]
-</code></pre>
-
-<p>The bar length defaults to <code>50</code>. You can change it in your code:</p>
-<pre><code class="python">from pyppl import Jobmgr
-Jobmgr.PBAR_SIZE = 80
-</code></pre>
-
-<p>Here is an explanation about how a cell (one sign or element of the bar) corresponds to job(s):
-Let's say <code>Jobmgr.PBAR_SIZE = 9</code> and we have 5 jobs, then every two cells represent 1 job for first 8 cells, and last one represents job #5. The rule is trying to equally distributed the cells to jobs:</p>
-<pre><code> 1 2 3 4 5         1  2  345      1    2345
+<p>Job status and progress are indicated in the log with progress bar:
+<div class="highlight"><pre><span></span>[==============================xxxxx!!!!!&gt;&gt;&gt;&gt;&gt;-----]
+</pre></div>
+The bar length defaults to <code>50</code>. You can change it in your code:
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyppl</span> <span class="kn">import</span> <span class="n">Jobmgr</span>
+<span class="n">Jobmgr</span><span class="o">.</span><span class="n">PBAR_SIZE</span> <span class="o">=</span> <span class="mi">80</span>
+</pre></div>
+Here is an explanation about how a cell (one sign or element of the bar) corresponds to job(s):
+Let's say <code>Jobmgr.PBAR_SIZE = 9</code> and we have 5 jobs, then every two cells represent 1 job for first 8 cells, and last one represents job #5. The rule is trying to equally distributed the cells to jobs:
+<div class="highlight"><pre><span></span> 1 2 3 4 5         1  2  345      1    2345
 [==xx!!&gt;&gt;-]  NOT  [===xxx!&gt;-] OR [=====x!&gt;-]
-</code></pre>
-
-<p>While if you have more jobs than cells, we try to equally distribute jobs to cells:
-Say we have 9 jobs but <code>Jobmgr.PBAR_SIZE = 5</code>:</p>
-<pre><code> 1357        
+</pre></div>
+While if you have more jobs than cells, we try to equally distribute jobs to cells:
+Say we have 9 jobs but <code>Jobmgr.PBAR_SIZE = 5</code>:
+<div class="highlight"><pre><span></span> 1357        
  24689        
 [=x!&gt;-] 
-</code></pre>
-
-<p>First cell represents job #1, #2; second job #3, #4; ...; the last one represents job #9.</p>
+</pre></div>
+First cell represents job #1, #2; second job #3, #4; ...; the last one represents job #9.</p>
 <p>The meaning of each sign in the cell:
 - <code>-</code>: Job initiated
 - <code>!</code>: Job failed to submit
@@ -556,12 +418,11 @@ Say we have 9 jobs but <code>Jobmgr.PBAR_SIZE = 5</code>:</p>
 - <code>x</code>: Job failed
 - <code>=</code>: Job done</p>
 <p>Note that if a cell represents multiple jobs, it has a priority as above listed. For example, in the second situation, if job #1 is done, however, job #2 is running, then the sign should be <code>&gt;</code>.</p>
-<p>But if the progress bar belongs to a job (shown when a job is submitted or done), the status of the job has the highest priority. So in the above example, if the progress bar belongs to job #1:</p>
-<pre><code>[JOBDONE] [1/9] [=----] Done:  x.x% | Running: x
+<p>But if the progress bar belongs to a job (shown when a job is submitted or done), the status of the job has the highest priority. So in the above example, if the progress bar belongs to job #1:
+<div class="highlight"><pre><span></span>[JOBDONE] [1/9] [=----] Done:  x.x% | Running: x
            ^ Indicating current job
-</code></pre>
-
-<p>So even job #2 belongs to the first cell and it's running, the sign is still <code>=</code>.</p>
+</pre></div>
+So even job #2 belongs to the first cell and it's running, the sign is still <code>=</code>.</p>
 <p>{% endraw %}</p>
               
             </div>
@@ -570,7 +431,7 @@ Say we have 9 jobs but <code>Jobmgr.PBAR_SIZE = 5</code>:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../configure-a-pipeline/" class="btn btn-neutral float-right" title="Pipeline configuration">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../draw-flowchart-of-a-pipeline/" class="btn btn-neutral float-right" title="Pipeline flowchart">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href="../set-other-properties-of-a-process/" class="btn btn-neutral" title="Other attributes of a process"><span class="icon icon-circle-arrow-left"></span> Previous</a>
@@ -602,7 +463,7 @@ Say we have 9 jobs but <code>Jobmgr.PBAR_SIZE = 5</code>:</p>
         <span><a href="../set-other-properties-of-a-process/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../configure-a-pipeline/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../draw-flowchart-of-a-pipeline/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

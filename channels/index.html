@@ -103,7 +103,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../runners/">Runners</a>
+    <a class="" href="../runners/">Runners and running profiles</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../error-handling/">Error handling of processes</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -118,12 +123,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
+    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
 	    </li>
           
             <li class="toctree-l1">
 		
-    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
+    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -189,24 +194,19 @@
             <div class="section">
               
                 <h1 id="channels">Channels</h1>
-<!-- toc -->
-
-<p>{% raw %}
-Channels are used to pass data from one process (an instance of <code>Proc</code>) to another. It is derived from a <code>list</code>, where each element is a <code>tuple</code>. <strong>So all python functions/methods that apply on <code>list</code> will also apply on <code>Channel</code>.</strong> The length a the <code>tuple</code> corresponds to the number of variables of the input or output of a <code>proc</code>.</p>
-<pre><code class="python"># v1  v2  v3
-c = [
- (a1, b1, c1),  # data for job #0
- (a2, b2, c2),  # data for job #1
-# ...
-]
-</code></pre>
-
-<p>If we specify this channel to the input of a <code>proc</code>:</p>
-<pre><code class="python">p = proc()
-p.input = {&quot;v1,v2,v3&quot;: c}
-</code></pre>
-
-<p>Then the values for different variables in different jobs wil be:</p>
+<p>Channels are used to pass data from one process (an instance of <code>Proc</code>) to another. It is derived from a <code>list</code>, where each element is a <code>tuple</code>. <strong>So all python functions/methods that apply on <code>list</code> will also apply on <code>Channel</code>.</strong> The length a the <code>tuple</code> corresponds to the number of variables of the input or output of a <code>proc</code>.
+<div class="highlight"><pre><span></span><span class="c1"># v1  v2  v3</span>
+<span class="n">c</span> <span class="o">=</span> <span class="p">[</span>
+ <span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">c1</span><span class="p">),</span>  <span class="c1"># data for job #0</span>
+ <span class="p">(</span><span class="n">a2</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">c2</span><span class="p">),</span>  <span class="c1"># data for job #1</span>
+<span class="c1"># ...</span>
+<span class="p">]</span>
+</pre></div>
+If we specify this channel to the input of a <code>proc</code>:
+<div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">proc</span><span class="p">()</span>
+<span class="n">p</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;v1,v2,v3&quot;</span><span class="p">:</span> <span class="n">c</span><span class="p">}</span>
+</pre></div>
+Then the values for different variables in different jobs wil be:</p>
 <table>
 <thead>
 <tr>
@@ -238,445 +238,375 @@ p.input = {&quot;v1,v2,v3&quot;: c}
 </tbody>
 </table>
 <h2 id="initialize-a-channel">Initialize a channel</h2>
-<p>There are several ways to initialize a channel:
-- From a non-iterable element (string is considered non-iterable):<br />
-  This will create a single element channel.
-  <code>python
-  from PyPPL import Channel
-  c = Channel.create(1)
-  # produce [(1,)]
-  c = Channel.create("a,b")
-  # produce [("a,b",)]</code>
-  So <code>pXXX.input = {'a': 1}</code> implies one single job will be created for <code>pXXX</code> and <code>{{in.a}}</code> gives <code>1</code> for that job.
-- From a <code>list</code> or a <code>tuple</code>
-  <code>python
-  c = Channel.create(["a", "b"])
-  # produce [("a", ), ("b", )]
-  c = Channel.create(("a", "b"))
-  # produce [("a", "b")]</code>  </p>
-<blockquote>
-<p><strong>Note</strong> Please use <code>Channel.create(...)</code> instead of <code>Channel(...)</code> unless each element is 'tuplized' properly. 
-  <code>python
-  Channel.create([1,2,3]) != Channel([1,2,3])
-  Channel.create([1,2,3]) == Channel([(1,), (2,), (3,)])</code>
-- From other channels: <br />
-<code>python
-  ch1 = Channel.create([(1, 2), (3, 4)])
-  ch2 = Channel.create('a')
-  ch3 = Channel.create([5, 6])
-  ch  = Channel.fromChannels(ch1, ch2, ch3)
-  # channels are column-bound
-  # ch == [(1, 2, 'a', 5), (3, 4, 'a', 6)]</code></p>
-</blockquote>
+<p>There are several ways to initialize a channel:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please use <code>Channel.create(...)</code> instead of <code>Channel(...)</code> unless each element is 'tuplized' properly. 
+<div class="highlight"><pre><span></span><span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span> <span class="o">!=</span> <span class="n">Channel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span> <span class="o">==</span> <span class="n">Channel</span><span class="p">([(</span><span class="mi">1</span><span class="p">,),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)])</span>
+</pre></div></p>
+</div>
 <ul>
-<li>From a file path pattern:<br />
-  Use <code>glob.glob</code> to grab files by the pattern, you may use different arguments for filter, sort or reverse the list:</li>
-<li>filter the files with type (<code>t</code>): <code>dir</code>, <code>file</code>, <code>link</code> or <code>any</code> (default), </li>
+<li>
+<p>From other channels: <br />
+  <div class="highlight"><pre><span></span><span class="n">ch1</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)])</span>
+<span class="n">ch2</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+<span class="n">ch3</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+<span class="n">ch</span>  <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">fromChannels</span><span class="p">(</span><span class="n">ch1</span><span class="p">,</span> <span class="n">ch2</span><span class="p">,</span> <span class="n">ch3</span><span class="p">)</span>
+<span class="c1"># channels are column-bound</span>
+<span class="c1"># ch == [(1, 2, &#39;a&#39;, 5), (3, 4, &#39;a&#39;, 6)]</span>
+</pre></div></p>
+</li>
+<li>
+<p>From a file path pattern:<br />
+  Use <code>glob.glob</code> to grab files by the pattern, you may use different arguments for filter, sort or reverse the list:</p>
+</li>
+<li>
+<p>filter the files with type (<code>t</code>): <code>dir</code>, <code>file</code>, <code>link</code> or <code>any</code> (default), </p>
+</li>
 <li>sort them by (<code>sortby</code>): <code>size</code>, <code>mtime</code> or <code>name</code> (default)</li>
 <li>
-<p>reverse the list (<code>reverse</code>): <code>False</code> (default, don't reverse)
-  <code>python
-  c = Channel.fromPattern ("/a/b/*.txt", t = 'any', sortby = 'size', reverse = False)</code></p>
+<p>reverse the list (<code>reverse</code>): <code>False</code> (default, don't reverse)</p>
+<div class="highlight"><pre><span></span><span class="n">c</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">fromPattern</span> <span class="p">(</span><span class="s2">&quot;/a/b/*.txt&quot;</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="s1">&#39;any&#39;</span><span class="p">,</span> <span class="n">sortby</span> <span class="o">=</span> <span class="s1">&#39;size&#39;</span><span class="p">,</span> <span class="n">reverse</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+</pre></div>
+
 </li>
 <li>
 <p>From file pairs:
-  <code>python
-  c = Channel.fromPairs ("/a/b/*.txt")
-  # the files will be sorted by names and then split into pairs
-  # c == [("/a/b/a1.txt", "/a/b/a2.txt"), ("/a/b/b1.txt", "/a/b/b2.txt")]</code></p>
+  <div class="highlight"><pre><span></span><span class="n">c</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">fromPairs</span> <span class="p">(</span><span class="s2">&quot;/a/b/*.txt&quot;</span><span class="p">)</span>
+<span class="c1"># the files will be sorted by names and then split into pairs</span>
+<span class="c1"># c == [(&quot;/a/b/a1.txt&quot;, &quot;/a/b/a2.txt&quot;), (&quot;/a/b/b1.txt&quot;, &quot;/a/b/b2.txt&quot;)]</span>
+</pre></div></p>
 </li>
 <li>
 <p>From file content:<br />
 <code>Channel.fromFile(fn, header=False, skip=0, delimit="\t")</code>
   For example, we have a file <code>"chan.txt"</code> with content:
-  <code>A&lt;tab&gt;B&lt;tab&gt;C
-  a1&lt;tab&gt;b1&lt;tab&gt;c1
-  a2&lt;tab&gt;b2&lt;tab&gt;c2</code><br />
+  <div class="highlight"><pre><span></span>A&lt;tab&gt;B&lt;tab&gt;C
+a1&lt;tab&gt;b1&lt;tab&gt;c1
+a2&lt;tab&gt;b2&lt;tab&gt;c2
+</pre></div>
   Read the file as a channel:
-  <code>python
-  c = Channel.fromFile ("chan.txt")
-  # c == [("A", "B", "C"), ("a1", "b1", "c1"), ("a2", "b2", "c2")]
-  c = Channel.fromFile ("chan.txt", header=True)
-  # c == [("a1", "b1", "c1"), ("a2", "b2", "c2")]
-  # c.A == [("a1", ), ("a2", )]
-  # c.B == [("b1", ), ("b2", )]
-  # c.C == [("c1", ), ("c2", )]
-  c = Channel.fromFile ("chan.txt", skip = 1)
-  # c == [("a1", "b1", "c1"), ("a2", "b2", "c2")]</code></p>
+  <div class="highlight"><pre><span></span><span class="n">c</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">fromFile</span> <span class="p">(</span><span class="s2">&quot;chan.txt&quot;</span><span class="p">)</span>
+<span class="c1"># c == [(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;), (&quot;a1&quot;, &quot;b1&quot;, &quot;c1&quot;), (&quot;a2&quot;, &quot;b2&quot;, &quot;c2&quot;)]</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">fromFile</span> <span class="p">(</span><span class="s2">&quot;chan.txt&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="c1"># c == [(&quot;a1&quot;, &quot;b1&quot;, &quot;c1&quot;), (&quot;a2&quot;, &quot;b2&quot;, &quot;c2&quot;)]</span>
+<span class="c1"># c.A == [(&quot;a1&quot;, ), (&quot;a2&quot;, )]</span>
+<span class="c1"># c.B == [(&quot;b1&quot;, ), (&quot;b2&quot;, )]</span>
+<span class="c1"># c.C == [(&quot;c1&quot;, ), (&quot;c2&quot;, )]</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">fromFile</span> <span class="p">(</span><span class="s2">&quot;chan.txt&quot;</span><span class="p">,</span> <span class="n">skip</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c1"># c == [(&quot;a1&quot;, &quot;b1&quot;, &quot;c1&quot;), (&quot;a2&quot;, &quot;b2&quot;, &quot;c2&quot;)]</span>
+</pre></div></p>
 </li>
 <li>
 <p>From <code>sys.argv</code> (command line arguments):
-  <code>python    
-  c == channel.fromArgv()
-  # python whatever.py /a/b/*.txt
-  # c == [("/a/b/1.txt",), ("/a/b/2.txt",), ("/a/b/3.txt",), ("/a/b/4.txt",)]
-  # Make a multple-variable channel:
-  # python whatever.py /a/b/1.txt,/a/b/2.txt /a/b/3.txt,/a/b/4.txt
-  # c == [("/a/b/1.txt", "/a/b/2.txt"), ("/a/b/3.txt", "/a/b/4.txt")]</code></p>
+  <div class="highlight"><pre><span></span><span class="n">c</span> <span class="o">==</span> <span class="n">channel</span><span class="o">.</span><span class="n">fromArgv</span><span class="p">()</span>
+<span class="c1"># python whatever.py /a/b/*.txt</span>
+<span class="c1"># c == [(&quot;/a/b/1.txt&quot;,), (&quot;/a/b/2.txt&quot;,), (&quot;/a/b/3.txt&quot;,), (&quot;/a/b/4.txt&quot;,)]</span>
+<span class="c1"># Make a multple-variable channel:</span>
+<span class="c1"># python whatever.py /a/b/1.txt,/a/b/2.txt /a/b/3.txt,/a/b/4.txt</span>
+<span class="c1"># c == [(&quot;/a/b/1.txt&quot;, &quot;/a/b/2.txt&quot;), (&quot;/a/b/3.txt&quot;, &quot;/a/b/4.txt&quot;)]</span>
+</pre></div></p>
 </li>
 <li>
 <p>From command line argument parser:
-  See <a href="https://pwwang.gitbooks.io/PyPPL/command-line-argument-parser.html">command line argument parser</a> for details.
-  ```python
-  from PyPPL import Channel, params
-  params.a = 'a'
-  params.b = 2
-  params.b.type = int
-  params.c = [1, 2]
-  params.c.type = list
-  params.d = ['a', 'b']
-  params.d.type = list
-  params.e = []
-  params.e.type = list</p>
+  See <a href="https://pwwang.github.io/PyPPL/command-line-argument-parser.html">command line argument parser</a> for details.
+  <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PyPPL</span> <span class="kn">import</span> <span class="n">Channel</span><span class="p">,</span> <span class="n">params</span>
+<span class="n">params</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="s1">&#39;a&#39;</span>
+<span class="n">params</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">params</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">int</span>
+<span class="n">params</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">params</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">list</span>
+<span class="n">params</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">]</span>
+<span class="n">params</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">list</span>
+<span class="n">params</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">params</span><span class="o">.</span><span class="n">e</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">list</span>
+
+<span class="n">ch</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">fromParams</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">)</span>
+<span class="c1"># Raises ValueError, non-equal length</span>
+<span class="n">ch</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">fromParams</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">)</span>
+<span class="c1"># ch == [(1, &#39;a&#39;), (2, &#39;b&#39;)]</span>
+<span class="n">ch</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">fromParams</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="c1"># ch == [(&#39;a&#39;, 2)]</span>
+</pre></div></p>
 </li>
 </ul>
-<p>ch = Channel.fromParams('c', 'e')
-  # Raises ValueError, non-equal length
-  ch = Channel.fromParams('c', 'd')
-  # ch == [(1, 'a'), (2, 'b')]
-  ch = Channel.fromParams('a', 'b')
-  # ch == [('a', 2)]
-  ```</p>
 <h2 id="methods-for-channels">Methods for channels</h2>
 <h3 id="get-the-length-and-width-of-a-channel">Get the length and width of a channel</h3>
-<pre><code class="python">chan = Channel.create ([(1,2,3), (4,5,6)])
-#chan.length() == 2 == len(chan)
-#chan.width()  == 3
-</code></pre>
+<div class="highlight"><pre><span></span><span class="n">chan</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span> <span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">)])</span>
+<span class="c1">#chan.length() == 2 == len(chan)</span>
+<span class="c1">#chan.width()  == 3</span>
+</pre></div>
 
 <h3 id="get-value-from-a-channel">Get value from a channel</h3>
-<pre><code class="python">chan = Channel.create ([(1,2,3), (4,5,6)])
-# chan.get() == 1
-# chan.get(0) == 1
-# chan.get(1) == 2
-# chan.get(2) == 3
-# chan.get(3) == 4
-# chan.get(4) == 5
-# chan.get(5) == 6
-</code></pre>
+<div class="highlight"><pre><span></span><span class="n">chan</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span> <span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">)])</span>
+<span class="c1"># chan.get() == 1</span>
+<span class="c1"># chan.get(0) == 1</span>
+<span class="c1"># chan.get(1) == 2</span>
+<span class="c1"># chan.get(2) == 3</span>
+<span class="c1"># chan.get(3) == 4</span>
+<span class="c1"># chan.get(4) == 5</span>
+<span class="c1"># chan.get(5) == 6</span>
+</pre></div>
 
 <h3 id="repeat-rows-and-columns">Repeat rows and columns</h3>
-<pre><code class="python">chan = Channel.create ([(1,2,3), (4,5,6)])
-chan2 = chan.repCol()
-chan3 = chan.repCol(n=3)
-# chan2 == [(1,2,3,1,2,3), (4,5,6,4,5,6)]
-# chan3 == [(1,2,3,1,2,3,1,2,3), (4,5,6,4,5,6,4,5,6)]
-chan4 = chan.repRow()
-chan5 = chan.repRow(n=3)
-# chan4 == [(1,2,3), (4,5,6), (1,2,3), (4,5,6)]
-# chan5 == [(1,2,3), (4,5,6), (1,2,3), (4,5,6), (1,2,3), (4,5,6)]
-</code></pre>
+<div class="highlight"><pre><span></span><span class="n">chan</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span> <span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">)])</span>
+<span class="n">chan2</span> <span class="o">=</span> <span class="n">chan</span><span class="o">.</span><span class="n">repCol</span><span class="p">()</span>
+<span class="n">chan3</span> <span class="o">=</span> <span class="n">chan</span><span class="o">.</span><span class="n">repCol</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="c1"># chan2 == [(1,2,3,1,2,3), (4,5,6,4,5,6)]</span>
+<span class="c1"># chan3 == [(1,2,3,1,2,3,1,2,3), (4,5,6,4,5,6,4,5,6)]</span>
+<span class="n">chan4</span> <span class="o">=</span> <span class="n">chan</span><span class="o">.</span><span class="n">repRow</span><span class="p">()</span>
+<span class="n">chan5</span> <span class="o">=</span> <span class="n">chan</span><span class="o">.</span><span class="n">repRow</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="c1"># chan4 == [(1,2,3), (4,5,6), (1,2,3), (4,5,6)]</span>
+<span class="c1"># chan5 == [(1,2,3), (4,5,6), (1,2,3), (4,5,6), (1,2,3), (4,5,6)]</span>
+</pre></div>
 
 <h3 id="expand-a-channel-by-directory">Expand a channel by directory</h3>
 <p><code>Channel.expand (col= 0, pattern = '*', t='any', sortby='name', reverse=False)</code></p>
 <p>Sometimes we prepare files in one process (for example, split a big file into small ones in a directory), then handle these files by different jobs in another process, so that they can be processed simultaneously. </p>
 <p><img alt="channel.expand" src="https://github.com/pwwang/pyppl/raw/master/docs/channel-expand.png" /> </p>
-<p>For example:</p>
-<pre><code class="python"># the original file: a.txt
-p1 = Proc()
-p1.input  = {&quot;infile:file&quot;: [&quot;a.txt&quot;]}
-p1.output = &quot;outdir:dir:{{in.infile | fn}}&quot;
-p1.script = &quot;# the script to split a.txt to 1.txt, 2.txt, 3.txt ... to {{outdir}}&quot;
-
-p2 = Proc()
-p2.depends = p1
-# expand channel [(&quot;outdir/a/&quot;,)] to channel:
-# [(&quot;outdir/a/1.txt&quot;,), (&quot;outdir/a/2.txt&quot;,), (&quot;outdir/a/3.txt&quot;,), ...]
-p2.input   = {&quot;infile:file&quot;: lambda ch: ch.expand()}
-p2.output  = {&quot;outfile:file:{{in.infile | fn}}.result&quot;}
-p2.script  = &quot;&quot;&quot;
-# work on each file (1.txt, 2.txt, 3.txt, ...) 
-# to result file (1.result, 2.result, 3.result, ...)
-&quot;&quot;&quot;
-
-PyPPL().start(p1).run()
-</code></pre>
-
-<p>If a channel is a multi-variable channel (containing 2 or more columns), you may specify the index of the column, which should be a directory. For the previous example:</p>
-<pre><code class="python">p1.output = &quot;outvar:{{in.infile | ext | [1:]}}, outdir:dir:{{in.infile | fn}}&quot;
-# ...
-p2.depends = p1
-p2.input   = {&quot;invar,infile:file&quot;: lambda ch: ch.expand(1)}
-# expands to: 
-# [(&quot;txt&quot;, &quot;outdir/a/1.txt&quot;), (&quot;txt&quot;, &quot;outdir/a/2.txt&quot;), (&quot;txt&quot;, &quot;outdir/a/3.txt&quot;), ...]
-# ...
-</code></pre>
-
-<p>You may also filter the files with a pattern (arguments <code>t</code>, <code>sortby</code> and <code>reverse</code> act exactly as <code>Channel.fromPattern</code>):</p>
-<pre><code class="python">p2.input   = {&quot;invar,infile:file&quot;: lambda ch: ch.expand(1, &quot;*.txt&quot;)}
-# only include .txt files
-</code></pre>
-
-<blockquote>
-<p><strong>Caution</strong> 
-- <code>expand</code> only works for original channels with length is 1, which will expand to <code>N</code> (number of files included). If original channel has more than 1 element, only first element will be used, and other elements will be ignored.
-- Only the value of the column to be expanded will be changed, values of other columns remain the same. </p>
-</blockquote>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<ul>
+<li><code>expand</code> only works for original channels with length is 1, which will expand to <code>N</code> (number of files included). If original channel has more than 1 element, only first element will be used, and other elements will be ignored.</li>
+<li>Only the value of the column to be expanded will be changed, values of other columns remain the same. </li>
+</ul>
+</div>
 <h3 id="collapse-a-channel-by-files-in-a-common-ancestor-directory">Collapse a channel by files in a common ancestor directory</h3>
 <p><code>Channel.collapse(col=0)</code></p>
 <p>It's basically the reverse process of <code>expand</code>. It applies when you deal with different files and in next process you need them all involved (i.e. combine the results):</p>
 <p><img alt="channel.expand" src="https://github.com/pwwang/pyppl/raw/master/docs/channel-collapse.png" /> </p>
-<p>For example:</p>
-<pre><code class="python">p1 = Proc()
-p1.input  = {&quot;infile:file&quot;: [&quot;/a/b/1.txt&quot;, &quot;/a/b/2.txt&quot;, &quot;/a/b/3.txt&quot;]}
-p1.output = {&quot;outfile:file&quot;: &quot;{{infile | fn}}.txt2&quot;}
-p1.script = &quot;&quot;&quot;
-# the script to deal with each input file:
-# /a/b/1.txt -&gt; &lt;outdir&gt;/1.txt2
-# /a/b/2.txt -&gt; &lt;outdir&gt;/2.txt2
-# /a/b/3.txt -&gt; &lt;outdir&gt;/3.txt2
-&quot;&quot;&quot;
-
-p2 = Proc()
-p2.depends = p1
-# collapse channel [(&quot;&lt;outdir&gt;/1.txt2&quot;,), (&quot;&lt;outdir&gt;/2.txt2&quot;,), (&quot;&lt;outdir&gt;/3.txt2&quot;,)] 
-# to channel: [(&quot;&lt;outdir&gt;/&quot;, )]
-p2.input   = {&quot;indir:file&quot;: lambda ch: ch.collapse()}
-p2.output  = {&quot;outfile:file:{{in.indir | fn}}.result&quot;}
-p2.script  = &quot;&quot;&quot;
-# combine 1.txt2, 2.txt2, 3.txt3 in {{in.indir}} to {{out.outfile}}
-&quot;&quot;&quot;
-PyPPL().start(p1).run()
-</code></pre>
-
-<p>If the files in the channel are not at column 0, you have to specify it: </p>
-<pre><code class="python">p1.input  = {&quot;infile:file&quot;: [(&quot;a&quot;, &quot;/a/b/1.txt&quot;), (&quot;a&quot;, &quot;/a/b/2.txt&quot;), (&quot;a&quot;, &quot;/a/b/3.txt&quot;)]}
-# ...
-p2.input  = {&quot;indir:file&quot;: lambda ch: ch.collapse(1)}
-# collapse to: [(&quot;a&quot;, &quot;&lt;outdir&gt;/&quot;)]
-# ...
-</code></pre>
-
-<blockquote>
-<p><strong>Caution</strong> 
-- <code>os.path.dirname(os.path.commonprefix(...))</code> is used to detect the common ancestor directory, so the files could be <code>['/a/1/1.file', '/a/2/1.file']</code>. In this case <code>/a/</code> will be returned.
-- values at other columns should be the same, <code>PyPPL</code> will NOT check it, the first value at the column will be used.</p>
-</blockquote>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<ul>
+<li><code>os.path.dirname(os.path.commonprefix(...))</code> is used to detect the common ancestor directory, so the files could be <code>['/a/1/1.file', '/a/2/1.file']</code>. In this case <code>/a/</code> will be returned.</li>
+<li>values at other columns should be the same, <code>PyPPL</code> will NOT check it, the first value at the column will be used.</li>
+</ul>
+</div>
 <h3 id="fetch-rows-from-a-channel">Fetch rows from a channel</h3>
 <ul>
 <li><code>Channel.rowAt(index)</code>  </li>
 </ul>
-<pre><code class="python">chan1 = Channel.create ([(1,2,3,4), (4,5,6,7)])
-chan2 = chan1.rowAt(1)
-# chan2 == [(4,5,6,7)]
+<div class="highlight"><pre><span></span><span class="n">chan1</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span> <span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">)])</span>
+<span class="n">chan2</span> <span class="o">=</span> <span class="n">chan1</span><span class="o">.</span><span class="n">rowAt</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># chan2 == [(4,5,6,7)]</span>
 
-# Now you can also fetch multiple columus as a channel:
-chan3 = chan1.rowAt([:2])
-chan3 == chan1
-</code></pre>
+<span class="c1"># Now you can also fetch multiple columus as a channel:</span>
+<span class="n">chan3</span> <span class="o">=</span> <span class="n">chan1</span><span class="o">.</span><span class="n">rowAt</span><span class="p">([:</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">chan3</span> <span class="o">==</span> <span class="n">chan1</span>
+</pre></div>
 
 <h3 id="fetch-columns-from-a-channel">Fetch columns from a channel</h3>
 <ul>
 <li><code>Channel.slice(start, length=None)</code></li>
 </ul>
-<pre><code class="python">chan1 = Channel.create ([(1,2,3,4), (4,5,6,7)])
-chan2 = chan1.slice(1,2)
-# chan2 == [(2,3), (5,6)]
-chan3 = chan1.slice(2)
-# chan3 == [(3,4), (6,7)]
-chan4 = chan1.slice(-1)
-# chan4 == [(4,), (7,)]
-</code></pre>
+<div class="highlight"><pre><span></span><span class="n">chan1</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span> <span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">)])</span>
+<span class="n">chan2</span> <span class="o">=</span> <span class="n">chan1</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># chan2 == [(2,3), (5,6)]</span>
+<span class="n">chan3</span> <span class="o">=</span> <span class="n">chan1</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># chan3 == [(3,4), (6,7)]</span>
+<span class="n">chan4</span> <span class="o">=</span> <span class="n">chan1</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># chan4 == [(4,), (7,)]</span>
+</pre></div>
 
 <ul>
 <li><code>Channel.colAt(index)</code></li>
 </ul>
-<pre><code class="python">chan.colAt(index) == chan.slice(index, 1)
+<div class="highlight"><pre><span></span><span class="n">chan</span><span class="o">.</span><span class="n">colAt</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">==</span> <span class="n">chan</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
-# Now you may also fetch multiple columns:
-chan.colAt([1,2]) == chan.slice(1, 2)
-</code></pre>
+<span class="c1"># Now you may also fetch multiple columns:</span>
+<span class="n">chan</span><span class="o">.</span><span class="n">colAt</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span> <span class="o">==</span> <span class="n">chan</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
 
 <h3 id="flatten-a-channel">Flatten a channel</h3>
 <p><code>Channel.flatten(col = None)</code>
-Flatten a channel, make it into a list.</p>
-<pre><code class="python">chan  = Channel.create ([(1,2,3), (4,5,6)])
-f1 = chan.flatten()
-# f1 == [1,2,3,4,5,6]
-f2 = chan.flatten(1)
-# f1 == [2,5]
-</code></pre>
-
+Flatten a channel, make it into a list.
+<div class="highlight"><pre><span></span><span class="n">chan</span>  <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span> <span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">)])</span>
+<span class="n">f1</span> <span class="o">=</span> <span class="n">chan</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="c1"># f1 == [1,2,3,4,5,6]</span>
+<span class="n">f2</span> <span class="o">=</span> <span class="n">chan</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># f1 == [2,5]</span>
+</pre></div></p>
 <h3 id="split-a-channel-to-single-width-channels">Split a channel to single-width channels</h3>
-<p><code>Channel.split(flatten = False)</code></p>
-<pre><code class="python">chan  = Channel.create ([(1,2,3), (4,5,6)])
-chans = chan.split()
-# isinstance (chans, list) == True
-# isinstance (chans, Channel) == False
-# chans == [
-#   [(1,), (4,)],  # isinstance (chans[0], Channel) == True
-#   [(2,), (5,)],
-#   [(3,), (6,)],
-# ]
-chans2 = chan.split(True)
-# chans2 == [
-#   [1, 4],        # isinstance (chans2[0], Channel) == False
-#   [2, 5],
-#   [3, 6],
-# ]
-</code></pre>
-
+<p><code>Channel.split(flatten = False)</code>
+<div class="highlight"><pre><span></span><span class="n">chan</span>  <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span> <span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">)])</span>
+<span class="n">chans</span> <span class="o">=</span> <span class="n">chan</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="c1"># isinstance (chans, list) == True</span>
+<span class="c1"># isinstance (chans, Channel) == False</span>
+<span class="c1"># chans == [</span>
+<span class="c1">#   [(1,), (4,)],  # isinstance (chans[0], Channel) == True</span>
+<span class="c1">#   [(2,), (5,)],</span>
+<span class="c1">#   [(3,), (6,)],</span>
+<span class="c1"># ]</span>
+<span class="n">chans2</span> <span class="o">=</span> <span class="n">chan</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="c1"># chans2 == [</span>
+<span class="c1">#   [1, 4],        # isinstance (chans2[0], Channel) == False</span>
+<span class="c1">#   [2, 5],</span>
+<span class="c1">#   [3, 6],</span>
+<span class="c1"># ]</span>
+</pre></div></p>
 <h3 id="attach-column-names">Attach column names</h3>
 <p><code>Channel.attach(*names)</code>
-We can attach the column names and then use them to access the columns.</p>
-<pre><code class="python">ch = Channel.create([(1,2,3), (4,5,6)])
-ch.attach ('col1', 'col2', 'col3')
-# ch.col1 == [(1,), (4,)]
-# ch.col2 == [(2,), (5,)]
-# ch.col3 == [(3,), (6,)]
-# isinstance(ch.col1, Channel) == True
+We can attach the column names and then use them to access the columns.
+<div class="highlight"><pre><span></span><span class="n">ch</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">)])</span>
+<span class="n">ch</span><span class="o">.</span><span class="n">attach</span> <span class="p">(</span><span class="s1">&#39;col1&#39;</span><span class="p">,</span> <span class="s1">&#39;col2&#39;</span><span class="p">,</span> <span class="s1">&#39;col3&#39;</span><span class="p">)</span>
+<span class="c1"># ch.col1 == [(1,), (4,)]</span>
+<span class="c1"># ch.col2 == [(2,), (5,)]</span>
+<span class="c1"># ch.col3 == [(3,), (6,)]</span>
+<span class="c1"># isinstance(ch.col1, Channel) == True</span>
 
-# flatten the columns
-ch.attach ('col1', 'col2', 'col3', True)
-# ch.col1 == [1,4]
-# ch.col2 == [2.5]
-# ch.col3 == [3,6]
-# isinstance(ch.col1, Channel) == False
-</code></pre>
-
+<span class="c1"># flatten the columns</span>
+<span class="n">ch</span><span class="o">.</span><span class="n">attach</span> <span class="p">(</span><span class="s1">&#39;col1&#39;</span><span class="p">,</span> <span class="s1">&#39;col2&#39;</span><span class="p">,</span> <span class="s1">&#39;col3&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+<span class="c1"># ch.col1 == [1,4]</span>
+<span class="c1"># ch.col2 == [2.5]</span>
+<span class="c1"># ch.col3 == [3,6]</span>
+<span class="c1"># isinstance(ch.col1, Channel) == False</span>
+</pre></div></p>
 <h3 id="map-filter-reduce">Map, filter, reduce</h3>
 <ul>
 <li><code>Channel.map(func)</code></li>
-<li><code>Channel.mapCol(func, col=0)</code></li>
-</ul>
-<pre><code class="python">ch1 = Channel.create()
-ch2 = Channel.create([1,2,3,4,5])
-ch3 = Channel.create([('a', 1), ('b', 2)])
-# ch1.map(lambda x: (x[0]*x[0],)) == []
-# ch2.map(lambda x: (x[0]*x[0],)) == [(1,),(4,),(9,),(16,),(25,)]
-# ch3.map(lambda x: (x[0], x[1]*x[1])) == [('a', 1), ('b', 4)]
-# ch1.mapCol(lambda x: x*x) == []
-# ch2.mapCol(lambda x: x*x) == [(1,),(4,),(9,),(16,),(25,)]
-# ch3.mapCol(lambda x: x*x, 1) == [('a', 1), ('b', 4)]
-# map &amp; mapCol return an instance of Channel
-</code></pre>
-
-<ul>
+<li><code>Channel.mapCol(func, col=0)</code>
+  <div class="highlight"><pre><span></span><span class="n">ch1</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+<span class="n">ch2</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+<span class="n">ch3</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">([(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)])</span>
+<span class="c1"># ch1.map(lambda x: (x[0]*x[0],)) == []</span>
+<span class="c1"># ch2.map(lambda x: (x[0]*x[0],)) == [(1,),(4,),(9,),(16,),(25,)]</span>
+<span class="c1"># ch3.map(lambda x: (x[0], x[1]*x[1])) == [(&#39;a&#39;, 1), (&#39;b&#39;, 4)]</span>
+<span class="c1"># ch1.mapCol(lambda x: x*x) == []</span>
+<span class="c1"># ch2.mapCol(lambda x: x*x) == [(1,),(4,),(9,),(16,),(25,)]</span>
+<span class="c1"># ch3.mapCol(lambda x: x*x, 1) == [(&#39;a&#39;, 1), (&#39;b&#39;, 4)]</span>
+<span class="c1"># map &amp; mapCol return an instance of Channel</span>
+</pre></div></li>
 <li><code>Channel.filter(func)</code></li>
-<li><code>Channel.filterCol(func, col=0)</code></li>
-</ul>
-<pre><code class="python">ch1 = Channel.create([
-  (1,    0,     0,   1  ),
-  ('a',  '',    'b', '0'),
-  (True, False, 0,   1  ),
-  ([],   [1],   [2], [0]),
-])
-# Filter by the first column, only first three rows remained
-ch1.filterCol() == ch1[:3] 
-# Filter by the second column, only the last row remained
-ch1.filterCol(col = 1) == ch1[3:4]
-# Filter by the third column, the 2nd and 4th row remained
-ch1.filterCol(col = 2) == [ch1[1], ch1[3]]
-# Filter by the fourth column, all rows remained
-ch1.filterCol(col = 3) == ch1
-# Filter with a function:       
-ch1.filter(lambda x: isinstance(x[2], int)) == [ch1[0], ch1[2]]
-# filter &amp; filterCol return an instance of Channel
-</code></pre>
-
-<ul>
+<li><code>Channel.filterCol(func, col=0)</code>
+  <div class="highlight"><pre><span></span><span class="n">ch1</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">([</span>
+  <span class="p">(</span><span class="mi">1</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>     <span class="mi">0</span><span class="p">,</span>   <span class="mi">1</span>  <span class="p">),</span>
+  <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span>  <span class="s1">&#39;&#39;</span><span class="p">,</span>    <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">),</span>
+  <span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">1</span>  <span class="p">),</span>
+  <span class="p">([],</span>   <span class="p">[</span><span class="mi">1</span><span class="p">],</span>   <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+<span class="p">])</span>
+<span class="c1"># Filter by the first column, only first three rows remained</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">filterCol</span><span class="p">()</span> <span class="o">==</span> <span class="n">ch1</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> 
+<span class="c1"># Filter by the second column, only the last row remained</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">filterCol</span><span class="p">(</span><span class="n">col</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">ch1</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+<span class="c1"># Filter by the third column, the 2nd and 4th row remained</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">filterCol</span><span class="p">(</span><span class="n">col</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="n">ch1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ch1</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span>
+<span class="c1"># Filter by the fourth column, all rows remained</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">filterCol</span><span class="p">(</span><span class="n">col</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="n">ch1</span>
+<span class="c1"># Filter with a function:		</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="nb">int</span><span class="p">))</span> <span class="o">==</span> <span class="p">[</span><span class="n">ch1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ch1</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+<span class="c1"># filter &amp; filterCol return an instance of Channel</span>
+</pre></div></li>
 <li><code>Channel.reduce(func)</code></li>
-<li><code>Channel.reduceCol(func, col=0)</code></li>
+<li><code>Channel.reduceCol(func, col=0)</code>
+  <div class="highlight"><pre><span></span><span class="n">ch1</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+<span class="c1"># Raises TypeError, no elements</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">)</span>
+<span class="n">ch1</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+<span class="c1"># Notice the different</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="c1"># x and y are tuples</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">reduceCol</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="mi">15</span>           <span class="c1"># x and y are numbers</span>
+</pre></div></li>
 </ul>
-<pre><code class="python">ch1 = Channel.create()
-# Raises TypeError, no elements
-ch1.reduce(lambda x,y: x+y)
-ch1 = Channel.create([1,2,3,4,5])
-# Notice the different
-ch1.reduce(lambda x,y: x+y) == (1, 2, 3, 4, 5) # x and y are tuples
-ch1.reduceCol(lambda x,y: x+y) == 15           # x and y are numbers
-</code></pre>
-
 <h3 id="add-rowscolumns-to-a-channel">Add rows/columns to a channel</h3>
 <ul>
 <li><code>Channel.rbind(*rows)</code>  </li>
 </ul>
 <p>Each row can be either a channel, a tuple, a list or a non-iterable element(including string) <br />
-  ```python
-  ch1 = Channel.create()
-  ch2 = Channel.create((1,2,3))</p>
-<p>row1 = Channel.create(1)
-  row2 = Channel.create((2,2,2))
-  row3 = [3]
-  row4 = (3,)
-  row5 = (4,4,4)
-  row6 = [4,4,4]
-  row7 = 5</p>
-<p>ch1.rbind(row1) == [(1, )]
-  ch2.rbind(row1) == [(1,2,3),(1,1,1)],
-  ch1.rbind(row2) == [(2,2,2)]
-  ch2.rbind(row2) == [(1,2,3), (2,2,2)]
-  ch1.rbind(row3) == [(3,)]
-  ch2.rbind(row3) == [(1,2,3),(3,3,3)]
-  ch1.rbind(row4) == [(3,)]
-  ch2.rbind(row4) == [(1,2,3),(3,3,3)]
-  ch1.rbind(row5) == [(4,4,4)]
-  ch2.rbind(row5) == [(1,2,3),(4,4,4)]
-  ch1.rbind(row6) == [(4,4,4)]
-  ch2.rbind(row6) == [(1,2,3),(4,4,4)]
-  ch1.rbind(row7) == [(5,)]
-  ch2.rbind(row7) == [(1,2,3),(5,5,5)]
-  ```</p>
+  <div class="highlight"><pre><span></span><span class="n">ch1</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+<span class="n">ch2</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="n">row1</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">row2</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">row3</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">row4</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+<span class="n">row5</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">row6</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">row7</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="n">ch1</span><span class="o">.</span><span class="n">rbind</span><span class="p">(</span><span class="n">row1</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="p">)]</span>
+<span class="n">ch2</span><span class="o">.</span><span class="n">rbind</span><span class="p">(</span><span class="n">row1</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)],</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">rbind</span><span class="p">(</span><span class="n">row2</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)]</span>
+<span class="n">ch2</span><span class="o">.</span><span class="n">rbind</span><span class="p">(</span><span class="n">row2</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">rbind</span><span class="p">(</span><span class="n">row3</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,)]</span>
+<span class="n">ch2</span><span class="o">.</span><span class="n">rbind</span><span class="p">(</span><span class="n">row3</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">rbind</span><span class="p">(</span><span class="n">row4</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,)]</span>
+<span class="n">ch2</span><span class="o">.</span><span class="n">rbind</span><span class="p">(</span><span class="n">row4</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">rbind</span><span class="p">(</span><span class="n">row5</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)]</span>
+<span class="n">ch2</span><span class="o">.</span><span class="n">rbind</span><span class="p">(</span><span class="n">row5</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">rbind</span><span class="p">(</span><span class="n">row6</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)]</span>
+<span class="n">ch2</span><span class="o">.</span><span class="n">rbind</span><span class="p">(</span><span class="n">row6</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">rbind</span><span class="p">(</span><span class="n">row7</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">5</span><span class="p">,)]</span>
+<span class="n">ch2</span><span class="o">.</span><span class="n">rbind</span><span class="p">(</span><span class="n">row7</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">)]</span>
+</pre></div></p>
 <ul>
-<li><code>Channel.cbind(*cols)</code>
-  ```python
-  ch1 = Channel.create([(1, 2), (3, 4)])
-  ch2 = Channel.create([5, 6])</li>
+<li>
+<p><code>Channel.cbind(*cols)</code>
+  <div class="highlight"><pre><span></span><span class="n">ch1</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)])</span>
+<span class="n">ch2</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+
+<span class="n">ch1</span><span class="o">.</span><span class="n">cbind</span><span class="p">(</span><span class="n">ch2</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">)]</span>
+
+<span class="n">ch2</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">cbind</span><span class="p">(</span><span class="n">ch2</span><span class="p">)</span>    <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">cbind</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">cbind</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">cbind</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>    <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)]</span>
+
+<span class="n">ch1</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+<span class="n">ch2</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">([</span><span class="mi">21</span><span class="p">,</span> <span class="mi">22</span><span class="p">])</span>
+<span class="n">ch3</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">ch4</span> <span class="o">=</span> <span class="p">[</span><span class="mi">41</span><span class="p">,</span> <span class="mi">42</span><span class="p">]</span>
+<span class="n">ch5</span> <span class="o">=</span> <span class="p">(</span><span class="mi">51</span><span class="p">,</span> <span class="mi">52</span><span class="p">)</span>
+<span class="n">ch6</span> <span class="o">=</span> <span class="s2">&quot;a&quot;</span>
+
+<span class="n">ch1</span><span class="o">.</span><span class="n">cbind</span><span class="p">(</span><span class="n">ch2</span><span class="p">,</span> <span class="n">ch3</span><span class="p">,</span> <span class="n">ch4</span><span class="p">,</span> <span class="n">ch5</span><span class="p">,</span> <span class="n">ch6</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">21</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">),</span> <span class="p">(</span><span class="mi">22</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">cbind</span><span class="p">(</span><span class="n">ch3</span><span class="p">)</span><span class="o">.</span><span class="n">cbind</span><span class="p">(</span><span class="n">ch6</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)]</span>
+</pre></div></p>
+</li>
+<li>
+<p><code>Channel.insert(index, col)</code><br />
+  <div class="highlight"><pre><span></span><span class="n">ch1</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)])</span>
+<span class="n">ch2</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ch2</span><span class="p">)</span>    <span class="o">==</span> <span class="p">[(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ch2</span><span class="p">)</span>    <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ch2</span><span class="p">)</span>   <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">ch2</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">)]</span>
+
+<span class="n">ch2</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ch2</span><span class="p">)</span>    <span class="o">==</span> <span class="p">[(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ch2</span><span class="p">)</span>    <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ch2</span><span class="p">)</span>   <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">ch2</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">)]</span>
+
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>    <span class="o">==</span> <span class="p">[(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>    <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>   <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>    <span class="o">==</span> <span class="p">[(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>    <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>   <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>       <span class="o">==</span> <span class="p">[(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>       <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>      <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>    <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)]</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">ch1</span><span class="p">,</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)])</span>
+
+<span class="n">ch1</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+<span class="n">ch2</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">create</span><span class="p">([</span><span class="mi">21</span><span class="p">,</span> <span class="mi">22</span><span class="p">])</span>
+<span class="n">ch3</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">ch4</span> <span class="o">=</span> <span class="p">[</span><span class="mi">41</span><span class="p">,</span> <span class="mi">42</span><span class="p">]</span>
+<span class="n">ch5</span> <span class="o">=</span> <span class="p">(</span><span class="mi">51</span><span class="p">,</span> <span class="mi">52</span><span class="p">)</span>
+<span class="n">ch6</span> <span class="o">=</span> <span class="s2">&quot;a&quot;</span>
+<span class="c1"># Raises ValueError, when 1 is inserted, it is a 1-width channel, </span>
+<span class="c1"># then you can&#39;t insert a 2-width to it.</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ch2</span><span class="p">)</span>
+<span class="n">ch1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ch2</span><span class="p">,</span> <span class="n">ch3</span><span class="p">,</span> <span class="n">ch4</span><span class="p">,</span> <span class="n">ch5</span><span class="p">,</span> <span class="n">ch6</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">21</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">),</span> <span class="p">(</span><span class="mi">22</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)]</span>
+</pre></div></p>
+</li>
 </ul>
-<p>ch1.cbind(ch2) == [(1, 2, 5), (3, 4, 6)]</p>
-<p>ch2 = Channel.create(5)
-  ch1.cbind(ch2)    == [(1, 2, 5), (3, 4, 5)]
-  ch1.cbind([5, 6]) == [(1, 2, 5), (3, 4, 6)]
-  ch1.cbind((5, 6)) == [(1, 2, 5), (3, 4, 6)]
-  ch1.cbind("a")    == [(1, 2, 'a'), (3, 4, 'a')]</p>
-<p>ch1 = Channel.create()
-  ch2 = Channel.create([21, 22])
-  ch3 = 3
-  ch4 = [41, 42]
-  ch5 = (51, 52)
-  ch6 = "a"</p>
-<p>ch1.cbind(ch2, ch3, ch4, ch5, ch6) == [(21, 3, 41, 51, 'a'), (22, 3, 42, 52, 'a')]
-  ch1.cbind(ch3).cbind(ch6) == [(3, 'a')]
-  ```</p>
-<ul>
-<li><code>Channel.insert(index, col)</code><br />
-  ```python
-  ch1 = Channel.create([(1, 2), (3, 4)])
-  ch2 = Channel.create([5, 6])
-  ch1.insert(0, ch2)    == [(5, 1, 2), (6, 3, 4)]
-  ch1.insert(1, ch2)    == [(1, 5, 2), (3, 6, 4)]
-  ch1.insert(-1, ch2)   == [(1, 5, 2), (3, 6, 4)]
-  ch1.insert(None, ch2) == [(1, 2, 5), (3, 4, 6)]</li>
-</ul>
-<p>ch2 = Channel.create(5)
-  ch1.insert(0, ch2)    == [(5, 1, 2), (5, 3, 4)]
-  ch1.insert(1, ch2)    == [(1, 5, 2), (3, 5, 4)]
-  ch1.insert(-1, ch2)   == [(1, 5, 2), (3, 5, 4)]
-  ch1.insert(None, ch2) == [(1, 2, 5), (3, 4, 5)]</p>
-<p>ch1.insert(0, [5, 6])    == [(5, 1, 2), (6, 3, 4)]
-  ch1.insert(1, [5, 6])    == [(1, 5, 2), (3, 6, 4)]
-  ch1.insert(-1, [5, 6])   == [(1, 5, 2), (3, 6, 4)]
-  ch1.insert(None, [5, 6]) == [(1, 2, 5), (3, 4, 6)]
-  ch1.insert(0, (5, 6))    == [(5, 1, 2), (6, 3, 4)]
-  ch1.insert(1, (5, 6))    == [(1, 5, 2), (3, 6, 4)]
-  ch1.insert(-1, (5, 6))   == [(1, 5, 2), (3, 6, 4)]
-  ch1.insert(None, (5, 6)) == [(1, 2, 5), (3, 4, 6)]
-  ch1.insert(0, "a")       == [('a', 1, 2), ('a', 3, 4)]
-  ch1.insert(1, "a")       == [(1, 'a', 2), (3, 'a', 4)]
-  ch1.insert(-1, "a")      == [(1, 'a', 2), (3, 'a', 4)]
-  ch1.insert(None, "a")    == [(1, 2, 'a'), (3, 4, 'a')]</p>
-<p>self.assertEqual(ch1, [(1, 2), (3, 4)])</p>
-<p>ch1 = Channel.create()
-  ch2 = Channel.create([21, 22])
-  ch3 = 3
-  ch4 = [41, 42]
-  ch5 = (51, 52)
-  ch6 = "a"
-  # Raises ValueError, when 1 is inserted, it is a 1-width channel, 
-  # then you can't insert a 2-width to it.
-  ch1.insert(1, ch2)
-  ch1.insert(0, ch2, ch3, ch4, ch5, ch6) == [(21, 3, 41, 51, 'a'), (22, 3, 42, 52, 'a')]
-  ```</p>
 <h3 id="fold-a-channel">Fold a channel</h3>
 <p><code>Channel.fold(n = 1)</code>
 Fold a <code>channel</code>, Make a row to n-length chunk rows
@@ -727,7 +657,6 @@ For example, you have the following channel:</p>
 Combine n-rows into one row; do the reverse thing as <code>Channel.fold</code>. But note that the different meaning of <code>n</code>. In <code>fold</code>, <code>n</code> means the length of the chunk that a row is cut to; will in <code>unfold</code>, it means how many rows to combine.</p>
 <h3 id="copy-a-channel">Copy a channel</h3>
 <p><code>Channel.copy()</code></p>
-<p>{% endraw %}</p>
               
             </div>
           </div>

@@ -89,7 +89,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../runners/">Runners</a>
+    <a class="" href="../runners/">Runners and running profiles</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../error-handling/">Error handling of processes</a>
 	    </li>
           
             <li class="toctree-l1 current">
@@ -105,19 +110,11 @@
         
             <li><a class="toctree-l3" href="#set-the-valid-returnexit-codes-pxxxrc">Set the valid return/exit codes pXXX.rc</a></li>
         
-            <li><a class="toctree-l3" href="#command-to-run-beforeafter-jobs-run-pxxxbeforecmdpxxxaftercmd">Command to run before/after jobs run pXXX.beforeCmd/pXXX.afterCmd</a></li>
-        
-            <li><a class="toctree-l3" href="#error-handling-pxxxerrhowpxxxerrntry">Error handling pXXX.errhow/pXXX.errntry</a></li>
-        
             <li><a class="toctree-l3" href="#set-the-processes-current-process-depends-on-pxxxdepends">Set the processes current process depends on pXXX.depends</a></li>
-        
-            <li><a class="toctree-l3" href="#set-expectations-of-a-process">Set expectations of a process</a></li>
         
             <li><a class="toctree-l3" href="#use-callback-to-modify-the-process-pxxxcallback">Use callback to modify the process pXXX.callback</a></li>
         
             <li><a class="toctree-l3" href="#use-callfront-to-modify-the-process-pxxxcallfront">Use callfront to modify the process pXXX.callfront</a></li>
-        
-            <li><a class="toctree-l3" href="#echo-jobs-stdoutstderr-to-log">Echo job's stdout/stderr to log</a></li>
         
         </ul>
     
@@ -132,12 +129,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
+    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
 	    </li>
           
             <li class="toctree-l1">
 		
-    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
+    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -203,208 +200,343 @@
             <div class="section">
               
                 <h1 id="other-attributes-of-a-process">Other attributes of a process</h1>
-<!-- toc -->
-
-<p>{% raw %}
-Currently we introduced in previous chapters a set of attributes of a process and we will introduce the rest of them in this chapter:</p>
-<p>| Attribute | Meaning | Possibile values/types | Default value | Where it's first mentioned |
-|-|-|-|-|-|-|
-| <code>id</code> | The id of the process | <code>str</code> | <code>&lt;the variable name&gt;</code> |<a href="https://pwwang.gitbooks.io/pyppl/content/placeholders.html#proc-property-placeholders">Link</a>|
-| <code>tag</code> | The tag of the process, makes it possible to have two processes with the same <code>id</code> but different <code>tag</code>. | <code>str</code> | <code>"notag"</code> |<a href="https://pwwang.gitbooks.io/pyppl/content/placeholders.html#proc-property-placeholders">Link</a>|
-| <code>desc</code> | The description of the process. | <code>str</code> | <code>"No description"</code> ||
-| <code>echo</code> | Whether to print out the <code>stdout</code> and <code>stderr</code> | <code>bool</code>/<code>dict</code> | <code>False</code> | <a href="https://pwwang.gitbooks.io/pyppl/content/placeholders.html#proc-property-placeholders">Link</a> |
-| <code>input</code> | The input of the process | <code>dict</code>/<code>list</code>/<code>str</code> ||<a href="https://pwwang.gitbooks.io/pyppl/content/specify-input-and-output-of-a-process.html#specify-input-of-a-process">Link</a>|
-| <code>output</code> | The output of the process | <code>list</code>/<code>str</code>/<code>OrderedDict</code> ||<a href="https://pwwang.gitbooks.io/pyppl/content/specify-input-and-output-of-a-process.html#specify-output-of-a-process">Link</a>|
-| <code>script</code> | The script of the process | <code>str</code> ||<a href="https://pwwang.gitbooks.io/pyppl/content/write-your-script.html">Link</a>|
-| <code>lang</code> | The language for the script | <code>str</code> | <code>"bash"</code> | <a href="https://pwwang.gitbooks.io/pyppl/content/write-your-script.html">Link</a>|
-| <code>exdir</code> | The export directory | <code>str</code> ||<a href="https://pwwang.gitbooks.io/pyppl/content/export-output-files.html">Link</a>|
-| <code>exhow</code> | How to export | <code>"move"</code>, <code>"copy"</code>, <code>"symlink"</code>, <code>"gzip"</code> | <code>"move"</code> |<a href="https://pwwang.gitbooks.io/pyppl/content/export-output-files.html">Link</a> |
-| <code>exow</code> | Whether to overwrite existing files when export | <code>bool</code> | <code>True</code>| <a href="https://pwwang.gitbooks.io/pyppl/content/export-output-files.html">Link</a> |
-| <code>cache</code> | Whether to cache the process | <code>True</code>, <code>False</code>, <code>"export"</code> | <code>True</code> |<a href="https://pwwang.gitbooks.io/pyppl/content/caching.html">Link</a> |
-| <code>runner</code> | Which runner to use | <code>str</code> | <code>"local"</code> |<a href="https://pwwang.gitbooks.io/pyppl/content/runners.html">Link</a> |
-| <code>ppldir</code> | The directory to store <code>&lt;workdir&gt;s</code> for all processes in this pipeline | <code>str</code> | <code>"./workdir"</code>|<a href="https://pwwang.gitbooks.io/pyppl/content/basic-concepts-and-directory-structure.html#folder-structure">Link</a>|
-| <code>workdir</code> | The work directory of the process | <code>str</code> | <code>"&lt;id&gt;.&lt;tag&gt;.&lt;uid&gt;"</code>|<a href="https://pwwang.gitbooks.io/pyppl/content/basic-concepts-and-directory-structure.html#folder-structure">Link</a>|
-| <code>args</code> | The arguments for the process | <code>dict</code> | <code>{}</code> | This chapter |
-| <code>rc</code> | Valid return codes | <code>str</code>/<code>list</code>/<code>int</code> | <code>0</code> | This chapter |
-| <code>beforeCmd</code> | The command to run before jobs run | <code>str</code> | | This chapter |
-| <code>afterCmd</code> | The command to run after jobs finish | <code>str</code> | | This chapter |
-| <code>errhow</code> | What's next if jobs fail | <code>"terminate"</code>, <code>"retry"</code>, <code>"ignore"</code> | <code>"terminate"</code>| This chapter |
-| <code>errntry</code> | If <code>errhow</code> is <code>"retry"</code>, how many time to re-try? | <code>int</code> | 3 | This chapter
-| <code>depends</code> | The processes the process depends on | <code>proc</code>/<code>list</code> | | This chapter |
-| <code>callback</code> | The callback, called after the process finishes | <code>callable</code> | | This chapter |
-| <code>callfront</code> | The callfront, called after properties are computed | <code>callable</code> | | This chapter |
-| <code>expect</code> | A command to check whether expected results generated | <code>str</code> | | This chapter |
-| <code>expart</code> | Partial export | <code>str</code>/<code>list</code> | | <a href="https://pwwang.gitbooks.io/pyppl/content/export-output-files.html">Link</a> |
-| <code>brings</code> | Definition of bring-in files| <code>str</code>/<code>list</code>||<a href="https://pwwang.gitbooks.io/pyppl/content/specify-input-and-output-of-a-process.html#specify-input-of-a-process">Link</a>|
-| <code>template</code> | The name of the template engine | <code>str</code> | <code>PyPPL</code> | <a href="https://pwwang.gitbooks.io/pyppl/content/placeholders.html#proc-property-placeholders">Link</a> |
-| <code>envs</code> | Environments for the template engine | <code>dict</code> |  | <a href="https://pwwang.gitbooks.io/pyppl/content/placeholders.html#proc-property-placeholders">Link</a> |
-| <code>nthread</code> | Number of theads used for job construction and cache checking | <code>int</code> | <code>1</code> | - |
-| <code>cclean</code> | Whether do cleanup (output checking/exporting) if a job was cached. | <code>bool</code> | <code>False</code> | - |
-| <code>dirsig</code><em> | Get the modified time for directory recursively (taking into account the dirs and files in it) for cache checking | <code>bool</code> | <code>True</code> | - |
-</em>: Set it to <code>False</code> if you have huge number of files generated for one job. It will save time since it just checks the modified time for <code>&lt;job.outdir&gt;</code> instead of each generated file.</p>
+<p>Currently we introduced in previous chapters a set of attributes of a process and we will introduce the rest of them in this chapter:</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Meaning</th>
+<th>Possibile values/types</th>
+<th>Default value</th>
+<th>Where it's first mentioned</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>The id of the process</td>
+<td><code>str</code></td>
+<td><code>&lt;the variable name&gt;</code></td>
+<td><a href="https://pwwang.github.io/PyPPL/content/placeholders.html#proc-property-placeholders">Link</a></td>
+</tr>
+<tr>
+<td><code>tag</code></td>
+<td>The tag of the process, makes it possible to have two processes with the same <code>id</code> but different <code>tag</code>.</td>
+<td><code>str</code></td>
+<td><code>"notag"</code></td>
+<td><a href="https://pwwang.github.io/PyPPL/content/placeholders.html#proc-property-placeholders">Link</a></td>
+</tr>
+<tr>
+<td><code>desc</code></td>
+<td>The description of the process.</td>
+<td><code>str</code></td>
+<td><code>"No description"</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>echo</code></td>
+<td>Whether to print out the <code>stdout</code> and <code>stderr</code></td>
+<td><code>bool</code>/<code>dict</code></td>
+<td><code>False</code></td>
+<td><a href="https://pwwang.github.io/PyPPL/content/placeholders.html#proc-property-placeholders">Link</a></td>
+</tr>
+<tr>
+<td><code>input</code></td>
+<td>The input of the process</td>
+<td><code>dict</code>/<code>list</code>/<code>str</code></td>
+<td></td>
+<td><a href="https://pwwang.github.io/PyPPL/content/specify-input-and-output-of-a-process.html#specify-input-of-a-process">Link</a></td>
+</tr>
+<tr>
+<td><code>output</code></td>
+<td>The output of the process</td>
+<td><code>list</code>/<code>str</code>/<code>OrderedDict</code></td>
+<td></td>
+<td><a href="https://pwwang.github.io/PyPPL/content/specify-input-and-output-of-a-process.html#specify-output-of-a-process">Link</a></td>
+</tr>
+<tr>
+<td><code>script</code></td>
+<td>The script of the process</td>
+<td><code>str</code></td>
+<td></td>
+<td><a href="https://pwwang.github.io/PyPPL/content/write-your-script.html">Link</a></td>
+</tr>
+<tr>
+<td><code>lang</code></td>
+<td>The language for the script</td>
+<td><code>str</code></td>
+<td><code>"bash"</code></td>
+<td><a href="https://pwwang.github.io/PyPPL/content/write-your-script.html">Link</a></td>
+</tr>
+<tr>
+<td><code>exdir</code></td>
+<td>The export directory</td>
+<td><code>str</code></td>
+<td></td>
+<td><a href="https://pwwang.github.io/PyPPL/content/export-output-files.html">Link</a></td>
+</tr>
+<tr>
+<td><code>exhow</code></td>
+<td>How to export</td>
+<td><code>"move"</code>, <code>"copy"</code>, <code>"symlink"</code>, <code>"gzip"</code></td>
+<td><code>"move"</code></td>
+<td><a href="https://pwwang.github.io/PyPPL/content/export-output-files.html">Link</a></td>
+</tr>
+<tr>
+<td><code>exow</code></td>
+<td>Whether to overwrite existing files when export</td>
+<td><code>bool</code></td>
+<td><code>True</code></td>
+<td><a href="https://pwwang.github.io/PyPPL/content/export-output-files.html">Link</a></td>
+</tr>
+<tr>
+<td><code>cache</code></td>
+<td>Whether to cache the process</td>
+<td><code>True</code>, <code>False</code>, <code>"export"</code></td>
+<td><code>True</code></td>
+<td><a href="https://pwwang.github.io/PyPPL/content/caching.html">Link</a></td>
+</tr>
+<tr>
+<td><code>runner</code></td>
+<td>Which runner to use</td>
+<td><code>str</code></td>
+<td><code>"local"</code></td>
+<td><a href="https://pwwang.github.io/PyPPL/content/runners.html">Link</a></td>
+</tr>
+<tr>
+<td><code>ppldir</code></td>
+<td>The directory to store <code>&lt;workdir&gt;s</code> for all processes in this pipeline</td>
+<td><code>str</code></td>
+<td><code>"./workdir"</code></td>
+<td><a href="https://pwwang.github.io/PyPPL/content/basic-concepts-and-directory-structure.html#folder-structure">Link</a></td>
+</tr>
+<tr>
+<td><code>workdir</code></td>
+<td>The work directory of the process</td>
+<td><code>str</code></td>
+<td><code>"&lt;id&gt;.&lt;tag&gt;.&lt;uid&gt;"</code></td>
+<td><a href="https://pwwang.github.io/PyPPL/content/basic-concepts-and-directory-structure.html#folder-structure">Link</a></td>
+</tr>
+<tr>
+<td><code>expart</code></td>
+<td>Partial export</td>
+<td><code>str</code>/<code>list</code></td>
+<td></td>
+<td><a href="https://pwwang.github.io/PyPPL/content/export-output-files.html">Link</a></td>
+</tr>
+<tr>
+<td><code>brings</code></td>
+<td>Definition of bring-in files</td>
+<td><code>str</code>/<code>list</code></td>
+<td></td>
+<td><a href="https://pwwang.github.io/PyPPL/content/specify-input-and-output-of-a-process.html#specify-input-of-a-process">Link</a></td>
+</tr>
+<tr>
+<td><code>template</code></td>
+<td>The name of the template engine</td>
+<td><code>str</code></td>
+<td><code>PyPPL</code></td>
+<td><a href="https://pwwang.github.io/PyPPL/content/placeholders.html#proc-property-placeholders">Link</a></td>
+</tr>
+<tr>
+<td><code>envs</code></td>
+<td>Environments for the template engine</td>
+<td><code>dict</code></td>
+<td></td>
+<td><a href="https://pwwang.github.io/PyPPL/content/placeholders.html#proc-property-placeholders">Link</a></td>
+</tr>
+<tr>
+<td><code>cclean</code></td>
+<td>Whether do cleanup (output checking/exporting) if a job was cached.</td>
+<td><code>bool</code></td>
+<td><code>False</code></td>
+<td><a href="https://pwwang.github.io/PyPPL/export-output-files/#control-of-export-of-cached-jobs">Link</a></td>
+</tr>
+<tr>
+<td><code>dirsig</code></td>
+<td>Get the modified time for directory recursively (taking into account the dirs and files in it) for cache checking</td>
+<td><code>bool</code></td>
+<td><code>True</code></td>
+<td><a href="https://pwwang.github.io/PyPPL/caching/#calculating-signatures-for-caching">Link</a></td>
+</tr>
+<tr>
+<td><code>errhow</code></td>
+<td>What's next if jobs fail</td>
+<td><code>"terminate"</code>, <code>"retry"</code>, <code>"ignore"</code></td>
+<td><code>"terminate"</code></td>
+<td><a href="https://pwwang.github.io/PyPPL/error-handling/">Link</a></td>
+</tr>
+<tr>
+<td><code>errntry</code></td>
+<td>If <code>errhow</code> is <code>"retry"</code>, how many time to re-try?</td>
+<td><code>int</code></td>
+<td>3</td>
+<td><a href="https://pwwang.github.io/PyPPL/error-handling/">Link</a></td>
+</tr>
+<tr>
+<td><code>expect</code></td>
+<td>A command to check whether expected results generated</td>
+<td><code>str</code></td>
+<td></td>
+<td><a href="https://pwwang.github.io/PyPPL/error-handling/">Link</a></td>
+</tr>
+<tr>
+<td><code>nthread</code></td>
+<td>Number of theads used for job construction and submission</td>
+<td><code>int</code></td>
+<td><code>min(int(cpu_count() / 2), 16)</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td>The arguments for the process</td>
+<td><code>dict</code></td>
+<td><code>{}</code></td>
+<td>This chapter</td>
+</tr>
+<tr>
+<td><code>rc</code></td>
+<td>Valid return codes</td>
+<td><code>str</code>/<code>list</code>/<code>int</code></td>
+<td><code>0</code></td>
+<td>This chapter</td>
+</tr>
+<tr>
+<td><code>beforeCmd</code></td>
+<td>The command to run before jobs run</td>
+<td><code>str</code></td>
+<td></td>
+<td>This chapter</td>
+</tr>
+<tr>
+<td><code>afterCmd</code></td>
+<td>The command to run after jobs finish</td>
+<td><code>str</code></td>
+<td></td>
+<td>This chapter</td>
+</tr>
+<tr>
+<td><code>depends</code></td>
+<td>The processes the process depends on</td>
+<td><code>proc</code>/<code>list</code></td>
+<td></td>
+<td>This chapter</td>
+</tr>
+<tr>
+<td><code>callback</code></td>
+<td>The callback, called after the process finishes</td>
+<td><code>callable</code></td>
+<td></td>
+<td>This chapter</td>
+</tr>
+<tr>
+<td><code>callfront</code></td>
+<td>The callfront, called after properties are computed</td>
+<td><code>callable</code></td>
+<td></td>
+<td>This chapter</td>
+</tr>
+</tbody>
+</table>
 <h2 id="set-arguments-of-a-process-pxxxargs">Set arguments of a process <code>pXXX.args</code></h2>
-<p>It is a <code>dict</code> used to set some common arguments shared within the process (different jobs). For example, all jobs use the same program: <code>bedtools</code>. but to make the process portable and shareable, you may want others can give a different path of <code>bedtools</code> as well. Then you can use <code>pXXX.args</code>:</p>
-<pre><code class="python">pXXX = proc()
-pXXX.input = {&quot;infile1:file, infile2:file&quot;: [(&quot;file1.bed&quot;, &quot;file2.bed&quot;)]}
-pXXX.output = &quot;outfile:file:{{in.infile1 | fn}}.out&quot;
-pXXX.args = {&quot;bedtools&quot;: &quot;/path/to/bedtools&quot;}
-# You can also do:
-# pXXX.args.bedtools = &quot;/path/to/bedtools&quot;
-pXXX.script = &quot;&quot;&quot;
-{{args.bedtools}} intersect -a {{in.infile1}} -b {{in.infile2}} &gt; {{out.outfile}}
-&quot;&quot;&quot;
-</code></pre>
-
-<p>That's <strong>NOT</strong> recommended that you put it in the input channel:</p>
-<pre><code class="python">pXXX = proc()
-pXXX.input = {&quot;infile1:file, infile2:file, bedtools&quot;: [(&quot;file1.bed&quot;, &quot;file2.bed&quot;, &quot;/path/to/bedtools&quot;)]}
-pXXX.output = &quot;outfile:file:{{infile.fn}}.out&quot;
-pXXX.script = &quot;&quot;&quot;
-{{bedtools}} intersect -a {{infile1}} -b {{infile2}} &gt; {{outfile}}
-&quot;&quot;&quot;
-</code></pre>
-
-<p>Of course, you can do that, but a common argument is not usually generated from prior processes, then you have to modify the input channels. If the argument is a file, and you put it in <code>input</code> with type <code>file</code>, <code>PyPPL</code> will try to create a link in <code>&lt;indir&gt;</code>. If you have 100 jobs, we need to do that 100 times or to determine whether the link exists for 100 times. You may not want that to happen.  </p>
-<blockquote>
-<p><strong>Caution</strong> never use a key with dot <code>.</code> in <code>pXXX.args</code>, since we use <code>{{args.key}}</code> to access it. </p>
-</blockquote>
+<p>It is a <code>dict</code> used to set some common arguments shared within the process (different jobs). For example, all jobs use the same program: <code>bedtools</code>. but to make the process portable and shareable, you may want others can give a different path of <code>bedtools</code> as well. Then you can use <code>pXXX.args</code>:
+<div class="highlight"><pre><span></span><span class="n">pXXX</span> <span class="o">=</span> <span class="n">Proc</span><span class="p">()</span>
+<span class="n">pXXX</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;infile1:file, infile2:file&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="s2">&quot;file1.bed&quot;</span><span class="p">,</span> <span class="s2">&quot;file2.bed&quot;</span><span class="p">)]}</span>
+<span class="n">pXXX</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="s2">&quot;outfile:file:{{in.infile1 | fn}}.out&quot;</span>
+<span class="n">pXXX</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;bedtools&quot;</span><span class="p">:</span> <span class="s2">&quot;/path/to/bedtools&quot;</span><span class="p">}</span>
+<span class="c1"># You can also do:</span>
+<span class="c1"># pXXX.args.bedtools = &quot;/path/to/bedtools&quot;</span>
+<span class="n">pXXX</span><span class="o">.</span><span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">{{args.bedtools}} intersect -a {{in.infile1}} -b {{in.infile2}} &gt; {{out.outfile}}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+</pre></div>
+That's <strong>NOT</strong> recommended that you put it in the input channel:
+<div class="highlight"><pre><span></span><span class="n">pXXX</span> <span class="o">=</span> <span class="n">proc</span><span class="p">()</span>
+<span class="n">pXXX</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;infile1:file, infile2:file, bedtools&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="s2">&quot;file1.bed&quot;</span><span class="p">,</span> <span class="s2">&quot;file2.bed&quot;</span><span class="p">,</span> <span class="s2">&quot;/path/to/bedtools&quot;</span><span class="p">)]}</span>
+<span class="n">pXXX</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="s2">&quot;outfile:file:{{infile.fn}}.out&quot;</span>
+<span class="n">pXXX</span><span class="o">.</span><span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">{{bedtools}} intersect -a {{infile1}} -b {{infile2}} &gt; {{outfile}}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+</pre></div>
+Of course, you can do that, but a common argument is not usually generated from prior processes, then you have to modify the input channels. If the argument is a file, and you put it in <code>input</code> with type <code>file</code>, <code>PyPPL</code> will try to create a link in <code>&lt;indir&gt;</code>. If you have 100 jobs, we need to do that 100 times or to determine whether the link exists for 100 times. You may not want that to happen.  </p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>Never use a key with dot <code>.</code> in <code>pXXX.args</code>, since we use <code>{{args.key}}</code> to access it. </p>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p><code>PyPPL</code> uses a built-in class <code>Box</code> to allow dot to be used to refer the attributes. So you can set the value of <code>args</code> like this: 
+<div class="highlight"><pre><span></span><span class="n">pXXX</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">bedtools</span> <span class="o">=</span> <span class="s1">&#39;bedtools&#39;</span>
+</pre></div></p>
+</div>
 <h2 id="set-the-valid-returnexit-codes-pxxxrc">Set the valid return/exit codes <code>pXXX.rc</code></h2>
-<p>When a program exits, it will return a code (or <a href="https://en.wikipedia.org/wiki/Exit_status">exit status</a>), usually a small integer to exhibit it's status. Generally if a program finishes successfully, it will return <code>0</code>, which is the default value of <code>p.rc</code>. <code>pyppl</code> relies on this return code to determine whether a job finishes successfully.  If not, <code>p.errorhow</code> will be triggered. You can set multiple valid return codes for a process: </p>
-<pre><code class="python">p.rc = [0, 1] #or &quot;0,1&quot;
-# exit code with 0 or 1 will be both regarded as success
-</code></pre>
-
-<h2 id="command-to-run-beforeafter-jobs-run-pxxxbeforecmdpxxxaftercmd">Command to run before/after jobs run <code>pXXX.beforeCmd</code>/<code>pXXX.afterCmd</code></h2>
-<p>You can run some commands before and after the jobs run. The commands should be fit for <a href="https://docs.python.org/2/library/subprocess.html#popen-constructor"><code>Popen</code></a> with <code>shell=True</code>. For example, you can set up some environment before the jobs start to run, and remove it when they finish.  </p>
-<blockquote>
-<p><strong>Caution</strong> <code>beforeCmd</code>/<code>afterCmd</code> only run locally, no matter which runner you choose to run the jobs.</p>
-</blockquote>
-<h2 id="error-handling-pxxxerrhowpxxxerrntry">Error handling <code>pXXX.errhow</code>/<code>pXXX.errntry</code></h2>
-<p>When a job finishes, it should generate a <code>job.rc</code> file containing the return code. When compare with the valid return codes <code>pXXX.rc</code>, the error triggered if it is not in <code>pXXX.rc</code>. <code>pXXX.errhow</code> determines what's next if errors happen. 
-- <code>"terminate"</code>: when errors happen, terminate the entire pipeline
-- <code>"ignore"</code>: ignore the errors, continuing run the next process
-- <code>"retry"</code>: re-submit and run the job again. <code>pXXX.errntry</code> defines how many time to retry.</p>
+<p>When a program exits, it will return a code (or <a href="https://en.wikipedia.org/wiki/Exit_status">exit status</a>), usually a small integer to exhibit it's status. Generally if a program finishes successfully, it will return <code>0</code>, which is the default value of <code>p.rc</code>. <code>pyppl</code> relies on this return code to determine whether a job finishes successfully.  If not, <code>p.errorhow</code> will be triggered. You can set multiple valid return codes for a process: 
+<div class="highlight"><pre><span></span><span class="n">p</span><span class="o">.</span><span class="n">rc</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="c1">#or &quot;0,1&quot;</span>
+<span class="c1"># exit code with 0 or 1 will be both regarded as success</span>
+</pre></div></p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p><code>beforeCmd</code>/<code>afterCmd</code> only run locally, no matter which runner you choose to run the jobs.</p>
+</div>
 <h2 id="set-the-processes-current-process-depends-on-pxxxdepends">Set the processes current process depends on <code>pXXX.depends</code></h2>
-<p>A process can not only depend on a single process: </p>
-<pre><code class="python">p2.depends = p1
-</code></pre>
-
-<p>but also multiple processes </p>
-<pre><code class="python">p2.depends = p1, p0
-</code></pre>
-
-<p>To set prior processes not only let the process use the output channel as input for current process, but also determines when the process starts to run (right after the prior processes finish).</p>
-<blockquote>
-<p><strong>Caution</strong> You can copy a process by <code>p2 = p.copy()</code>, but remember <code>depends</code> will not be copied, you have to specify it for the copied processes.<br />
-When you specify new dependents for a process, its original ones will be removed, which means each time <code>pXXX.depends</code> will overwrite the previous setting.</p>
-</blockquote>
-<h2 id="set-expectations-of-a-process">Set expectations of a process</h2>
-<p>You can use commands to check whether you have expected output. For example:</p>
-<pre><code class="python">p = proc ()
-p.input = {&quot;input&quot;: &quot;1&quot;}
-p.script = &quot;echo {{in.input}}&quot;
-# check the stdout
-p.expect = &quot;grep 1 {{job.outfile}}&quot;
-</code></pre>
-
+<p>A process can not only depend on a single process: 
+<div class="highlight"><pre><span></span><span class="n">p2</span><span class="o">.</span><span class="n">depends</span> <span class="o">=</span> <span class="n">p1</span>
+</pre></div>
+but also multiple processes 
+<div class="highlight"><pre><span></span><span class="n">p2</span><span class="o">.</span><span class="n">depends</span> <span class="o">=</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p0</span>
+</pre></div>
+To set prior processes not only let the process use the output channel as input for current process, but also determines when the process starts to run (right after the prior processes finish).</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>You can copy a process by <code>p2 = p.copy()</code>, but remember <code>depends</code> will not be copied, you have to specify it for the copied processes.  </p>
+<p>When you specify new dependents for a process, its original ones will be removed, which means each time <code>pXXX.depends</code> will overwrite the previous setting.</p>
+</div>
 <h2 id="use-callback-to-modify-the-process-pxxxcallback">Use callback to modify the process <code>pXXX.callback</code></h2>
-<p>The processes <strong>NOT</strong> initialized until it's ready to run. So you may not be able to modify some of the values until it is initialized. For example, you may want to change the output channel before it passes to the its dependent process:</p>
-<pre><code class="python">pSingle = proc ()
-pSingle.input    = {&quot;infile:file&quot;: [&quot;file1.txt&quot;, &quot;file2.txt&quot;, &quot;file3.txt&quot;]}
-pSingle.output   = &quot;outfile:file:{{in.infile | fn}}.sorted&quot;
-pSingle.script   = &quot;# Sort {{in. infile}} and save to {{out.outfile}}.sorted&quot;
-# pSingle.channel == [(&quot;file1.sorted&quot;,), (&quot;file2.sorted&quot;,), (&quot;file3.sorted&quot;,)]
-# BUT NOT NOW!! the output channel is only generated after the process finishes
+<p>The processes <strong>NOT</strong> initialized until it's ready to run. So you may not be able to modify some of the values until it is initialized. For example, you may want to change the output channel before it passes to the its dependent process:
+<div class="highlight"><pre><span></span><span class="n">pSingle</span> <span class="o">=</span> <span class="n">Proc</span> <span class="p">()</span>
+<span class="n">pSingle</span><span class="o">.</span><span class="n">input</span>    <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;infile:file&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;file1.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;file2.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;file3.txt&quot;</span><span class="p">]}</span>
+<span class="n">pSingle</span><span class="o">.</span><span class="n">output</span>   <span class="o">=</span> <span class="s2">&quot;outfile:file:{{in.infile | fn}}.sorted&quot;</span>
+<span class="n">pSingle</span><span class="o">.</span><span class="n">script</span>   <span class="o">=</span> <span class="s2">&quot;# Sort {{in. infile}} and save to {{out.outfile}}.sorted&quot;</span>
+<span class="c1"># pSingle.channel == [(&quot;file1.sorted&quot;,), (&quot;file2.sorted&quot;,), (&quot;file3.sorted&quot;,)]</span>
+<span class="c1"># BUT NOT NOW!! the output channel is only generated after the process finishes</span>
 
-pCombine = proc ()
-pCombine.depends = pSingle
-pCombine.input   = &quot;indir:file&quot;   
-# the directory contains &quot;file1.sorted&quot;, &quot;file2.sorted&quot;, &quot;file3.sorted&quot;
-pCombine.output  = &quot;outfile:{{in.indir | fn}}.combined&quot;
-pCombine.script  = &quot;# combine files to {{out.outfile}}.combined&quot;
+<span class="n">pCombine</span> <span class="o">=</span> <span class="n">Proc</span> <span class="p">()</span>
+<span class="n">pCombine</span><span class="o">.</span><span class="n">depends</span> <span class="o">=</span> <span class="n">pSingle</span>
+<span class="n">pCombine</span><span class="o">.</span><span class="n">input</span>   <span class="o">=</span> <span class="s2">&quot;indir:file&quot;</span>   
+<span class="c1"># the directory contains &quot;file1.sorted&quot;, &quot;file2.sorted&quot;, &quot;file3.sorted&quot;</span>
+<span class="n">pCombine</span><span class="o">.</span><span class="n">output</span>  <span class="o">=</span> <span class="s2">&quot;outfile:{{in.indir | fn}}.combined&quot;</span>
+<span class="n">pCombine</span><span class="o">.</span><span class="n">script</span>  <span class="o">=</span> <span class="s2">&quot;# combine files to {{out.outfile}}.combined&quot;</span>
 
-# To use the directory of &quot;file1.sorted&quot;, &quot;file2.sorted&quot;, &quot;file3.sorted&quot; as the input channel for pCombine
-# You can use callback
-def pSingleCallback(p):
-    p.channel = p.channel.collapse()
-pSingle.callback = pSingleCallback
+<span class="c1"># To use the directory of &quot;file1.sorted&quot;, &quot;file2.sorted&quot;, &quot;file3.sorted&quot; as the input channel for pCombine</span>
+<span class="c1"># You can use callback</span>
+<span class="k">def</span> <span class="nf">pSingleCallback</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">collapse</span><span class="p">()</span>
+<span class="n">pSingle</span><span class="o">.</span><span class="n">callback</span> <span class="o">=</span> <span class="n">pSingleCallback</span>
 
-PyPPL().start (pSingle).run()
-</code></pre>
-
-<p>You can also use a callback in <code>pCombine.input</code> to modify the channel, see <a href="https://pwwang.gitbooks.io/pyppl/content/specify-input-and-output-of-a-process.html#use-a-callback-to-modify-the-output-channel-of-the-prior-process">here</a>, which is recommended. Because <code>p.callback</code> will change the original output channel of <code>pSingle</code>, but the <code>input</code> callback will keep the output channel intact. However, <code>p.callback</code> can not only change the output channel, but also change other properties of current process or even set the properties of coming processes.</p>
+<span class="n">PyPPL</span><span class="p">()</span><span class="o">.</span><span class="n">start</span> <span class="p">(</span><span class="n">pSingle</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+You can also use a callback in <code>pCombine.input</code> to modify the channel, see <a href="https://pwwang.github.io/PyPPL/content/specify-input-and-output-of-a-process.html#use-a-callback-to-modify-the-output-channel-of-the-prior-process">here</a>, which is recommended. Because <code>p.callback</code> will change the original output channel of <code>pSingle</code>, but the <code>input</code> callback will keep the output channel intact. However, <code>p.callback</code> can not only change the output channel, but also change other properties of current process or even set the properties of coming processes.</p>
 <h2 id="use-callfront-to-modify-the-process-pxxxcallfront">Use callfront to modify the process <code>pXXX.callfront</code></h2>
 <p>One possible scenario is that, value in  <code>pXXX.args</code> depends on the other process.
-For example:</p>
-<pre><code class="python"># generate bam files
-# ...
-pBam.output = &quot;bamfile:file:{{in.infile | fn}}.bam&quot;
+For example:
+<div class="highlight"><pre><span></span><span class="c1"># generate bam files</span>
+<span class="c1"># ...</span>
+<span class="n">pBam</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="s2">&quot;bamfile:file:{{in.infile | fn}}.bam&quot;</span>
 
-# generate/download reference file, and index it
-# ...
-pRef.output = &quot;reffile:file:{{in.in}}.fa&quot;
+<span class="c1"># generate/download reference file, and index it</span>
+<span class="c1"># ...</span>
+<span class="n">pRef</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="s2">&quot;reffile:file:{{in.in}}.fa&quot;</span>
 
-# call variance
-# ...
-pCall.depends   = pBam, pRef
-pCall.callfront = lambda p: p.args.update({'reffile': pRef.channel.reffile[0][0]})
+<span class="c1"># call variance</span>
+<span class="c1"># ...</span>
+<span class="n">pCall</span><span class="o">.</span><span class="n">depends</span>   <span class="o">=</span> <span class="n">pBam</span><span class="p">,</span> <span class="n">pRef</span>
+<span class="n">pCall</span><span class="o">.</span><span class="n">callfront</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;reffile&#39;</span><span class="p">:</span> <span class="n">pRef</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">reffile</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]})</span>
 
-# pCall also depends on pRef, as it needs the reference file to run. 
-# But you may not want to put it in input.
+<span class="c1"># pCall also depends on pRef, as it needs the reference file to run. </span>
+<span class="c1"># But you may not want to put it in input.</span>
 
-PyPPL().start(pBam, pRef).run()
-</code></pre>
-
-<h2 id="echo-jobs-stdoutstderr-to-log">Echo job's stdout/stderr to log</h2>
-<p><code>pXXX.echo</code> sets whether/how the job's stderr/stdout should be echoed to the log.<br />
-The full format of <code>pXXX.echo</code> is:</p>
-<pre><code class="json">{
-    &quot;jobs&quot;: [0],
-    &quot;type&quot;: [&quot;stdout&quot;, &quot;stderr&quot;],
-    &quot;filter&quot;: r&quot;^OUTPUT:&quot;
-}
-</code></pre>
-
-<p><code>filter</code> is a regular expression defining what kind of messages should be echoed out.
-You can also simply set it as:</p>
-<pre><code class="python">pXXX.echo = False
-# same as {'jobs':0, 'type':[]}
-pXXX.echo = True
-# same as {'jobs':0, 'type':['stdout', 'stderr']}
-pXXX.echo = &quot;stderr&quot;
-# same as {'jobs':0, 'type': ['stderr']}
-pXXX.echo = &quot;stdout&quot;
-# same as {'jobs':0, 'type': ['stdout']}
-</code></pre>
-
-<p>To echo for all jobs:</p>
-<pre><code class="json">{
-    &quot;jobs&quot;: range(p.forks),
-    &quot;type&quot;: [&quot;stdout&quot;, &quot;stderr&quot;]
-}
-</code></pre>
-
-<p>To output some as a log message:<br />
-Even with <code>pXXX.echo = False</code>, in your script:</p>
-<pre><code class="python">p.script = &quot;&quot;&quot;
-echo &quot;pyppl.log.hhhhh: I am a log message&quot; 1&gt;&amp;2
-# The log level ^^^^^
-# The message          ^^^^^^^^^^^^^^^^^^
-# The log must be printed to stderr        ^^^^
-&quot;&quot;&quot;
-</code></pre>
-
-<p>Then on your screen:</p>
-<pre><code>...
-[2017-08-01 18:11:00][   INFO] p: Submitting job #0  
-[2017-08-01 18:11:03][  HHHHH] p: I am a log message
-...
-</code></pre>
-
-<blockquote>
-<p><strong>NOTE</strong> Only logs from jobs in <code>p.echo['jobs']</code> will be echoed. So if <code>p.echo = False</code>, only job #0 will have logs on your terminal or in log file.</p>
-</blockquote>
-<p>{% endraw %}</p>
+<span class="n">PyPPL</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">pBam</span><span class="p">,</span> <span class="n">pRef</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div></p>
               
             </div>
           </div>
@@ -415,7 +547,7 @@ echo &quot;pyppl.log.hhhhh: I am a log message&quot; 1&gt;&amp;2
         <a href="../configure-your-logs/" class="btn btn-neutral float-right" title="Log configuration">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../runners/" class="btn btn-neutral" title="Runners"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../error-handling/" class="btn btn-neutral" title="Error handling of processes"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -441,7 +573,7 @@ echo &quot;pyppl.log.hhhhh: I am a log message&quot; 1&gt;&amp;2
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../runners/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../error-handling/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
         <span style="margin-left: 15px"><a href="../configure-your-logs/" style="color: #fcfcfc">Next &raquo;</a></span>

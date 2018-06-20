@@ -89,7 +89,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../runners/">Runners</a>
+    <a class="" href="../runners/">Runners and running profiles</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../error-handling/">Error handling of processes</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -104,12 +109,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
+    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
 	    </li>
           
             <li class="toctree-l1">
 		
-    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
+    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -640,16 +645,15 @@ The list converted from the Channel.  </p>
 </li>
 </ul>
 <h4 id="fold-self-n"><code>fold (self, n)</code></h4>
-<p>Fold a Channel. Make a row to n-length chunk rows  </p>
-<pre><code>a1  a2  a3  a4  
-b1  b2  b3  b4  
+<p>Fold a Channel. Make a row to n-length chunk rows<br />
+<div class="highlight"><pre><span></span>a1	a2	a3	a4  
+b1	b2	b3	b4  
 if n==2, fold(2) will change it to:  
-a1  a2  
-a3  a4  
-b1  b2  
-b3  b4  
-</code></pre>
-
+a1	a2  
+a3	a4  
+b1	b2  
+b3	b4  
+</pre></div></p>
 <ul>
 <li>
 <p><strong>params:</strong><br />
@@ -1304,20 +1308,20 @@ The Box object  </li>
 <p>A customized logger for pyppl</p>
 </blockquote>
 <h4 id="class-loggerthemeerror"><code>class: LoggerThemeError</code></h4>
-<pre><code>Theme errors for logger
-</code></pre>
+<div class="highlight"><pre><span></span>Theme errors for logger
+</pre></div>
 
 <h4 id="class-pyppllogfilter"><code>class: PyPPLLogFilter</code></h4>
-<pre><code>logging filter by levels (flags)
-</code></pre>
+<div class="highlight"><pre><span></span>logging filter by levels (flags)
+</pre></div>
 
 <h4 id="class-pyppllogformatter"><code>class: PyPPLLogFormatter</code></h4>
-<pre><code>logging formatter for pyppl
-</code></pre>
+<div class="highlight"><pre><span></span>logging formatter for pyppl
+</pre></div>
 
 <h4 id="class-templatepyppl"><code>class: TemplatePyPPL</code></h4>
-<pre><code>Built-in template wrapper.
-</code></pre>
+<div class="highlight"><pre><span></span>Built-in template wrapper.
+</pre></div>
 
 <h4 id="_formattheme-theme-staticmethod"><code>_formatTheme (theme) [@staticmethod]</code></h4>
 <p>Make them in the standard form with bgcolor and fgcolor in raw terminal color strings<br />
@@ -1376,10 +1380,10 @@ The logger  </p>
 <h4 id="joinablequeue-maxsize"><code>JoinableQueue (maxsize)</code></h4>
 <p>Returns a queue object  </p>
 <h4 id="class-thread"><code>class: Thread</code></h4>
-<pre><code>A class that represents a thread of control.
+<div class="highlight"><pre><span></span>A class that represents a thread of control.
 
     This class can be safely subclassed in a limited fashion.
-</code></pre>
+</pre></div>
 
 <h4 id="_cp-f1-f2"><code>_cp (f1, f2)</code></h4>
 <p>Copy a file or a directory  </p>
@@ -1421,17 +1425,16 @@ The path of the lock file  </p>
 <code>data</code>: the data to be converted  </p>
 </li>
 <li>
-<p><strong>examples:</strong>  </p>
+<p><strong>examples:</strong><br />
+<div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;a, b, c&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">]</span>  
+<span class="n">ret</span>  <span class="o">=</span> <span class="n">alwaysList</span> <span class="p">(</span><span class="n">data</span><span class="p">)</span>  
+<span class="c1"># ret == [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]  </span>
+</pre></div></p>
 </li>
-</ul>
-<pre><code class="python">data = [&quot;a, b, c&quot;, &quot;d&quot;]  
-ret  = alwaysList (data)  
-# ret == [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]  
-</code></pre>
-
-<ul>
-<li><strong>returns:</strong><br />
-The split list  </li>
+<li>
+<p><strong>returns:</strong><br />
+The split list  </p>
+</li>
 </ul>
 <h4 id="brieflist-l"><code>briefList (l)</code></h4>
 <p>Briefly show an integer list, combine the continuous numbers.  </p>
@@ -1466,18 +1469,17 @@ A list with or without the path of the interpreter as the first element and the 
 <code>newDict</code>:  The new dictionary  </p>
 </li>
 <li>
-<p><strong>examples:</strong>  </p>
+<p><strong>examples:</strong><br />
+<div class="highlight"><pre><span></span><span class="n">od1</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">}}}</span>  
+<span class="n">od2</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span><span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">:</span><span class="n">value</span> <span class="ow">in</span> <span class="n">od1</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>  
+<span class="n">nd</span>  <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;d&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}}}</span>  
+<span class="n">od1</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">nd</span><span class="p">)</span>  
+<span class="c1"># od1 == {&quot;a&quot;: {&quot;b&quot;: {&quot;d&quot;: 2}}}, od1[&quot;a&quot;][&quot;b&quot;] is lost  </span>
+<span class="n">dictUpdate</span><span class="p">(</span><span class="n">od2</span><span class="p">,</span> <span class="n">nd</span><span class="p">)</span>  
+<span class="c1"># od2 == {&quot;a&quot;: {&quot;b&quot;: {&quot;c&quot;: 1, &quot;d&quot;: 2}}}  </span>
+</pre></div></p>
 </li>
 </ul>
-<pre><code class="python">od1 = {&quot;a&quot;: {&quot;b&quot;: {&quot;c&quot;: 1, &quot;d&quot;:1}}}  
-od2 = {key:value for key:value in od1.items()}  
-nd  = {&quot;a&quot;: {&quot;b&quot;: {&quot;d&quot;: 2}}}  
-od1.update(nd)  
-# od1 == {&quot;a&quot;: {&quot;b&quot;: {&quot;d&quot;: 2}}}, od1[&quot;a&quot;][&quot;b&quot;] is lost  
-dictUpdate(od2, nd)  
-# od2 == {&quot;a&quot;: {&quot;b&quot;: {&quot;c&quot;: 1, &quot;d&quot;: 2}}}  
-</code></pre>
-
 <h4 id="dirmtime-d"><code>dirmtime (d)</code></h4>
 <p>Calculate the mtime for a directory.<br />
 Should be the max mtime of all files in it.  </p>
@@ -1709,17 +1711,16 @@ If any of the path does not exist, return False  </p>
 <code>trim</code>: whether to trim each part. Default: True  </p>
 </li>
 <li>
-<p><strong>examples:</strong>  </p>
+<p><strong>examples:</strong><br />
+<div class="highlight"><pre><span></span><span class="n">ret</span> <span class="o">=</span> <span class="n">split</span><span class="p">(</span><span class="s2">&quot;&#39;a,b&#39;,c&quot;</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="p">)</span>  
+<span class="c1"># ret == [&quot;&#39;a,b&#39;&quot;, &quot;c&quot;]  </span>
+<span class="c1"># &#39;,&#39; inside quotes will be recognized.  </span>
+</pre></div></p>
 </li>
-</ul>
-<pre><code class="python">ret = split(&quot;'a,b',c&quot;, &quot;,&quot;)  
-# ret == [&quot;'a,b'&quot;, &quot;c&quot;]  
-# ',' inside quotes will be recognized.  
-</code></pre>
-
-<ul>
-<li><strong>returns:</strong><br />
-The list of substrings  </li>
+<li>
+<p><strong>returns:</strong><br />
+The list of substrings  </p>
+</li>
 </ul>
 <h4 id="targz-srcdir-tgzfile-overwrite-tmpdir"><code>targz (srcdir, tgzfile, overwrite, tmpdir)</code></h4>
 <p>Do a "tar zcf"-like for a directory  </p>
@@ -1877,14 +1878,13 @@ The <code>ProcNode</code> instance  </p>
 <code>proc0</code>: The original process, because this function runs recursively.  </p>
 </li>
 <li>
-<p><strong>returns:</strong>  </p>
-</li>
-</ul>
-<pre><code>p1 -&gt; p2 -&gt; p3  
+<p><strong>returns:</strong><br />
+<div class="highlight"><pre><span></span>p1 -&gt; p2 -&gt; p3  
 p4  _/  
 Paths for p3: [[p4], [p2, p1]]  
-</code></pre>
-
+</pre></div></p>
+</li>
+</ul>
 <h4 id="getpathstostarts-self-proc"><code>getPathsToStarts (self, proc)</code></h4>
 <p>Filter the paths with start processes  </p>
 <ul>
