@@ -298,7 +298,7 @@ You can define profiles in <code>PyPPL</code>'s default configuration files: <co
 </div>
 <h2 id="built-in-runners">Built-in runners</h2>
 <p>We have 5 built-in runners (<code>RunnerLocal</code>, <code>RunnerSsh</code>, <code>RunnerSge</code>, <code>RunnerSlurm</code>, <code>runnerDry</code>), you can also define you own runners.</p>
-<p>You can either tell one process to use a runner, or even, you can tell the pipeline to use one runner for all the processes. That means each process can have the same runner or a different one. To tell a process which runner to use, just specify the runner name to <code>pXXX.runner</code> (for example, <code>pXXX.runner = "sge"</code> to use the sge runner). Each process may use different configuration for the runner (<code>pXXX.sgeRunner</code>) or the same one by <a href="https://pwwang.gitbooks.io/pyppl/content/configure-a-pipeline.html">configuring the pipeline</a>.</p>
+<p>You can either tell one process to use a runner, or even, you can tell the pipeline to use one runner for all the processes. That means each process can have the same runner or a different one. To tell a process which runner to use, just specify the runner name to <code>pXXX.runner</code> (for example, <code>pXXX.runner = "sge"</code> to use the sge runner). Each process may use different configuration for the runner (<code>pXXX.sgeRunner</code>) or the same one by <a href="../configure-a-pipeline/">configuring the pipeline</a>.</p>
 <h2 id="configurations-for-ssh-runner">Configurations for ssh runner</h2>
 <p>Ssh runner takes the advantage to use the computing resources from other servers that can be connected via <code>ssh</code>. The <code>ssh</code> command allows us to pass the command to the server and execute it: <code>ssh [options] [command]</code></p>
 <div class="admonition caution">
@@ -348,7 +348,7 @@ Host dev
     <span class="p">}</span>
 <span class="p">})</span>
 </pre></div>
-Also see "<a href="https://pwwang.github.io/pyppl/content/configure-a-pipeline.html">pipeline configration</a>" for more details.</p>
+Also see "<a href="../configure-a-pipeline/">pipeline configration</a>" for more details.</p>
 <p>The constructor of the runner will change the actual script to run the following (<code>&lt;workdir&gt;/0/job.script.ssh</code>):</p>
 <div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
 <span class="nb">trap</span> <span class="s2">&quot;status=\$?; echo \$status &gt; &lt;workdir&gt;/scripts/script.0.rc; exit \$status&quot;</span> <span class="m">1</span> <span class="m">2</span> <span class="m">3</span> <span class="m">6</span> <span class="m">7</span> <span class="m">8</span> <span class="m">9</span> <span class="m">10</span> <span class="m">11</span> <span class="m">12</span> <span class="m">15</span> <span class="m">16</span> <span class="m">17</span> EXIT
@@ -380,7 +380,7 @@ Please check <code>man qsub</code> to find other options. Remember to add a <cod
     <span class="p">}</span>
 <span class="p">})</span>
 </pre></div>
-Also see "<a href="https://pwwang.gitbooks.io/pyppl/content/configure-a-pipeline.html">pipeline configuration</a>" for more details.</p>
+Also see "<a href="../configure-a-pipeline/">pipeline configuration</a>" for more details.</p>
 <p>The constructor of the runner will change the script to run to the following (<code>&lt;workdir&gt;/0/job.script.sge</code>):
 <div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
 <span class="c1">#$ -N &lt;id&gt;.&lt;tag&gt;.0</span>
@@ -461,7 +461,7 @@ For running profiles:
 </ul>
 </div>
 <h2 id="define-your-own-runner">Define your own runner</h2>
-<p>You are also able to define your own runner, which should be a class extends <code>Runner</code> (jobs run immediately after submission) or <code>RunnerQueue</code> (jobs are put into a queue after submission). There are several methods and variables you may need to redefine (You may check the <a href="https://pwwang.gitbooks.io/pyppl/content/API.html#runner">API documentation</a> for all available methods and variables).</p>
+<p>You are also able to define your own runner, which should be a class extends <code>Runner</code> (jobs run immediately after submission) or <code>RunnerQueue</code> (jobs are put into a queue after submission). There are several methods and variables you may need to redefine (You may check the <a href="../API/#runner">API documentation</a> for all available methods and variables).</p>
 <p>The class name <strong>MUST</strong> start with <code>Runner</code> and end with the runner name with first letter capitalized. For example, to define the runner <code>my</code>:
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyppl.runners</span> <span class="kn">import</span> <span class="n">Runner</span>
 <span class="k">class</span> <span class="nc">RunnerMy</span> <span class="p">(</span><span class="n">Runner</span><span class="p">):</span>

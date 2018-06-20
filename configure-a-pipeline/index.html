@@ -226,14 +226,10 @@ Here is the full structure of the configurations (<strong><code>yaml</code> conf
     <span class="err">...</span>
 <span class="p">}</span>
 </pre></div>
-- For log configuration please refer to <a href="https://pwwang.github.io/PyPPL/configure-your-logs.html">configure your logs</a>
-- For flowchart configuration please refer to <a href="https://pwwang.github.io/PyPPL/draw-flowchart-of-a-pipeline.html">pipeline flowchart</a>
-- <code>proc</code> defines the base running profile for processes in this pipeline. <a href="https://pwwang.github.io/PyPPL/content/set-other-properties-of-a-process.html">All the properties</a> of a process can be set here, but just some common one are recommended. Obviously, <code>input</code> is not suitable to be set here, except some extreme cases.
+- For log configuration please refer to <a href="../configure-your-logs/">configure your logs</a>
+- For flowchart configuration please refer to <a href="../draw-flowchart-of-a-pipeline/">pipeline flowchart</a>
+- <code>proc</code> defines the base running profile for processes in this pipeline. <a href="../set-other-properties-of-a-process/">All the properties</a> of a process can be set here, but just some common one are recommended. Obviously, <code>input</code> is not suitable to be set here, except some extreme cases.
 - <code>profiles</code> defines some profiles that may be shared by the processes. To use a profile, just specify the profile name to <code>run</code>: <code>PyPPL(config).start(process).run(&lt;profile&gt;)</code>.</p>
-<div class="admonition info">
-<p class="admonition-title">Info</p>
-<p>Settings for <code>profiles</code> are actually the same as for <code>proc</code>. They just make you easy to switch the profiles back and forth. For example, you want to run with sge runner this time, but ssh runner next time, what you need to do is just change from <code>...run("profile_sge")</code> to <code>...run("profile_ssh")</code></p>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You may also use the runner name as a profile. That means, following profiles are implied in the configuration:
@@ -248,10 +244,10 @@ Here is the full structure of the configurations (<strong><code>yaml</code> conf
 </div>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
-<p>You cannot define profiles with names <code>flowchart</code> and <code>log</code></p>
+<p>You cannot define profiles with names <code>_flowchart</code> and <code>_log</code></p>
 </div>
 <h2 id="priority-of-configuration-options">Priority of configuration options</h2>
-<p>See <a href="https://pwwang.github.io/PyPPL/runners/#defining-running-profiles">here</a> for use of configuration files.<br />
+<p>See <a href="../runners/#defining-running-profiles">here</a> for use of configuration files.<br />
 Now you have 3 ways to set attributes for a process: 
 - directly set the process attributes <em>(1)</em>, 
 - set in the first argument (<code>config</code>) of <code>PyPPL</code> constructor <em>(2)</em>, 

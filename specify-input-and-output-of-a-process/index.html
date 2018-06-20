@@ -255,7 +255,7 @@ But you cannot do:
 <li><code>{{in.RE_infile}}</code>: The realpath</li>
 </ul>
 </div>
-<p>Use <code>sys.argv</code> (see details for <a href="https://pwwang.gitbooks.io/pyppl/content/channels.html#initialize-a-channel"><code>Channel.fromArgv</code></a>):
+<p>Use <code>sys.argv</code> (see details for <a href="../channels/#initialize-a-channel"><code>Channel.fromArgv</code></a>):
 <div class="highlight"><pre><span></span><span class="n">p3</span> <span class="o">=</span> <span class="n">Proc</span><span class="p">()</span>
 <span class="n">p3</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="s2">&quot;in1&quot;</span>
 <span class="c1"># same as p3.input = {&quot;in1&quot;: channel.fromArgv ()}</span>
@@ -311,7 +311,7 @@ But you cannot do:
 <span class="c1"># just use the last 2 columns: [(2,5), (3,6)]</span>
 <span class="c1"># p1.channel keeps intact</span>
 </pre></div>
-You can check more examples in some channel methods: <a href="https://pwwang.gitbooks.io/pyppl/channels.html#expand-a-channel-by-directory">channel.expand</a> and <a href="https://pwwang.gitbooks.io/pyppl/channels.html#collapse-a-channel-by-files-in-a-common-ancestor-directory">channel.collapse</a>.</p>
+You can check more examples in some channel methods: <a href="../channels/#expand-a-channel-by-directory">channel.expand</a> and <a href="../channels/#collapse-a-channel-by-files-in-a-common-ancestor-directory">channel.collapse</a>.</p>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <p>If you use callback to modify the channel, you may combine the keys: in the above case <code>"in1, in2": ...</code>, or specify them independently: <code>p2.input = {"in1": lambda ch: ch.slice(1,1), "in2": lambda ch: ch.slice(2)}</code>. But remember, <strong>all channels</strong> from <code>p2.depends</code> will be passed to each callback function. For example:

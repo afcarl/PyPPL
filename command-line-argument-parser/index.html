@@ -311,13 +311,15 @@ Note that by default, the options from the <code>dict</code> will be hidden from
 <li><code>params.prefix('--p-')</code> The prefix of the options. Default: <code>--param-</code></li>
 <li><code>params.helpOpts('--help, -H')</code> The option to show the help page.  </li>
 </ul>
-<blockquote>
-<p><strong>Hint</strong>
-- You can also chain those settings: <code>params.usage(...).example(...)</code><br />
-- Multiple usages and examples can be separated by <code>'\n'</code>
-- You can also set the <code>helpOpts</code> by <code>list</code>: <code>params.helpOpts(['-h', '-?'])</code>
-- An empty string in <code>helpOpts</code> means to show help page if no arguments offered.</p>
-</blockquote>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<ul>
+<li>You can also chain those settings: <code>params.usage(...).example(...)</code>  </li>
+<li>Multiple usages and examples can be separated by <code>'\n'</code></li>
+<li>You can also set the <code>helpOpts</code> by <code>list</code>: <code>params.helpOpts(['-h', '-?'])</code></li>
+<li>An empty string in <code>helpOpts</code> means to show help page if no arguments offered.</li>
+</ul>
+</div>
               
             </div>
           </div>

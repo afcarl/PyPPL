@@ -204,20 +204,20 @@
 <h2 id="built-in-log-themes">Built-in log themes</h2>
 <p>We have some built-in themes:</p>
 <p>greenOnBlack (default):
-<img alt="greenOnBlack" src="https://raw.githubusercontent.com/pwwang/pyppl/master/docs/greenOnBlack.png" /></p>
+<img alt="greenOnBlack" src="../greenOnBlack.png" /></p>
 <p>greenOnWhite:
-<img alt="greenOnWhite" src="https://raw.githubusercontent.com/pwwang/pyppl/master/docs/greenOnWhite.png" />
+<img alt="greenOnWhite" src="../greenOnWhite.png" />
 blueOnBlack:
-<img alt="blueOnBlack" src="https://raw.githubusercontent.com/pwwang/pyppl/master/docs/blueOnBlack.png" /></p>
+<img alt="blueOnBlack" src="../blueOnBlack.png" /></p>
 <p>blueOnWhite:
-<img alt="blueOnWhite" src="https://raw.githubusercontent.com/pwwang/pyppl/master/docs/blueOnWhite.png" /></p>
+<img alt="blueOnWhite" src="../blueOnWhite.png" /></p>
 <p>magentaOnBlack:
-<img alt="magentaOnBlack" src="https://raw.githubusercontent.com/pwwang/pyppl/master/docs/magentaOnBlack.png" /></p>
+<img alt="magentaOnBlack" src="../magentaOnBlack.png" /></p>
 <p>magentaOnWhite:
-<img alt="magentaOnWhite" src="https://raw.githubusercontent.com/pwwang/pyppl/master/docs/magentaOnWhite.png" /></p>
+<img alt="magentaOnWhite" src="../magentaOnWhite.png" /></p>
 <p>If you don't like them, you can also disable them:
-<img alt="noThemeOnBlack" src="https://raw.githubusercontent.com/pwwang/pyppl/master/docs/noThemeOnBlack.png" />
-<img alt="noThemeOnWhite" src="https://raw.githubusercontent.com/pwwang/pyppl/master/docs/noThemeOnWhite.png" /></p>
+<img alt="noThemeOnBlack" src="../noThemeOnBlack.png" />
+<img alt="noThemeOnWhite" src="../noThemeOnWhite.png" /></p>
 <p>To use them, just specify the name in your pipeline configuration file:
 <div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="nt">&quot;_log&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -234,7 +234,7 @@ If you set <code>theme</code> to <code>True</code>, then default theme <code>gre
 <p>Please note that the levels are different from those of python's <code>logging</code> module. For <code>logging</code> module has <a href="https://docs.python.org/2/library/logging.html#logging-levels">6 levels</a>, with different int values. However, pyppl's log has many levels, or more suitable, flags, which don't have corresponding values. They are somehow equal, but some of them always print out unless you ask them not to.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The log levels are a little bit different from here, please see <a href="https://pwwang.github.io/PyPPL/write-your-script.html#debug-your-script">debug your script</a>.</p>
+<p>The log levels are a little bit different from here, please see <a href="../write-your-script.html#debug-your-script">debug your script</a>.</p>
 </div>
 <p>You may also specify the group name in your pipeline configuration file:
 <div class="highlight"><pre><span></span><span class="p">{</span>
@@ -388,9 +388,10 @@ Then empty string key (<code>''</code>) defines the colors to use for the messag
 </pre></div></p>
 <h2 id="log-to-file">Log to file</h2>
 <p>By default, pyppl will not log to a file until you set a file path to <code>{"_log": {"file": "/path/to/logfile"}}</code> in the configuration. Or you can specfiy <code>False</code> to it to disable logging to file. If you set it to <code>True</code>, a default log file will be used, which is: <code>"./pipeline.pyppl.log"</code> if your pipeline is from file: <code>./pipeline.py</code></p>
-<blockquote>
-<p><strong>NOTE</strong> Filters and themes are not applied to handler to log to file. So you can always find all logs in the log file if your have it enabled.</p>
-</blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Filters and themes are not applied to handler to log to file. So you can always find all logs in the log file if your have it enabled.</p>
+</div>
 <h2 id="progress-bar">Progress bar</h2>
 <p>Job status and progress are indicated in the log with progress bar:
 <div class="highlight"><pre><span></span>[==============================xxxxx!!!!!&gt;&gt;&gt;&gt;&gt;-----]
@@ -423,7 +424,6 @@ First cell represents job #1, #2; second job #3, #4; ...; the last one represent
            ^ Indicating current job
 </pre></div>
 So even job #2 belongs to the first cell and it's running, the sign is still <code>=</code>.</p>
-<p>{% endraw %}</p>
               
             </div>
           </div>

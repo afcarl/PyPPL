@@ -310,7 +310,7 @@ a2&lt;tab&gt;b2&lt;tab&gt;c2
 </li>
 <li>
 <p>From command line argument parser:
-  See <a href="https://pwwang.github.io/PyPPL/command-line-argument-parser.html">command line argument parser</a> for details.
+  See <a href="../command-line-argument-parser/">command line argument parser</a> for details.
   <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PyPPL</span> <span class="kn">import</span> <span class="n">Channel</span><span class="p">,</span> <span class="n">params</span>
 <span class="n">params</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="s1">&#39;a&#39;</span>
 <span class="n">params</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="mi">2</span>
@@ -364,7 +364,7 @@ a2&lt;tab&gt;b2&lt;tab&gt;c2
 <h3 id="expand-a-channel-by-directory">Expand a channel by directory</h3>
 <p><code>Channel.expand (col= 0, pattern = '*', t='any', sortby='name', reverse=False)</code></p>
 <p>Sometimes we prepare files in one process (for example, split a big file into small ones in a directory), then handle these files by different jobs in another process, so that they can be processed simultaneously. </p>
-<p><img alt="channel.expand" src="https://github.com/pwwang/pyppl/raw/master/docs/channel-expand.png" /> </p>
+<p><img alt="channel.expand" src="../channel-expand.png" /> </p>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <ul>
@@ -375,7 +375,7 @@ a2&lt;tab&gt;b2&lt;tab&gt;c2
 <h3 id="collapse-a-channel-by-files-in-a-common-ancestor-directory">Collapse a channel by files in a common ancestor directory</h3>
 <p><code>Channel.collapse(col=0)</code></p>
 <p>It's basically the reverse process of <code>expand</code>. It applies when you deal with different files and in next process you need them all involved (i.e. combine the results):</p>
-<p><img alt="channel.expand" src="https://github.com/pwwang/pyppl/raw/master/docs/channel-collapse.png" /> </p>
+<p><img alt="channel.expand" src="../channel-collapse.png" /> </p>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <ul>
