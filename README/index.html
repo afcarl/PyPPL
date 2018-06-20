@@ -1,153 +1,218 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
-        
-        
-        <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>Introduction - PyPPL - A Python PiPeLine framework</title>
-        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../css/font-awesome-4.5.0.css" rel="stylesheet">
-        <link href="../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="../css/highlight.css">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-        <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Introduction - PyPPL</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
-        <script src="../js/jquery-1.10.2.min.js"></script>
-        <script src="../js/bootstrap-3.0.3.min.js"></script>
-        <script src="../js/highlight.pack.js"></script> 
-    </head>
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Introduction";
+    var mkdocs_page_input_path = "README.md";
+    var mkdocs_page_url = "/README/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
 
-    <body>
+<body class="wy-body-for-nav" role="document">
 
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
+  <div class="wy-grid-for-nav">
 
-        <!-- Collapsed navigation -->
-        <div class="navbar-header">
-            <!-- Expander button -->
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="./">PyPPL - A Python PiPeLine framework</a>
-        </div>
-
-        <!-- Expanded navigation -->
-        <div class="navbar-collapse collapse">
-                <!-- Main navigation -->
-                <ul class="nav navbar-nav">
-                    <li class="active">
-                        <a href="./">Introduction</a>
-                    </li>
-                    <li >
-                        <a href="../basic-concepts-and-directory-structure/">Basics and folder structure</a>
-                    </li>
-                    <li >
-                        <a href="../placeholders/">Templating</a>
-                    </li>
-                    <li >
-                        <a href="../channels/">Channels</a>
-                    </li>
-                    <li >
-                        <a href="../specify-input-and-output-of-a-process/">Input and output of a process</a>
-                    </li>
-                    <li >
-                        <a href="../write-your-script/">The heart: script</a>
-                    </li>
-                    <li >
-                        <a href="../export-output-files/">Output file exporting</a>
-                    </li>
-                    <li >
-                        <a href="../caching/">Caching and resuming processes</a>
-                    </li>
-                    <li >
-                        <a href="../runners/">Runners</a>
-                    </li>
-                    <li >
-                        <a href="../set-other-properties-of-a-process/">Other attributes of a process</a>
-                    </li>
-                    <li >
-                        <a href="../configure-your-logs/">Log configuration</a>
-                    </li>
-                    <li >
-                        <a href="../configure-a-pipeline/">Pipeline configuration</a>
-                    </li>
-                    <li >
-                        <a href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
-                    </li>
-                    <li >
-                        <a href="../command-line-argument-parser/">Command line argument parser</a>
-                    </li>
-                    <li >
-                        <a href="../aggregations/">Aggregations</a>
-                    </li>
-                    <li >
-                        <a href="../command-line-tool/">Command line tool</a>
-                    </li>
-                    <li >
-                        <a href="../api/">API</a>
-                    </li>
-                    <li >
-                        <a href="../faq/">FAQ</a>
-                    </li>
-                    <li >
-                        <a href="../change-log/">Change log</a>
-                    </li>
-                </ul>
-
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
-                        <i class="fa fa-search"></i> Search
-                    </a>
-                </li>
-                    <li class="disabled">
-                        <a rel="next" >
-                            <i class="fa fa-arrow-left"></i> Previous
-                        </a>
-                    </li>
-                    <li >
-                        <a rel="prev" href="../basic-concepts-and-directory-structure/">
-                            Next <i class="fa fa-arrow-right"></i>
-                        </a>
-                    </li>
-            </ul>
-        </div>
-    </div>
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="./" class="icon icon-home"> PyPPL</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
 </div>
+      </div>
 
-        <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#pyppl-a-python-pipeline-framework">PyPPL - A Python PiPeLine framework</a></li>
-            <li><a href="#features">Features</a></li>
-            <li><a href="#requirements">Requirements</a></li>
-            <li><a href="#installation">Installation</a></li>
-            <li><a href="#get-started">Get started</a></li>
-            <li><a href="#deduce-input-channel-from-dependent-process">Deduce input channel from dependent process</a></li>
-            <li><a href="#modify-input-channel">Modify input channel</a></li>
-            <li><a href="#use-a-different-language">Use a different language</a></li>
-            <li><a href="#use-args">Use args</a></li>
-            <li><a href="#use-the-command-line-argument-parser">Use the command line argument parser</a></li>
-            <li><a href="#use-a-different-runner">Use a different runner</a></li>
-            <li><a href="#use-jinja2-as-template-engine">Use Jinja2 as template engine</a></li>
-            <li><a href="#debug-your-script">Debug your script</a></li>
-            <li><a href="#switch-runner-profiles">Switch runner profiles</a></li>
-            <li><a href="#draw-the-pipeline-chart">Draw the pipeline chart</a></li>
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Introduction</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#pyppl-a-python-pipeline-framework">PyPPL - A Python PiPeLine framework</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#features">Features</a></li>
+        
+            <li><a class="toctree-l3" href="#requirements">Requirements</a></li>
+        
+            <li><a class="toctree-l3" href="#installation">Installation</a></li>
+        
+            <li><a class="toctree-l3" href="#get-started">Get started</a></li>
+        
+            <li><a class="toctree-l3" href="#deduce-input-channel-from-dependent-process">Deduce input channel from dependent process</a></li>
+        
+            <li><a class="toctree-l3" href="#modify-input-channel">Modify input channel</a></li>
+        
+            <li><a class="toctree-l3" href="#use-a-different-language">Use a different language</a></li>
+        
+            <li><a class="toctree-l3" href="#use-args">Use args</a></li>
+        
+            <li><a class="toctree-l3" href="#use-the-command-line-argument-parser">Use the command line argument parser</a></li>
+        
+            <li><a class="toctree-l3" href="#use-a-different-runner">Use a different runner</a></li>
+        
+            <li><a class="toctree-l3" href="#use-jinja2-as-template-engine">Use Jinja2 as template engine</a></li>
+        
+            <li><a class="toctree-l3" href="#debug-your-script">Debug your script</a></li>
+        
+            <li><a class="toctree-l3" href="#switch-runner-profiles">Switch runner profiles</a></li>
+        
+            <li><a class="toctree-l3" href="#draw-the-pipeline-chart">Draw the pipeline chart</a></li>
+        
+        </ul>
+    
+
     </ul>
-</div></div>
-                <div class="col-md-9" role="main">
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../basic-concepts-and-directory-structure/">Basics and folder structure</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../placeholders/">Templating</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../channels/">Channels</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../specify-input-and-output-of-a-process/">Input and output of a process</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../write-your-script/">The heart: script</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../export-output-files/">Output file exporting</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../caching/">Caching and resuming processes</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../runners/">Runners</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../set-other-properties-of-a-process/">Other attributes of a process</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../configure-your-logs/">Log configuration</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../configure-a-pipeline/">Pipeline configuration</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../draw-flowchart-of-a-pipeline/">Pipeline flowchart</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../command-line-argument-parser/">Command line argument parser</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../aggregations/">Aggregations</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../command-line-tool/">Command line tool</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../api/">API</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../faq/">FAQ</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../change-log/">Change log</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
 
-<h1 id="pyppl-a-python-pipeline-framework"><a href="https://github.com/pwwang/pyppl/">PyPPL</a> - A <a href="#">Py</a>thon <a href="#">P</a>i<a href="#">P</a>e<a href="#">L</a>ine framework</h1>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="./">PyPPL</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="./">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Introduction</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="pyppl-a-python-pipeline-framework"><a href="https://github.com/pwwang/pyppl/">PyPPL</a> - A <a href="#">Py</a>thon <a href="#">P</a>i<a href="#">P</a>e<a href="#">L</a>ine framework</h1>
 <p><img alt="Pypi" src="https://img.shields.io/pypi/v/pyppl.svg?style=flat-square" /> <img alt="Github" src="https://img.shields.io/github/tag/pwwang/PyPPL.svg?style=flat-square" /> [<img alt="Gitter chat" src="https://img.shields.io/gitter/room/pwwang/PyPPL.svg?style=flat-square" />]<a href="https://gitter.im/PyPPL/Lobby">10</a> [<img alt="Codacy" src="https://img.shields.io/codacy/grade/a04aac445f384a8dbe47da19c779763f.svg?style=flat-square" />]<a href="https://www.codacy.com/app/pwwang/PyPPL?utm_source=github.com&amp;amp;utm_medium=referral&amp;amp;utm_content=pwwang/pyppl&amp;amp;utm_campaign=Badge_Grade">5</a> <img alt="Codacy coverage" src="https://img.shields.io/codacy/coverage/a04aac445f384a8dbe47da19c779763f.svg?style=flat-square" /> <img alt="Gitbook" src="https://www.gitbook.com/button/status/book/pwwang/pyppl" /></p>
 <p><a href="https://pwwang.gitbooks.io/PyPPL/">Documentation</a> | <a href="https://pwwang.gitbooks.io/PyPPL/api.html">API</a> | <a href="https://pwwang.gitbooks.io/PyPPL/change-log.html">Change log</a> | <a href="https://pwwang.gitbooks.io/PyPPL/content/faq.html">FAQ</a></p>
 <!-- toc -->
@@ -617,82 +682,50 @@ PyPPL().start(p1, p8, p9).flowchart().run()
 <p>To generate svg file, you have to have <a href="https://github.com/xflr6/graphviz">graphviz</a> installed.<br />
 <code>drawFlowchart.pyppl.svg</code>:<br />
 <img alt="PyPPL chart" src="https://raw.githubusercontent.com/pwwang/PyPPL/master/docs/drawFlowchart_pyppl.png" /></p>
-<p><strong><em>Enjoy pipelining!!!</em></strong></p></div>
-        </div>
-
-        <footer class="col-md-12">
-            <hr>
-            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
-        </footer>
-        <script>var base_url = '..';</script>
-        <script src="../js/base.js"></script>
-        <script src="../search/require.js"></script>
-        <script src="../search/search.js"></script>
-
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+<p><strong><em>Enjoy pipelining!!!</em></strong></p>
+              
             </div>
-            <div class="modal-body">
-                <p>
-                    From here you can search these documents. Enter
-                    your search terms below.
-                </p>
-                <form role="form">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
-                    </div>
-                </form>
-                <div id="mkdocs-search-results"></div>
-            </div>
-            <div class="modal-footer">
-            </div>
-        </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../basic-concepts-and-directory-structure/" class="btn btn-neutral float-right" title="Basics and folder structure">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
-            </div>
-            <div class="modal-body">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th style="width: 20%;">Keys</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><kbd>?</kbd></td>
-                    <td>Open this help</td>
-                  </tr>
-                  <tr>
-                    <td><kbd>&larr;</kbd></td>
-                    <td>Previous page</td>
-                  </tr>
-                  <tr>
-                    <td><kbd>&rarr;</kbd></td>
-                    <td>Next page</td>
-                  </tr>
-                  <tr>
-                    <td><kbd>s</kbd></td>
-                    <td>Search</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="modal-footer">
-            </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
         </div>
-    </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+        <span style="margin-left: 15px"><a href="../basic-concepts-and-directory-structure/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
 </div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/require.js"></script>
+      <script src="../search/search.js"></script>
 
-
-    </body>
+</body>
 </html>
