@@ -273,6 +273,14 @@ Then the log message will be:
 </pre></div></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
+<p>You have to tell <code>PyPPL</code> which jobs to output these logs.
+Just simply by:
+<div class="highlight"><pre><span></span><span class="c1"># You have to specify an empty string to &#39;type&#39; to disable other outputs, unless you want them.</span>
+<span class="n">pXXX</span><span class="o">.</span><span class="n">echo</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;jobs&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">}</span>
+</pre></div></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>The level name you specified after <code>pyppl.log</code> does not apply to <a href="../configure-your-logs/">normal log filters or themes</a>, because the actual level is <code>_FLAG</code> in this case. So unless you set <code>loglevels</code> to <code>None</code>, it will be anyway printed out. For themes, the color at the empty string key will be used. </p>
 <p>You can define filters or themes for this kind of logs, just remember the actual level name has an <code>_</code> prefix. See <a href="../configure-your-logs/">here</a> to learn how to define filters and themes.</p>
 </div>
