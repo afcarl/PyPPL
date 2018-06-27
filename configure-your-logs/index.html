@@ -394,7 +394,7 @@ Then empty string key (<code>''</code>) defines the colors to use for the messag
 </div>
 <h2 id="progress-bar">Progress bar</h2>
 <p>Job status and progress are indicated in the log with progress bar:
-<div class="highlight"><pre><span></span>[==============================xxxxx!!!!!&gt;&gt;&gt;&gt;&gt;-----]
+<div class="highlight"><pre><span></span>[==============================XXXXX!!!!!&gt;&gt;&gt;&gt;&gt;-----]
 </pre></div>
 The bar length defaults to <code>50</code>. You can change it in your code:
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyppl</span> <span class="kn">import</span> <span class="n">Jobmgr</span>
@@ -403,20 +403,20 @@ The bar length defaults to <code>50</code>. You can change it in your code:
 Here is an explanation about how a cell (one sign or element of the bar) corresponds to job(s):
 Let's say <code>Jobmgr.PBAR_SIZE = 9</code> and we have 5 jobs, then every two cells represent 1 job for first 8 cells, and last one represents job #5. The rule is trying to equally distributed the cells to jobs:
 <div class="highlight"><pre><span></span> 1 2 3 4 5         1  2  345      1    2345
-[==xx!!&gt;&gt;-]  NOT  [===xxx!&gt;-] OR [=====x!&gt;-]
+[==XX!!&gt;&gt;-]  NOT  [===XXX!&gt;-] OR [=====X!&gt;-]
 </pre></div>
 While if you have more jobs than cells, we try to equally distribute jobs to cells:
 Say we have 9 jobs but <code>Jobmgr.PBAR_SIZE = 5</code>:
 <div class="highlight"><pre><span></span> 1357        
  24689        
-[=x!&gt;-] 
+[=X!&gt;-] 
 </pre></div>
 First cell represents job #1, #2; second job #3, #4; ...; the last one represents job #9.</p>
 <p>The meaning of each sign in the cell:
 - <code>-</code>: Job initiated
 - <code>!</code>: Job failed to submit
 - <code>&gt;</code>: Job running
-- <code>x</code>: Job failed
+- <code>X</code>: Job failed
 - <code>=</code>: Job done</p>
 <p>Note that if a cell represents multiple jobs, it has a priority as above listed. For example, in the second situation, if job #1 is done, however, job #2 is running, then the sign should be <code>&gt;</code>.</p>
 <p>But if the progress bar belongs to a job (shown when a job is submitted or done), the status of the job has the highest priority. So in the above example, if the progress bar belongs to job #1:

@@ -274,18 +274,6 @@ A set of procs  </p>
 If there are 2 processes with the same id and tag, raise <code>ValueError</code>.  </p>
 </li>
 </ul>
-<h4 id="_getprofile-self-profile"><code>_getProfile (self, profile)</code></h4>
-<p>Get running profile according to profile name  </p>
-<ul>
-<li>
-<p><strong>params:</strong><br />
-<code>profile</code>: The profile name  </p>
-</li>
-<li>
-<p><strong>returns:</strong><br />
-The running configuration  </p>
-</li>
-</ul>
 <h4 id="_registerproc-proc-staticmethod"><code>_registerProc (proc) [@staticmethod]</code></h4>
 <p>Register the process  </p>
 <ul>
@@ -394,16 +382,14 @@ The pipeline object itself.  </p>
 <p><strong>config:</strong><br />
 id, input, output, ppldir, forks, cache, cclean, rc, echo, runner, script, depends, tag, desc, dirsig<br />
 exdir, exhow, exow, errhow, errntry, lang, beforeCmd, afterCmd, workdir, args, aggr<br />
-callfront, callback, brings, expect, expart, template, tplenvs, resume, nthread, maxsubmit  </p>
+callfront, callback, expect, expart, template, tplenvs, resume, nthread  </p>
 </li>
 <li>
 <p><strong>props</strong><br />
-input, output, rc, echo, script, depends, beforeCmd, afterCmd, workdir, brings, expect<br />
+input, output, rc, echo, script, depends, beforeCmd, afterCmd, workdir, expect<br />
 expart, template, channel, jobs, ncjobids, size, sets, procvars, suffix, logs  </p>
 </li>
 </ul>
-<h4 id="_buildbrings-self"><code>_buildBrings (self)</code></h4>
-<p>Build the bring-file templates waiting to be rendered.  </p>
 <h4 id="_buildinput-self"><code>_buildInput (self)</code></h4>
 <p>Build the input data<br />
 Input could be:<br />
@@ -429,7 +415,7 @@ and also echo some out.  </p>
 <li><strong>returns:</strong><br />
 True if all jobs are cached, otherwise False  </li>
 </ul>
-<h4 id="_readconfig-self-config"><code>_readConfig (self, config)</code></h4>
+<h4 id="_readconfig-self-profile-profiles"><code>_readConfig (self, profile, profiles)</code></h4>
 <p>Read the configuration  </p>
 <ul>
 <li><strong>params:</strong><br />
@@ -452,7 +438,12 @@ The return code of the command  </p>
 <h4 id="_savesettings-self"><code>_saveSettings (self)</code></h4>
 <p>Save all settings in proc.settings, mostly for debug  </p>
 <h4 id="_suffix-self"><code>_suffix (self)</code></h4>
-<p>Calcuate a uid for the process according to the configuration  </p>
+<p>Calcuate a uid for the process according to the configuration<br />
+The philosophy:<br />
+1. procs from different script must have different suffix (sys.argv[0])<br />
+2. procs from the same script:<br />
+- procs with different id or tag have different suffix<br />
+- procs with different input have different suffix (depends, input)  </p>
 <ul>
 <li><strong>returns:</strong><br />
 The uniq id of the process  </li>
@@ -494,7 +485,7 @@ The new process  </p>
 <li><strong>returns:</strong><br />
 the name  </li>
 </ul>
-<h4 id="run-self-config"><code>run (self, config)</code></h4>
+<h4 id="run-self-profile-profiles"><code>run (self, profile, profiles)</code></h4>
 <p>Run the jobs with a configuration  </p>
 <ul>
 <li><strong>params:</strong><br />
@@ -944,14 +935,6 @@ The "[001/100]" like indicator  </li>
 The link to the original file.  </p>
 </li>
 </ul>
-<h4 id="_prepbrings-self"><code>_prepBrings (self)</code></h4>
-<p>Build the brings to bring some files to indir<br />
-The brings can be set as: <code>p.brings = {"infile": "{{infile.bn}}*.bai"}</code><br />
-If you have multiple files to bring in:<br />
-<code>p.brings = {"infile": "{{infile.bn}}*.bai", "infile#": "{{infile.bn}}*.fai"}</code><br />
-You can use wildcards to search the files, but only the first file will return<br />
-To access the brings in your script: {% raw %}<code>{{ brings.infile }}</code>, <code>{{ brings.infile# }}</code>{% endraw %}<br />
-If original input file is a link, will try to find it along each directory the link is in.  </p>
 <h4 id="_prepinput-self"><code>_prepInput (self)</code></h4>
 <p>Prepare input, create link to input files and set other placeholders  </p>
 <h4 id="_prepoutput-self"><code>_prepOutput (self)</code></h4>
@@ -986,7 +969,7 @@ for 1,2 channels will be the property channel for this proc (i.e. p.channel)  </
 <h4 id="export-self"><code>export (self)</code></h4>
 <p>Export the output files  </p>
 <h4 id="init-self"><code>init (self)</code></h4>
-<p>Initiate a job, make directory and prepare input, brings, output and script.  </p>
+<p>Initiate a job, make directory and prepare input, output and script.  </p>
 <h4 id="isexptcached-self"><code>isExptCached (self)</code></h4>
 <p>Prepare to use export files as cached information<br />
 True if succeed, otherwise False  </p>
@@ -1235,6 +1218,12 @@ TypeError will be raised if error happens  </p>
 </blockquote>
 <h4 id="__init__-self"><code>__init__ (self)</code></h4>
 <p>Constructor  </p>
+<h4 id="asdict-self"><code>asDict (self)</code></h4>
+<p>Convert the parameters to Box object  </p>
+<ul>
+<li><strong>returns:</strong><br />
+The Box object  </li>
+</ul>
 <h4 id="desc-self-d"><code>desc (self, d)</code></h4>
 <p>Set the description of the program  </p>
 <ul>
@@ -1283,7 +1272,7 @@ For config file other than json, a section name is needed, whatever it is.  </p>
 <li>Default: False (don't show parameter from config file in help page)  </li>
 <li>It'll be overwritten by the <code>show</code> property inside the config file.  </li>
 </ul>
-<h4 id="parse-self"><code>parse (self)</code></h4>
+<h4 id="parse-self-args"><code>parse (self, args)</code></h4>
 <p>Parse the arguments from <code>sys.argv</code>  </p>
 <h4 id="prefix-self-p"><code>prefix (self, p)</code></h4>
 <p>Set the prefix of options  </p>
@@ -1292,11 +1281,7 @@ For config file other than json, a section name is needed, whatever it is.  </p>
 <code>p</code>: The prefix. No default, but typically '--param-'  </li>
 </ul>
 <h4 id="todict-self"><code>toDict (self)</code></h4>
-<p>Convert the parameters to Box object  </p>
-<ul>
-<li><strong>returns:</strong><br />
-The Box object  </li>
-</ul>
+<p>Will be deprecated.  </p>
 <h4 id="usage-self-u"><code>usage (self, u)</code></h4>
 <p>Set the usage of the program. Otherwise it'll be automatically calculated.  </p>
 <ul>
@@ -1377,12 +1362,20 @@ The logger  </p>
 <blockquote>
 <p>A set of utitities for PyPPL</p>
 </blockquote>
-<h4 id="joinablequeue-maxsize"><code>JoinableQueue (maxsize)</code></h4>
-<p>Returns a queue object  </p>
-<h4 id="class-thread"><code>class: Thread</code></h4>
-<div class="highlight"><pre><span></span>A class that represents a thread of control.
+<h4 id="class-ordereddict"><code>class: OrderedDict</code></h4>
+<div class="highlight"><pre><span></span>Dictionary that remembers insertion order
+</pre></div>
 
-    This class can be safely subclassed in a limited fashion.
+<h4 id="class-parallel"><code>class: Parallel</code></h4>
+<div class="highlight"><pre><span></span>
+</pre></div>
+
+<h4 id="class-processpoolexecutor"><code>class: ProcessPoolExecutor</code></h4>
+<div class="highlight"><pre><span></span>
+</pre></div>
+
+<h4 id="class-threadpoolexecutor"><code>class: ThreadPoolExecutor</code></h4>
+<div class="highlight"><pre><span></span>
 </pre></div>
 
 <h4 id="_cp-f1-f2"><code>_cp (f1, f2)</code></h4>
@@ -1436,6 +1429,9 @@ The path of the lock file  </p>
 The split list  </p>
 </li>
 </ul>
+<h4 id="asstr-s-encoding"><code>asStr (s, encoding)</code></h4>
+<p>Convert everything (str, unicode, bytes) to str with python2, python3 compatiblity  </p>
+<h4 id="basename-f"><code>basename (f)</code></h4>
 <h4 id="brieflist-l"><code>briefList (l)</code></h4>
 <p>Briefly show an integer list, combine the continuous numbers.  </p>
 <ul>
@@ -1593,16 +1589,6 @@ The signature  </p>
 <p><strong>returns:</strong><br />
 The maped list  </p>
 </li>
-</ul>
-<h4 id="parallel-func-args-nthread-method"><code>parallel (func, args, nthread, method)</code></h4>
-<p>Call functions in a parallel way.<br />
-If nthread == 1, will be running in single-threading manner.  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>func</code>: The function<br />
-<code>args</code>: The arguments, in list. Each element should be the arguments for the function in one thread.<br />
-<code>nthread</code>: Number of threads<br />
-<code>method</code>: use multithreading (thread) or multiprocessing (process)  </li>
 </ul>
 <h4 id="range-i-args-kwargs"><code>range (i, *args, **kwargs)</code></h4>
 <p>Convert a range to list, because in python3, range is not a list  </p>
@@ -1856,18 +1842,6 @@ The names  </p>
 <ul>
 <li><strong>returns:</strong><br />
 The process next to run  </li>
-</ul>
-<h4 id="getnode-proc-staticmethod"><code>getNode (proc) [@staticmethod]</code></h4>
-<p>Get the <code>ProcNode</code> instance by <code>Proc</code> instance  </p>
-<ul>
-<li>
-<p><strong>params:</strong><br />
-<code>proc</code>: The <code>Proc</code> instance  </p>
-</li>
-<li>
-<p><strong>returns:</strong><br />
-The <code>ProcNode</code> instance  </p>
-</li>
 </ul>
 <h4 id="getpaths-self-proc-proc0"><code>getPaths (self, proc, proc0)</code></h4>
 <p>Infer the path to a process  </p>
