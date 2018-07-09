@@ -336,7 +336,7 @@ The pipeline object itself.  </p>
 <ul>
 <li>
 <p><strong>params:</strong><br />
-<code>profile</code>: the profile used to run, if not found, it'll be used as runner name. default: 'local'  </p>
+<code>profile</code>: the profile used to run, if not found, it'll be used as runner name. default: 'default'  </p>
 </li>
 <li>
 <p><strong>returns:</strong><br />
@@ -1218,36 +1218,42 @@ TypeError will be raised if error happens  </p>
 </blockquote>
 <h4 id="__init__-self"><code>__init__ (self)</code></h4>
 <p>Constructor  </p>
+<h4 id="_coercevalue-value-t-staticmethod"><code>_coerceValue (value, t) [@staticmethod]</code></h4>
+<h4 id="_gettype-self-argname-argtype"><code>_getType (self, argname, argtype)</code></h4>
+<h4 id="_parsename-self-argname"><code>_parseName (self, argname)</code></h4>
+<p>If <code>argname</code> is the name of an option  </p>
+<ul>
+<li>
+<p><strong>params:</strong><br />
+<code>argname</code>: The argname  </p>
+</li>
+<li>
+<p><strong>returns:</strong><br />
+<code>an</code>: clean argument name<br />
+<code>at</code>: normalized argument type<br />
+<code>av</code>: the argument value, if <code>argname</code> is like: <code>-a=1</code>  </p>
+</li>
+</ul>
+<h4 id="_putvalue-self-argname-argtype-argval"><code>_putValue (self, argname, argtype, argval)</code></h4>
+<h4 id="_shouldprinthelp-self-args"><code>_shouldPrintHelp (self, args)</code></h4>
 <h4 id="asdict-self"><code>asDict (self)</code></h4>
 <p>Convert the parameters to Box object  </p>
 <ul>
 <li><strong>returns:</strong><br />
 The Box object  </li>
 </ul>
-<h4 id="desc-self-d"><code>desc (self, d)</code></h4>
-<p>Set the description of the program  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>d</code>: The description  </li>
-</ul>
-<h4 id="example-self-e"><code>example (self, e)</code></h4>
-<p>Set the examples of the program  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>e</code>: The examples. Multiple examples in multiple lines  </li>
-</ul>
-<h4 id="help-self"><code>help (self)</code></h4>
+<h4 id="help-self-error-printnexit"><code>help (self, error, printNexit)</code></h4>
 <p>Calculate the help page  </p>
 <ul>
-<li><strong>return:</strong><br />
-The help information  </li>
-</ul>
-<h4 id="helpopts-self-h"><code>helpOpts (self, h)</code></h4>
-<p>The options to popup help information<br />
-An empty string '' implys help information pops up when no arguments specified  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>h</code>: The options. It could be either list or comma separated.  </li>
+<li>
+<p><strong>params:</strong><br />
+<code>error</code>: The error message to show before the help information. Default: <code>''</code><br />
+<code>printNexit</code>: Print the help page and exit the program? Default: <code>False</code> (return the help information)  </p>
+</li>
+<li>
+<p><strong>return:</strong><br />
+The help information  </p>
+</li>
 </ul>
 <h4 id="loaddict-self-dictvar-show"><code>loadDict (self, dictVar, show)</code></h4>
 <p>Load parameters from a dict  </p>
@@ -1274,20 +1280,6 @@ For config file other than json, a section name is needed, whatever it is.  </p>
 </ul>
 <h4 id="parse-self-args"><code>parse (self, args)</code></h4>
 <p>Parse the arguments from <code>sys.argv</code>  </p>
-<h4 id="prefix-self-p"><code>prefix (self, p)</code></h4>
-<p>Set the prefix of options  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>p</code>: The prefix. No default, but typically '--param-'  </li>
-</ul>
-<h4 id="todict-self"><code>toDict (self)</code></h4>
-<p>Will be deprecated.  </p>
-<h4 id="usage-self-u"><code>usage (self, u)</code></h4>
-<p>Set the usage of the program. Otherwise it'll be automatically calculated.  </p>
-<ul>
-<li><strong>params</strong><br />
-<code>u</code>: The usage, no program name needed. Multiple usages in multiple lines.  </li>
-</ul>
 <h2 id="module-logger">Module <code>logger</code></h2>
 <blockquote>
 <p>A customized logger for pyppl</p>

@@ -443,7 +443,11 @@ If the jobs are sharing the same set of configurations (in this case, the number
   <span class="o">.</span><span class="n">setRequired</span><span class="p">()</span>  \
   <span class="o">.</span><span class="n">setDesc</span><span class="p">(</span><span class="s1">&#39;The data directory containing the data files.&#39;</span><span class="p">)</span>
 
-<span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span><span class="o">.</span><span class="n">toDict</span><span class="p">()</span>
+<span class="c1"># or</span>
+<span class="c1"># params.datadir.required = True</span>
+<span class="c1"># params.datadir.desc     = &#39;The data directory containing the data files.&#39;</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
 
 <span class="n">pSort</span>         <span class="o">=</span> <span class="n">Proc</span><span class="p">(</span><span class="n">desc</span> <span class="o">=</span> <span class="s1">&#39;Sort files.&#39;</span><span class="p">)</span>
 <span class="n">pSort</span><span class="o">.</span><span class="n">input</span>   <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;infile:file&quot;</span><span class="p">:</span> <span class="n">Channel</span><span class="o">.</span><span class="n">fromPattern</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">datadir</span> <span class="o">+</span> <span class="s1">&#39;/*.txt&#39;</span><span class="p">)}</span>
@@ -459,16 +463,16 @@ If the jobs are sharing the same set of configurations (in this case, the number
 Run the pipeline:<br />
 <code>&gt; python useParams.py</code>
 <div class="highlight"><pre><span></span>USAGE:
-  useParams.py --param-datadir &lt;str&gt;
+  useParams.py -datadir &lt;str&gt;
 
 REQUIRED OPTIONS:
-  --param-datadir &lt;str&gt;                 The data directory containing the data files.
+  -datadir &lt;str&gt;                        The data directory containing the data files.
 
 OPTIONAL OPTIONS:
   -h, --help, -H, -?                    Print this help information.
 </pre></div>
-Provide value to <code>--param-datadir</code>:<br />
-<code>&gt; python useParams.py --param-datadir ./data</code></p>
+Provide value to <code>-datadir</code>:<br />
+<code>&gt; python useParams.py -datadir ./data</code></p>
 <h2 id="use-a-different-runner">Use a different runner</h2>
 <p>See <code>/tutorials/differentRunner/</code>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyppl</span> <span class="kn">import</span> <span class="n">PyPPL</span><span class="p">,</span> <span class="n">Proc</span><span class="p">,</span> <span class="n">Channel</span>
@@ -720,5 +724,5 @@ We can define a set of runner profiles in a <code>json</code> file (<code>./prof
 
 <!--
 MkDocs version : 0.17.4
-Build Date UTC : 2018-06-27 23:45:43
+Build Date UTC : 2018-07-09 16:29:24
 -->

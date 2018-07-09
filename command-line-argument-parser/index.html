@@ -134,6 +134,8 @@
         
             <li><a class="toctree-l3" href="#load-params-from-a-configuration-file">Load params from a configuration file</a></li>
         
+            <li><a class="toctree-l3" href="#preseved-option-names">Preseved option names</a></li>
+        
             <li><a class="toctree-l3" href="#set-other-attributes-of-params">Set other attributes of params</a></li>
         
         </ul>
@@ -210,21 +212,24 @@
 <p><div class="highlight"><pre><span></span><span class="n">params</span><span class="o">.</span><span class="n">opt</span> <span class="o">=</span> <span class="s1">&#39;a&#39;</span>
 <span class="c1"># or</span>
 <span class="c1"># params.opt.setValue(&#39;a&#39;)</span>
-<span class="n">params</span><span class="o">.</span><span class="n">opt2</span><span class="o">.</span><span class="n">setType</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span><span class="o">.</span><span class="n">setRequired</span><span class="p">()</span>
+<span class="n">params</span><span class="o">.</span><span class="n">opt2</span><span class="o">.</span><span class="n">setType</span><span class="p">(</span><span class="s1">&#39;list&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setRequired</span><span class="p">()</span>
 
 <span class="c1"># then don&#39;t forget to parse the command line arguments:</span>
 <span class="n">params</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
 </pre></div>
-Then <code>python pipeline.py --param-opt b --param-opt2 1 2 3</code> will overwrite the value.<br />
-<code>list</code> option can also be specified as <code>--param-opt2 1 --param-opt2 2 --param-opt2 3</code>
+Then <code>python pipeline.py -opt b -opt2 1 2 3</code> will overwrite the value.<br />
+<code>list</code> option can also be specified as <code>-opt2 1 -opt2 2 -opt2 3</code>
 To use the value:
 <div class="highlight"><pre><span></span><span class="n">var</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;2&#39;</span>
 <span class="c1"># var is &#39;b2&#39;</span>
 <span class="n">var2</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">opt2</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span>
-<span class="c1"># var2 is [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, 4]</span>
+<span class="c1"># var2 is [1, 2, 3, 4]</span>
 </pre></div></p>
-<p>If you feel annoying using <code>params.xxx.value</code> to have the value of the option, you can convert the <code>params</code> object to a <code>box.Box</code> object (python-box):
-<div class="highlight"><pre><span></span><span class="n">ps</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">toDict</span><span class="p">()</span>
+<p>If you feel annoying using <code>params.xxx.value</code> to have the value of the option, you can convert the <code>params</code> object to a <code>Box</code> object (inherited from <code>OrderedDict</code>):
+<div class="highlight"><pre><span></span><span class="n">params</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
+<span class="n">ps</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">asDict</span><span class="p">()</span>
+<span class="c1"># or just</span>
+<span class="c1"># ps = params.parse()</span>
 </pre></div>
 Then you can use <code>params.xxx</code> to get the value directly:
 <div class="highlight"><pre><span></span><span class="n">var</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">opt</span> <span class="o">+</span> <span class="s1">&#39;2&#39;</span>
@@ -232,11 +237,11 @@ Then you can use <code>params.xxx</code> to get the value directly:
 </pre></div></p>
 <h2 id="set-attributes-of-an-option">Set attributes of an option</h2>
 <p>An option has server properties:
-- <code>desc</code>: The description of the option, shows in the help page. Default: <code>''</code>
+- <code>desc</code>: The description of the option, shows in the help page. Default: <code>[]</code>
 - <code>required</code>: Whether the option is required. Default: <code>False</code>
 - <code>show</code>: Whether this option should be shown in the help page. Default: <code>True</code>
 - <code>type</code>: The type of the option value. Default: <code>str</code>
-- <code>name</code>: The name of the option, then in command line, <code>--param-&lt;name&gt;</code> refers to the option.
+- <code>name</code>: The name of the option, then in command line, <code>-&lt;name&gt;</code> refers to the option.
 - <code>value</code>: The default value of the option.</p>
 <p>You can either set the value of an option by 
 <div class="highlight"><pre><span></span><span class="n">params</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="bp">True</span>
@@ -258,8 +263,8 @@ or
 <div class="admonition note">
 <p class="admonition-title">About the <code>type</code></p>
 <ul>
-<li>To explicitly specify type of an option, you have to use the type itself, instead of the name of the type. That mean <code>str</code> instead of <code>"str"</code></li>
-<li>The type can be implied by: <code>params.opt = []</code> (implies <code>list</code>). But <code>params.opt.setValue('a')</code> or <code>params.opt.value = 1</code> won't change the type, instead, the value will be coerced to the type previously specified/implied.</li>
+<li>To explicitly specify type of an option, you have to use the type itself, as well as the name of the type. That means either <code>str</code> or <code>"str"</code> is legal.</li>
+<li>The type can be implied by: <code>params.opt = []</code> (implies <code>list</code>). But <code>params.opt.setValue('a')</code> or <code>params.opt.value = 1</code> won't change the type.</li>
 </ul>
 </div>
 <h2 id="load-params-from-a-dict">Load params from a dict</h2>
@@ -303,22 +308,41 @@ Note that by default, the options from the <code>dict</code> will be hidden from
 <span class="na">p3.show: True</span>
 </pre></div></p>
 <p>Similarly, you can set the default value for <code>show</code> property by: <code>params.loadCfgfile("params.config", show=True)</code></p>
-<h2 id="set-other-attributes-of-params">Set other attributes of params</h2>
-<ul>
-<li><code>params.usage('--param-infile &lt;infile&gt; [Options]')</code> The usage of the program</li>
-<li><code>params.example('python prog.py /path/to/file &lt;options&gt;')</code> The example of usages</li>
-<li><code>params.desc('What does the program do?')</code> The description of the program</li>
-<li><code>params.prefix('--p-')</code> The prefix of the options. Default: <code>--param-</code></li>
-<li><code>params.helpOpts('--help, -H')</code> The option to show the help page.  </li>
-</ul>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<ul>
-<li>You can also chain those settings: <code>params.usage(...).example(...)</code>  </li>
-<li>Multiple usages and examples can be separated by <code>'\n'</code></li>
-<li>You can also set the <code>helpOpts</code> by <code>list</code>: <code>params.helpOpts(['-h', '-?'])</code></li>
-<li>An empty string in <code>helpOpts</code> means to show help page if no arguments offered.</li>
-</ul>
+<p><code>params</code> is a singleton of <code>Parameters</code>. It's a combination of configuration and command line arguments. So you are able to load the configurations from files, which will be used as default values, before you parse the command line arguments. You are also able to choose some of the options for the users to pass value to, and some hidden from the users.</p>
+</div>
+<h2 id="preseved-option-names">Preseved option names</h2>
+<p>We have a certain convention of the option names used with <code>params</code>:
+- Make sure it's only composed of alphabetics, underscores and hyphens.
+- Make sure it starts with alphabetics.
+- Make sure it's not one of these words (<code>help</code>, <code>loadDict</code>, <code>loadFile</code> and <code>asDict</code>)</p>
+<h2 id="set-other-attributes-of-params">Set other attributes of params</h2>
+<h3 id="show-the-usagesexampledescription-of-the-program">Show the usages/example/description of the program</h3>
+<p><code>params('usage', ["{prog} -h", "{prog} -infile &lt;infile&gt; [options]"])</code><br />
+<code>params('example', ["{prog} -h", "{prog} -infile path/to/infile -out /path/to/outfile"])</code><br />
+<code>params('desc', ["This program does this.", "This program also does that."])</code><br />
+Multiple lines can also be passed as a string with <code>"\n"</code>:<br />
+<code>params('desc', ["This program does this.\nThis program also does that."])</code></p>
+<h3 id="set-the-prefix-of-option-names">Set the prefix of option names</h3>
+<p>By default, the option names are recognized from the command line if they follow the convention and start with <code>-</code>. You may change it, let's say you want the option names to start with <code>--</code>:<br />
+<code>params('prefix', '--')</code><br />
+The only <code>prog --opt 1</code> will be parsed, instead of <code>prog -opt 1</code> to get the value by <code>params.opt.value</code>  </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You cannot use an empty prefix</p>
+</div>
+<h3 id="set-the-default-help-options">Set the default help options</h3>
+<p>By default, the help options are <code>['-h', '--help', '-H', '-?', '']</code>. The empty string (<code>''</code>) enables the program to print the help page without arguments be passed from the command line. If you don't want it, you can remove it from the default help options:<br />
+<code>params('hopts', '-h, --help, -H, -?')</code> or<br />
+<code>params('hopts', ['-h', '--help', '-H', '-?'])</code><br />
+Or you can just simply remove some of them by:<br />
+<code>params('hopts', ['-H', '-?', ''], excl = True)</code><br />
+Then you will only have <code>['-h', '--help']</code></p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>These statements can also be chained:<br />
+<code>params('usage', ["{prog} -h", "{prog} -infile &lt;infile&gt; [options]"])('prefix', '--')('hopts', ['-H', '-?', ''], excl = True)</code></p>
 </div>
               
             </div>
