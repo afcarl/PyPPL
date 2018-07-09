@@ -260,13 +260,45 @@ or
 <span class="c1">#           .setName(&#39;opt1&#39;)       \</span>
 <span class="c1">#           .setValue([1,2,3])</span>
 </pre></div></p>
+<h3 id="about-type">About <code>type</code></h3>
+<h4 id="declear-the-type-of-an-option">Declear the type of an option</h4>
+<p>You can use either the type itself or the type name:<br />
+<code>params.opt.type = int</code> or <code>params.opt.type = 'int'</code></p>
+<h4 id="infer-type-when-option-initialized">Infer type when option initialized</h4>
+<p>When you initialize an option:
+<div class="highlight"><pre><span></span><span class="c1"># with nothing specified</span>
+<span class="n">params</span><span class="o">.</span><span class="n">opt</span>
+<span class="c1"># with a default value</span>
+<span class="n">params</span><span class="o">.</span><span class="n">opt</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+The type will be inferred from the value. In the first case, the type is <code>None</code>, will in the second, it's <code>'int'</code></p>
 <div class="admonition note">
-<p class="admonition-title">About the <code>type</code></p>
-<ul>
-<li>To explicitly specify type of an option, you have to use the type itself, as well as the name of the type. That means either <code>str</code> or <code>"str"</code> is legal.</li>
-<li>The type can be implied by: <code>params.opt = []</code> (implies <code>list</code>). But <code>params.opt.setValue('a')</code> or <code>params.opt.value = 1</code> won't change the type.</li>
-</ul>
+<p class="admonition-title">Note</p>
+<p>Let initialize an option first: <code>params.opt</code>, then when the value is set explictly:<br />
+<code>params.opt.value = "a"</code><br />
+Or when the value replaced (set value after initialization):<br />
+<code>params.opt = "a"</code><br />
+The type will not be changed (it's <code>None</code> in this case).</p>
 </div>
+<h4 id="allowed-types">Allowed types</h4>
+<p>Literally, allowed types are <code>str</code>, <code>int</code>, <code>float</code>, <code>bool</code> and <code>list</code>. But we allow subtypes (types of elements) for <code>list</code>. By default, the value of <code>list</code> elements will be recognized automatically. For example, <code>'1'</code> will be recognized as an integer <code>1</code>, and <code>"True"</code> will be recognized as bool value <code>True</code>. You can avoid this by specified the subtypes explictly: <code>params.opt.type = 'list:str'</code>, then <code>'1'</code> will be kept as <code>'1'</code> rather than <code>1</code>, and <code>"True"</code> will be <code>"True"</code> instead of <code>True</code>.</p>
+<p>You can use shortcuts for the types:
+<div class="highlight"><pre><span></span>i     -&gt; &#39;int&#39;
+f     -&gt; &#39;float&#39;
+b     -&gt; &#39;bool&#39;
+s     -&gt; &#39;str&#39;
+l     -&gt; &#39;list&#39;
+array -&gt; &#39;list&#39;
+</pre></div>
+For subtypes, you can also do <code>params.opt.type = 'l:s'</code> indicating <code>list:str</code>. Or you can even mix them: <code>params.opt.type = 'l:str'</code> or <code>params.opt.type = 'list:s'</code></p>
+<h4 id="overwrite-the-type-from-command-line">Overwrite the type from command line</h4>
+<p>Even though we may declear the type of an option by <code>params.opt.type = 'list:str'</code>, the users are able to overwrite it by pass the type through command argument:<br />
+<code>&gt; program -opt:list:int 1 2 3</code><br />
+Then we will get: <code>params.opt.value == [1,2,3]</code> instead of <code>params.opt.value == ['1', '2', '3']</code> when we do:<br />
+<code>&gt; program -opt 1 2 3</code><br />
+Flexibly, we can have mixed types of elements in a list option:<br />
+<code>&gt; program -opt:list:bool 1 -opt:list:int 2 -opt:list:str 3</code><br />
+We will get: <code>params.opt.value == [True, 2, '3']</code></p>
 <h2 id="load-params-from-a-dict">Load params from a dict</h2>
 <p>You can define a <code>dict</code>, and then load it to <code>params</code>:
 <div class="highlight"><pre><span></span><span class="n">d2load</span> <span class="o">=</span> <span class="p">{</span>
