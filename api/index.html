@@ -153,8 +153,6 @@
         
             <li><a class="toctree-l3" href="#module-aggr">Module Aggr</a></li>
         
-            <li><a class="toctree-l3" href="#module-flowchart">Module Flowchart</a></li>
-        
             <li><a class="toctree-l3" href="#module-parameter">Module Parameter</a></li>
         
             <li><a class="toctree-l3" href="#module-parameters">Module Parameters</a></li>
@@ -1115,45 +1113,6 @@ The new aggregation  </p>
 <code>attr</code> : The attribute of the aggregation<br />
 <code>procs</code>: The ids of the processes. Default: None (all processes)<br />
 <code>pattr</code>: The attr of the processes. Default: None (same as <code>attr</code>)  </li>
-</ul>
-<h2 id="module-flowchart">Module <code>Flowchart</code></h2>
-<blockquote>
-<p>Draw flowchart for pipelines</p>
-</blockquote>
-<pre><code>@static variables:
-    `THEMES`: predefined themes
-</code></pre>
-<h4 id="__init__-self-fcfile-dotfile"><code>__init__ (self, fcfile, dotfile)</code></h4>
-<p>The constructor  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>fcfile</code>: The flowchart file. Default: <code>path.splitext(sys.argv[0])[0] + '.pyppl.svg'</code><br />
-<code>dotfile</code>: The dot file. Default: <code>path.splitext(sys.argv[0])[0] + '.pyppl.dot'</code>  </li>
-</ul>
-<h4 id="_assemble-self"><code>_assemble (self)</code></h4>
-<p>Assemble the graph for printing and rendering  </p>
-<h4 id="addlink-self-node1-node2"><code>addLink (self, node1, node2)</code></h4>
-<p>Add a link to the chart  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>node1</code>: The first node.<br />
-<code>node2</code>: The second node.  </li>
-</ul>
-<h4 id="addnode-self-node-role"><code>addNode (self, node, role)</code></h4>
-<p>Add a node to the chart  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>node</code>: The node<br />
-<code>role</code>: Is it a starting node, an ending node or None. Default: None.  </li>
-</ul>
-<h4 id="generate-self"><code>generate (self)</code></h4>
-<p>Generate the dot file and graph file.  </p>
-<h4 id="settheme-self-theme-base"><code>setTheme (self, theme, base)</code></h4>
-<p>Set the theme to be used  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>theme</code>: The theme, could be the key of Flowchart.THEMES or a dict of a theme definition.<br />
-<code>base</code> : The base theme to be based on you pass custom theme  </li>
 </ul>
 <h2 id="module-parameter">Module <code>Parameter</code></h2>
 <blockquote>

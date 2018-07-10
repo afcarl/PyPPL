@@ -64,7 +64,7 @@
         
             <li><a class="toctree-l3" href="#get-started">Get started</a></li>
         
-            <li><a class="toctree-l3" href="#deduce-input-channel-from-dependent-process">Deduce input channel from dependent process</a></li>
+            <li><a class="toctree-l3" href="#infer-input-channel-from-dependent-process">Infer input channel from dependent process</a></li>
         
             <li><a class="toctree-l3" href="#modify-input-channel">Modify input channel</a></li>
         
@@ -218,7 +218,7 @@
             <div class="section">
               
                 <h1 id="pyppl-a-python-pipeline-framework"><a href="https://github.com/pwwang/pyppl/">PyPPL</a> - A <a href="#">Py</a>thon <a href="#">P</a>i<a href="#">P</a>e<a href="#">L</a>ine framework</h1>
-<p><img alt="Pypi" src="https://img.shields.io/pypi/v/pyppl.svg?style=flat-square" /> <img alt="Github" src="https://img.shields.io/github/tag/pwwang/PyPPL.svg?style=flat-square" /> <img alt="Codacy" src="https://img.shields.io/codacy/grade/a04aac445f384a8dbe47da19c779763f.svg?style=flat-square" /> <img alt="Codacy coverage" src="https://img.shields.io/codacy/coverage/a04aac445f384a8dbe47da19c779763f.svg?style=flat-square" /></p>
+<p><img alt="Pypi" src="https://img.shields.io/pypi/v/pyppl.svg?style=flat-square" /> <img alt="Github" src="https://img.shields.io/github/tag/pwwang/PyPPL.svg?style=flat-square" /> <img alt="Codacy" src="https://img.shields.io/codacy/grade/a04aac445f384a8dbe47da19c779763f.svg?style=flat-square" /> <img alt="Codacy coverage" src="https://img.shields.io/codacy/coverage/a04aac445f384a8dbe47da19c779763f.svg?style=flat-square" /> <img alt="Travis building" src="https://img.shields.io/travis/pwwang/PyPPL.svg?style=flat-square" /></p>
 <p><a href="https://pwwang.github.io/PyPPL/">Documentation</a> | <a href="https://pwwang.github.io/PyPPL/api/">API</a> | <a href="https://pwwang.github.io/PyPPL/change-log/">Change log</a> | <a href="https://pwwang.github.io/PyPPL/faq/">FAQ</a></p>
 <!-- toc -->
 
@@ -237,9 +237,9 @@
 </ul>
 <h2 id="requirements">Requirements</h2>
 <ul>
-<li>OS: Linux, OSX or WSL (Windows Subsystem for Linux)</li>
-<li>Python 2.7+ or Python 3.4+ (lower versions not tested)</li>
-<li>Python packages: <a href="https://github.com/benjaminp/six">six</a>, <a href="https://github.com/benediktschmitt/py-filelock">filelock</a> (suggested: <a href="https://github.com/xflr6/graphviz">graphviz</a>, <a href="https://github.com/yaml/pyyaml">pyyaml</a> and <a href="https://pwwang.github.com/testly">testly</a>).</li>
+<li>OS: Linux, OSX, WSL (Windows Subsystem for Linux) or Cygwin</li>
+<li>Python 2.7 or Python 3.6</li>
+<li>Python packages: <a href="https://github.com/benjaminp/six">six</a>, <a href="https://github.com/benediktschmitt/py-filelock">filelock</a>, <a href="https://github.com/tomMoral/loky">loky</a>, <a href="https://pypi.org/project/futures/">futures</a> (suggested: <a href="https://github.com/xflr6/graphviz">graphviz</a>, <a href="https://github.com/yaml/pyyaml">pyyaml</a> and <a href="https://github.com/pwwang/testly">python-testly</a>).</li>
 </ul>
 <h2 id="installation">Installation</h2>
 <div class="highlight"><pre><span></span><span class="c1"># install latest version</span>
@@ -252,8 +252,9 @@ pip install git+git://github.com/pwwang/PyPPL.git
 <span class="c1"># install released version</span>
 pip install PyPPL
 
-<span class="c1"># run tests for both python2 and python3</span>
-pip install git+git://github.com/pwwang/testly.git
+<span class="c1"># run tests </span>
+pip install python-testly
+<span class="c1"># or pip install git+git://github.com/pwwang/testly.git</span>
 make <span class="nb">test</span>
 
 <span class="c1"># run tests only for python2</span>
@@ -299,7 +300,7 @@ total 0
 -rw-rw-rw- 1 pwwang pwwang 58 Sep 14 20:50 test4.sorted
 -rw-rw-rw- 1 pwwang pwwang 58 Sep 14 20:50 test5.sorted
 </pre></div></p>
-<h2 id="deduce-input-channel-from-dependent-process">Deduce input channel from dependent process</h2>
+<h2 id="infer-input-channel-from-dependent-process">Infer input channel from dependent process</h2>
 <p>See <code>tutorials/inputFromDependent/</code><br />
 If a process depends on another one, the input channel can be deduced from the output channel of the latter process.<br />
 Sort 5 files and then add line number to each line.
@@ -724,5 +725,5 @@ We can define a set of runner profiles in a <code>json</code> file (<code>./prof
 
 <!--
 MkDocs version : 0.17.4
-Build Date UTC : 2018-07-09 17:09:36
+Build Date UTC : 2018-07-10 17:45:11
 -->
