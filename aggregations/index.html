@@ -137,6 +137,10 @@
         
             <li><a class="toctree-l3" href="#delegate-attributes-of-processes-to-an-aggregation">Delegate attributes of processes to an aggregation</a></li>
         
+            <li><a class="toctree-l3" href="#default-delegations">Default delegations</a></li>
+        
+            <li><a class="toctree-l3" href="#set-attribute-value-for-specific-processes-of-an-aggregation">Set attribute value for specific processes of an aggregation</a></li>
+        
             <li><a class="toctree-l3" href="#set-an-aggregation-as-start-aggregation-for-a-pipeline">Set an aggregation as start aggregation for a pipeline</a></li>
         
             <li><a class="toctree-l3" href="#the-dependency-of-aggregations-and-processes">The dependency of aggregations and processes</a></li>
@@ -202,8 +206,6 @@
             <div class="section">
               
                 <h1 id="aggregations">Aggregations</h1>
-<!-- toc -->
-
 <p>Imagine that you have a set of processes predefined, and every time when you deal with similar problems (i.e. format a file and plot the data or some next generation sequencing data analysis), you will consistently use those processes, then you have to configure and call them every time. </p>
 <p>Aggregations are designed for this kind of situations, you can just define an aggregations with those processes, and adjust the dependencies, input and arguments, you will be able to re-use the aggregation with very less configuration.</p>
 <p>For example:
@@ -314,7 +316,7 @@ This is a very commonly used Whole Genome Sequencing data cleanup pipeline from 
    <div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">Aggr</span><span class="p">(</span>
     <span class="n">p1</span><span class="p">,</span>
     <span class="n">p2</span><span class="p">,</span>
-    <span class="n">p1</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">newid</span> <span class="o">=</span> <span class="s1">&#39;p1copy&#39;</span><span class="p">)</span>
+    <span class="n">p1</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="nb">id</span> <span class="o">=</span> <span class="s1">&#39;p1copy&#39;</span><span class="p">)</span>
 <span class="p">)</span>
 <span class="c1"># then to access the 2nd p1: a.p1copy</span>
 </pre></div></li>
@@ -331,13 +333,73 @@ You can add a process, and also define whether to put it in <code>starts</code>,
 Then when you want to set <code>args.reffile</code> for <code>pAlignPEByBWA</code>, you can just do:
 <div class="highlight"><pre><span></span><span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">reffile</span> <span class="o">=</span> <span class="s1">&#39;/path/to/hg19.fa&#39;</span>
 </pre></div>
-You may use <code>starts/ends</code> represents the start/end processes.
-You may also set an alias for the attribute:
-<div class="highlight"><pre><span></span><span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">delegate</span><span class="p">(</span><span class="s1">&#39;align_ref&#39;</span><span class="p">,</span> <span class="s1">&#39;pAlignPEByBWA&#39;</span><span class="p">,</span> <span class="s1">&#39;args.reffile&#39;</span><span class="p">)</span>
-</pre></div>
-Then to set the value:
-<div class="highlight"><pre><span></span><span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">align_ref</span> <span class="o">=</span> <span class="s1">&#39;/path/to/hg19.fa&#39;</span>
+You may use <code>starts/ends</code> represents the start/end processes.  </p>
+<p>Delegate an attribute to multiple processes:
+<div class="highlight"><pre><span></span><span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">delegate</span><span class="p">(</span><span class="s1">&#39;args.reffile&#39;</span><span class="p">,</span> <span class="s1">&#39;pAlignPEByBWA, pPrintReads&#39;</span><span class="p">)</span>
+<span class="c1"># or</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">delegate</span><span class="p">(</span><span class="s1">&#39;args.reffile&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;pAlignPEByBWA&#39;</span><span class="p">,</span> <span class="s1">&#39;pPrintReads&#39;</span><span class="p">])</span>
+<span class="c1"># or</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">delegate</span><span class="p">(</span><span class="s1">&#39;args.reffile&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pAlignPEByBWA</span><span class="p">,</span> <span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pPrintReads</span><span class="p">])</span>
 </pre></div></p>
+<p>Delegate multiple attributes at one time:
+<div class="highlight"><pre><span></span><span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">delegate</span><span class="p">(</span><span class="s1">&#39;args.reffile, args.tmpdir&#39;</span><span class="p">,</span> <span class="s1">&#39;pAlignPEByBWA, pPrintReads&#39;</span><span class="p">)</span>
+<span class="c1"># or</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">delegate</span><span class="p">([</span><span class="s1">&#39;args.reffile&#39;</span><span class="p">,</span> <span class="s1">&#39;args.tmpdir&#39;</span><span class="p">],</span> <span class="s1">&#39;pAlignPEByBWA, pPrintReads&#39;</span><span class="p">)</span>
+</pre></div></p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>Undelegated attributes will be delegated to all processes. But remember if an attribute has been set before, say <code>p.runner = 'local'</code> then, <code>aggr.runner</code> will not overwrite it if <code>runner</code> is not delegated. If it is, then it'll be overwritten.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For attributes that have sub-attributes (i.e. <code>p.args.params.inopts.cnames</code>), you may just delegate the first parts, then the full assignment of the attribute will still follow the delegation. For example:<br />
+<div class="highlight"><pre><span></span><span class="n">aggr</span><span class="o">.</span><span class="n">delegate</span><span class="p">(</span><span class="s1">&#39;args.params&#39;</span><span class="p">,</span> <span class="s1">&#39;p1,p2&#39;</span><span class="p">)</span>
+<span class="n">aggr</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">inopts</span><span class="o">.</span><span class="n">cnames</span> <span class="o">=</span> <span class="bp">True</span> <span class="c1"># only affects p1, p2</span>
+</pre></div>
+Keep in mind that shorter delegations always come first. In the above case, if we have another delegation: <code>aggr.delegate('args.params.inopts', 'p3')</code>, then the assignment will still affect <code>p1, p2</code> (the first delegation) and <code>p3</code> (the second delegation).</p>
+</div>
+<h2 id="default-delegations">Default delegations</h2>
+<p>By default, <code>input/depends</code> are delegated for start processes, and <code>exdir/exhow/exow/expart</code> for end processes. Importantly, as <code>aggr.starts</code> is a list, the values for <code>input/depends</code> must be a list as well, with elements corresponing to each start process. 
+Besides, we have two special attributes for aggregations: <code>input2</code> and <code>depends2</code>. Unlike <code>input</code> and <code>depends</code>, <code>input2</code> and <code>depends2</code> try to pass everything it gets to each process, instead of passing corresponind element to each process. For example:
+<div class="highlight"><pre><span></span><span class="c1"># aggr.starts = [aggr.p1, aggr.p2]</span>
+<span class="n">aggr</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]]</span>
+<span class="c1"># then:</span>
+<span class="c1"># aggr.p1.config[&#39;input&#39;] == [&#39;a&#39;]</span>
+<span class="c1"># aggr.p2.config[&#39;input&#39;] == [&#39;b&#39;]</span>
+
+<span class="n">aggr</span><span class="o">.</span><span class="n">input2</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]]</span>
+<span class="c1"># then:</span>
+<span class="c1"># aggr.p1.config[&#39;input&#39;] == [[&#39;a&#39;], [&#39;b&#39;]]</span>
+<span class="c1"># aggr.p2.config[&#39;input&#39;] == [[&#39;a&#39;], [&#39;b&#39;]]</span>
+</pre></div></p>
+<h2 id="set-attribute-value-for-specific-processes-of-an-aggregation">Set attribute value for specific processes of an aggregation</h2>
+<p>There are several ways to do that:
+<div class="highlight"><pre><span></span><span class="c1"># refer to the process directly</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pPrintReads</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pPrintReads</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="s1">&#39;local&#39;</span>
+<span class="c1"># refer to the index of the process</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">runner</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;local&#39;</span>
+<span class="c1"># refer to the name of the process</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;pPrintReads&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">runner</span><span class="p">[</span><span class="s1">&#39;pPrintReads&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;local&#39;</span>
+
+<span class="c1"># for multiple processes</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">args</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;aFastqPE2Bam&#39;</span><span class="p">,</span> <span class="s1">&#39;pPrintReads&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;aFastqPE2Bam, pPrintReads&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
+
+<span class="c1"># or you may use starts/ends to refer to the start/end processes</span>
+<span class="c1"># has to be done after aggr.starts/aggr.ends assigned </span>
+<span class="c1"># or initialized with depends = True</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;starts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
+<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;ends&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
+</pre></div></p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>If an attribute is delegated for other processes, you can still set the value of it by the above methods.</p>
+</div>
 <h2 id="set-an-aggregation-as-start-aggregation-for-a-pipeline">Set an aggregation as start aggregation for a pipeline</h2>
 <p>You can do it just like setting a process as the starting process of pipeline (see <a href="../configure-a-pipeline/#starting-processes">here</a>). Actually the starting processes in the aggregation (<code>aggr.starts</code>) will be set as the starting processes of the pipeline.</p>
 <h2 id="the-dependency-of-aggregations-and-processes">The dependency of aggregations and processes</h2>

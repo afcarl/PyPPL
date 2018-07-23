@@ -1106,14 +1106,12 @@ the aggregation itself  </p>
 The new aggregation  </p>
 </li>
 </ul>
-<h4 id="delegate-self-attr-procs-pattr"><code>delegate (self, attr, procs, pattr)</code></h4>
-<p>Delegate attributes of processes to aggr.  </p>
-<ul>
-<li><strong>params</strong><br />
-<code>attr</code> : The attribute of the aggregation<br />
-<code>procs</code>: The ids of the processes. Default: None (all processes)<br />
-<code>pattr</code>: The attr of the processes. Default: None (same as <code>attr</code>)  </li>
-</ul>
+<h4 id="delegate-self-attrs-procs"><code>delegate (self, attrs, procs)</code></h4>
+<p>Delegate the procs to have the attributes set by:<br />
+<code>aggr.args.a.b = 1</code><br />
+Instead of setting <code>args.a.b</code> of all processes, <code>args.a.b</code> of only delegated processes will be set.<br />
+<code>procs</code> can be <code>starts</code>/<code>ends</code>, but it cannot be set with other procs, which means you can do:<br />
+<code>aggr.delegate('args', 'starts')</code>, but not <code>aggr.delegate('args', ['starts', 'pXXX'])</code>  </p>
 <h2 id="module-parameter">Module <code>Parameter</code></h2>
 <blockquote>
 <p>The class for a single parameter</p>
