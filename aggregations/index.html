@@ -405,7 +405,14 @@ Besides, we have two special attributes for aggregations: <code>input2</code> an
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>When use <code>__getitem__</code> to select processes from aggregations, only the index or the id will return the processes itself (instance of <code>Proc</code>), otherwise it will return an instance <code>_Proxy</code>, which is proxy used to pass attribute values to a set of processes.<br />
-So pay attention to it, because we can do <code>aggr['pXXX1, pXXX2'].depends = "pXXX3, pXXX4"</code> to <code>aggr.pXXX3</code> and <code>aggr.pXXX4</code> as the dependent of <code>aggr.pXXX1</code> and <code>aggr.pXXX2</code> respectively, but if you do <code>aggr['pXXX1'] = 'pXXX3'</code> will raise an error. Because <code>_Proxy</code> helps the aggregation to select the processes from itselt, but a <code>Proc</code> instance doesn't know how to.</p>
+So pay attention to it, because we can do <code>aggr['pXXX1, pXXX2'].depends = "pXXX3, pXXX4"</code> to <code>aggr.pXXX3</code> and <code>aggr.pXXX4</code> as the dependent of <code>aggr.pXXX1</code> and <code>aggr.pXXX2</code> respectively, but if you do <code>aggr['pXXX1'] = 'pXXX3'</code> will raise an error. Because <code>_Proxy</code> helps the aggregation to select the processes from itselt, but a <code>Proc</code> instance doesn't know how to.<br />
+You may turn it into <code>_Proxy</code> from <code>Proc</code> instance simply by add a comma to the selector:
+<div class="highlight"><pre><span></span><span class="nb">isinstance</span><span class="p">(</span><span class="n">aggr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Proc</span><span class="p">)</span>
+<span class="nb">isinstance</span><span class="p">(</span><span class="n">aggr</span><span class="p">[</span><span class="mi">0</span><span class="p">,],</span> <span class="n">_Proxy</span><span class="p">)</span>
+<span class="nb">isinstance</span><span class="p">(</span><span class="n">aggr</span><span class="p">[</span><span class="s1">&#39;pXXX1&#39;</span><span class="p">],</span> <span class="n">Proc</span><span class="p">)</span>
+<span class="nb">isinstance</span><span class="p">(</span><span class="n">aggr</span><span class="p">[</span><span class="s1">&#39;pXXX1,&#39;</span><span class="p">],</span> <span class="n">_Proxy</span><span class="p">)</span> <span class="c1"># or</span>
+<span class="nb">isinstance</span><span class="p">(</span><span class="n">aggr</span><span class="p">[</span><span class="s1">&#39;pXXX1&#39;</span><span class="p">,],</span> <span class="n">_Proxy</span><span class="p">)</span> 
+</pre></div></p>
 </div>
 <h2 id="define-modules-of-an-aggregation">Define modules of an aggregation.</h2>
 <p>We can define some modules for an aggregation, later on we can switch them on or off.<br />
