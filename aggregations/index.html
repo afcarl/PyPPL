@@ -141,6 +141,8 @@
         
             <li><a class="toctree-l3" href="#set-attribute-value-for-specific-processes-of-an-aggregation">Set attribute value for specific processes of an aggregation</a></li>
         
+            <li><a class="toctree-l3" href="#define-modules-of-an-aggregation">Define modules of an aggregation.</a></li>
+        
             <li><a class="toctree-l3" href="#set-an-aggregation-as-start-aggregation-for-a-pipeline">Set an aggregation as start aggregation for a pipeline</a></li>
         
             <li><a class="toctree-l3" href="#the-dependency-of-aggregations-and-processes">The dependency of aggregations and processes</a></li>
@@ -378,27 +380,65 @@ Besides, we have two special attributes for aggregations: <code>input2</code> an
 <span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pPrintReads</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
 <span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">pPrintReads</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="s1">&#39;local&#39;</span>
 <span class="c1"># refer to the index of the process</span>
-<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
-<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">runner</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;local&#39;</span>
+<span class="n">aFastqPE2Bam</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
+<span class="n">aFastqPE2Bam</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="s1">&#39;local&#39;</span>
 <span class="c1"># refer to the name of the process</span>
-<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;pPrintReads&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
-<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">runner</span><span class="p">[</span><span class="s1">&#39;pPrintReads&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;local&#39;</span>
+<span class="n">aFastqPE2Bam</span><span class="p">[</span><span class="s1">&#39;pPrintReads&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
+<span class="n">aFastqPE2Bam</span><span class="p">[</span><span class="s1">&#39;pPrintReads&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="s1">&#39;local&#39;</span>
 
 <span class="c1"># for multiple processes</span>
-<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">args</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
-<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
-<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;aFastqPE2Bam&#39;</span><span class="p">,</span> <span class="s1">&#39;pPrintReads&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
-<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;aFastqPE2Bam, pPrintReads&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
+<span class="n">aFastqPE2Bam</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
+<span class="n">aFastqPE2Bam</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
+<span class="n">aFastqPE2Bam</span><span class="p">[</span><span class="s1">&#39;aFastqPE2Bam&#39;</span><span class="p">,</span> <span class="s1">&#39;pPrintReads&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
+<span class="n">aFastqPE2Bam</span><span class="p">[</span><span class="s1">&#39;aFastqPE2Bam, pPrintReads&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
 
 <span class="c1"># or you may use starts/ends to refer to the start/end processes</span>
 <span class="c1"># has to be done after aggr.starts/aggr.ends assigned </span>
 <span class="c1"># or initialized with depends = True</span>
-<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;starts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
-<span class="n">aFastqPE2Bam</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;ends&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
+<span class="n">aFastqPE2Bam</span><span class="p">[</span><span class="s1">&#39;starts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
+<span class="n">aFastqPE2Bam</span><span class="p">[</span><span class="s1">&#39;ends&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span>
 </pre></div></p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>If an attribute is delegated for other processes, you can still set the value of it by the above methods.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When use <code>__getitem__</code> to select processes from aggregations, only the index or the id will return the processes itself (instance of <code>Proc</code>), otherwise it will return an instance <code>_Proxy</code>, which is proxy used to pass attribute values to a set of processes.<br />
+So pay attention to it, because we can do <code>aggr['pXXX1, pXXX2'].depends = "pXXX3, pXXX4"</code> to <code>aggr.pXXX3</code> and <code>aggr.pXXX4</code> as the dependent of <code>aggr.pXXX1</code> and <code>aggr.pXXX2</code> respectively, but if you do <code>aggr['pXXX1'] = 'pXXX3'</code> will raise an error. Because <code>_Proxy</code> helps the aggregation to select the processes from itselt, but a <code>Proc</code> instance doesn't know how to.</p>
+</div>
+<h2 id="define-modules-of-an-aggregation">Define modules of an aggregation.</h2>
+<p>We can define some modules for an aggregation, later on we can switch them on or off.<br />
+To define a module, you can simply do:
+<div class="highlight"><pre><span></span><span class="n">aggr</span><span class="o">.</span><span class="n">module</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">starts</span> <span class="o">=</span> <span class="s1">&#39;pStart&#39;</span><span class="p">,</span> <span class="n">ends</span> <span class="o">=</span> <span class="s1">&#39;pEnd&#39;</span><span class="p">,</span> <span class="n">depends</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;pEnd&#39;</span><span class="p">:</span> <span class="s1">&#39;pStart&#39;</span><span class="p">})</span>
+</pre></div>
+Later on, when we switch this module on: <code>aggr.on('name')</code>, then <code>aggr.pStart</code> will be added to <code>aggr.starts</code>, <code>aggr.pEnds</code> will be added to <code>aggr.ends</code>, and <code>aggr.pEnd</code> will be set to depend on <code>aggr.pStart</code>. When we switch it off, then <code>aggr.pStart</code> will be removed from <code>aggr.starts</code>, <code>aggr.pEnds</code> will be removed from <code>aggr.ends</code>, and <code>aggr.pStart</code> will be removed from <code>aggr.pStart</code>'s dependents.<br />
+If you want to keep some processes from being removed when the module is switched off, as they are used by other modules, you may do: 
+<div class="highlight"><pre><span></span><span class="n">aggr</span><span class="o">.</span><span class="n">module</span><span class="p">(</span>
+    <span class="s1">&#39;name&#39;</span><span class="p">,</span> 
+    <span class="n">starts</span>      <span class="o">=</span> <span class="s1">&#39;pStart&#39;</span><span class="p">,</span>
+    <span class="n">ends</span>        <span class="o">=</span> <span class="s1">&#39;pEnd&#39;</span><span class="p">,</span>
+    <span class="n">depends</span>     <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;pEnd&#39;</span><span class="p">:</span> <span class="s1">&#39;pStart&#39;</span><span class="p">},</span>
+    <span class="n">ends_shared</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;pEnd&#39;</span><span class="p">:</span> <span class="s1">&#39;othermod&#39;</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+Then when the module is switched off, <code>aggr.pEnd</code> will be kept.</p>
+<p>If you have something else to be done when a module is switched on/off, you may use <code>moduleFunc</code> to define them:
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">name_on</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">addStart</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">pStart</span><span class="p">)</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">pEnd</span><span class="o">.</span><span class="n">depends</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">pStart</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">addEnd</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">pEnd</span><span class="p">)</span>
+    <span class="c1"># more stuff go here</span>
+<span class="k">def</span> <span class="nf">name_off</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">delStart</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">pStart</span><span class="p">)</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">pEnd</span><span class="o">.</span><span class="n">depends</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">delEnd</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">pEnd</span><span class="p">)</span>
+    <span class="c1"># more stuff go here</span>
+<span class="n">aggr</span><span class="o">.</span><span class="n">moduleFunc</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">on</span><span class="p">,</span> <span class="n">off</span><span class="p">)</span>
+</pre></div></p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>You may use <code>aggr.on()</code> to switch all modules on and <code>aggr.off()</code> to switch all modules off.</p>
 </div>
 <h2 id="set-an-aggregation-as-start-aggregation-for-a-pipeline">Set an aggregation as start aggregation for a pipeline</h2>
 <p>You can do it just like setting a process as the starting process of pipeline (see <a href="../configure-a-pipeline/#starting-processes">here</a>). Actually the starting processes in the aggregation (<code>aggr.starts</code>) will be set as the starting processes of the pipeline.</p>
@@ -430,7 +470,7 @@ Besides, we have two special attributes for aggregations: <code>input2</code> an
 <p>You have to specify <code>depends</code> for start processes of an aggregation.</p>
 </div>
 <h2 id="copy-an-aggregation">Copy an aggregation</h2>
-<p><code>Aggr.copy(tag = 'notag', copyDeps = True, newid = None)</code>
+<p><code>Aggr.copy(tag = 'notag', depends = True, id = None, delegates = True, modules = True)</code>
 You may copy an aggregation, all the processes in the aggregation will be copied, and the dependencies will be switched to the corresponding copied processes, as well as the starting and ending processes, if <code>copyDeps == True</code>. </p>
 <p>You can keep the ids of processes unchanged but give a new tag and also give the aggregation an new id instead of the variable name:
 <div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">Aggr</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">)</span>
