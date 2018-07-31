@@ -153,14 +153,6 @@
         
             <li><a class="toctree-l3" href="#module-aggr">Module Aggr</a></li>
         
-            <li><a class="toctree-l3" href="#module-parameter">Module Parameter</a></li>
-        
-            <li><a class="toctree-l3" href="#module-parameters">Module Parameters</a></li>
-        
-            <li><a class="toctree-l3" href="#module-logger">Module logger</a></li>
-        
-            <li><a class="toctree-l3" href="#module-utils">Module utils</a></li>
-        
             <li><a class="toctree-l3" href="#module-proctreeprocnode">Module proctree.ProcNode</a></li>
         
             <li><a class="toctree-l3" href="#module-proctreeproctree">Module proctree.ProcTree</a></li>
@@ -367,7 +359,7 @@ The pipeline object itself.  </p>
     `__getattr__(self, name)`: get the value of a property in `self.props`
     `__setattr__(self, name, value)`: set the value of a property in `self.config`
 </code></pre>
-<h4 id="__init__-self-tag-desc-id"><code>__init__ (self, tag, desc, id)</code></h4>
+<h4 id="__init__-self-tag-desc-id-kwargs"><code>__init__ (self, tag, desc, id, **kwargs)</code></h4>
 <p>Constructor  </p>
 <ul>
 <li>
@@ -1036,6 +1028,8 @@ No need to lock as it only runs in one process (the watcher process)  </p>
 <li><strong>returns:</strong><br />
 <code>True</code> if we can, otherwise <code>False</code>  </li>
 </ul>
+<h4 id="halt-self-index"><code>halt (self, index)</code></h4>
+<p>Halt the pipeline if needed  </p>
 <h4 id="progressbar-self-jid-loglevel"><code>progressbar (self, jid, loglevel)</code></h4>
 <h4 id="run-self"><code>run (self)</code></h4>
 <p>Start to run the jobs  </p>
@@ -1077,306 +1071,360 @@ No need to lock as it only runs in one process (the watcher process)  </p>
 <code>id</code>: The id of the aggr. Default: None (the variable name)<br />
 <code>tag</code>: The tag of the processes. Default: None (a unique 4-char str according to the id)  </li>
 </ul>
-<h4 id="addproc-self-p-tag-where-copy"><code>addProc (self, p, tag, where, copy)</code></h4>
-<p>Add a process to the aggregation.<br />
-Note that you have to adjust the dependencies after you add processes.  </p>
-<ul>
-<li>
-<p><strong>params:</strong><br />
-<code>p</code>:     The process<br />
-<code>where</code>: Add to where: 'starts', 'ends', 'both' or None (default)  </p>
-</li>
-<li>
-<p><strong>returns:</strong><br />
-the aggregation itself  </p>
-</li>
-</ul>
-<h4 id="copy-self-tag-deps-id"><code>copy (self, tag, deps, id)</code></h4>
-<p>Like <code>proc</code>'s <code>copy</code> function, copy an aggregation. Each processes will be copied.  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>tag</code>:      The new tag of all copied processes<br />
-<code>deps</code>: Whether to copy the dependencies or not. Default: True  </li>
-<li>
-<p>dependences for processes in starts will not be copied<br />
-<code>id</code>:    Use a different id if you don't want to use the variant name  </p>
-</li>
-<li>
-<p><strong>returns:</strong><br />
-The new aggregation  </p>
-</li>
-</ul>
-<h4 id="delegate-self-attrs-procs"><code>delegate (self, attrs, procs)</code></h4>
-<p>Delegate the procs to have the attributes set by:<br />
-<code>aggr.args.a.b = 1</code><br />
-Instead of setting <code>args.a.b</code> of all processes, <code>args.a.b</code> of only delegated processes will be set.<br />
-<code>procs</code> can be <code>starts</code>/<code>ends</code>, but it cannot be set with other procs, which means you can do:<br />
-<code>aggr.delegate('args', 'starts')</code>, but not <code>aggr.delegate('args', ['starts', 'pXXX'])</code>  </p>
-<h2 id="module-parameter">Module <code>Parameter</code></h2>
-<blockquote>
-<p>The class for a single parameter</p>
-</blockquote>
-<h4 id="__init__-self-name-value"><code>__init__ (self, name, value)</code></h4>
-<p>Constructor  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>name</code>:  The name of the parameter<br />
-<code>value</code>: The initial value of the parameter  </li>
-</ul>
-<h4 id="_forcetype-self"><code>_forceType (self)</code></h4>
-<p>Coerce the value to the type specified<br />
-TypeError will be raised if error happens  </p>
-<h4 id="_printname-self-prefix-keylen"><code>_printName (self, prefix, keylen)</code></h4>
-<p>Get the print name with type for the parameter  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>prefix</code>: The prefix of the option  </li>
-</ul>
-<h4 id="setdesc-self-d"><code>setDesc (self, d)</code></h4>
-<p>Set the description of the parameter  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>d</code>: The description  </li>
-</ul>
-<h4 id="setname-self-n"><code>setName (self, n)</code></h4>
-<p>Set the name of the parameter  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>n</code>: The name  </li>
-</ul>
-<h4 id="setrequired-self-r"><code>setRequired (self, r)</code></h4>
-<p>Set whether this parameter is required  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>r</code>: True if required else False. Default: True  </li>
-</ul>
-<h4 id="setshow-self-s"><code>setShow (self, s)</code></h4>
-<p>Set whether this parameter should be shown in help information  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>s</code>: True if it shows else False. Default: True  </li>
-</ul>
-<h4 id="settype-self-t"><code>setType (self, t)</code></h4>
-<p>Set the type of the parameter  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>t</code>: The type of the value. Default: str  </li>
-<li>Note: str rather then 'str'  </li>
-</ul>
-<h4 id="setvalue-self-v"><code>setValue (self, v)</code></h4>
-<p>Set the value of the parameter  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>v</code>: The value  </li>
-</ul>
-<h2 id="module-parameters">Module <code>Parameters</code></h2>
-<blockquote>
-<p>A set of parameters</p>
-</blockquote>
-<h4 id="__init__-self"><code>__init__ (self)</code></h4>
-<p>Constructor  </p>
-<h4 id="_coercevalue-value-t-staticmethod"><code>_coerceValue (value, t) [@staticmethod]</code></h4>
-<h4 id="_gettype-self-argname-argtype"><code>_getType (self, argname, argtype)</code></h4>
-<h4 id="_parsename-self-argname"><code>_parseName (self, argname)</code></h4>
-<p>If <code>argname</code> is the name of an option  </p>
-<ul>
-<li>
-<p><strong>params:</strong><br />
-<code>argname</code>: The argname  </p>
-</li>
-<li>
-<p><strong>returns:</strong><br />
-<code>an</code>: clean argument name<br />
-<code>at</code>: normalized argument type<br />
-<code>av</code>: the argument value, if <code>argname</code> is like: <code>-a=1</code>  </p>
-</li>
-</ul>
-<h4 id="_putvalue-self-argname-argtype-argval"><code>_putValue (self, argname, argtype, argval)</code></h4>
-<h4 id="_shouldprinthelp-self-args"><code>_shouldPrintHelp (self, args)</code></h4>
-<h4 id="asdict-self"><code>asDict (self)</code></h4>
-<p>Convert the parameters to Box object  </p>
+<h4 id="_select-self-key-forcelist-flatten"><code>_select (self, key, forceList, flatten)</code></h4>
+<p>Select processes<br />
+<div class="highlight"><pre><span></span># self._procs = OrderedDict([  
+#	(&#39;a&#39;, Proc(id = &#39;a&#39;)),  
+#	(&#39;b&#39;, Proc(id = &#39;b&#39;)),  
+#	(&#39;c&#39;, Proc(id = &#39;c&#39;)),  
+#	(&#39;d&#39;, Proc(id = &#39;d&#39;))  
+# ])  
+  
+self[&#39;a&#39;] # proc a  
+self[0]   # proc a  
+self[1:2] # _Proxy of (proc b, proc c)  
+self[1,3] # _Proxy of (proc b, proc d)  
+self[&#39;b&#39;, &#39;c&#39;] # _Proxy of (proc b, proc c)  
+self[&#39;b,c&#39;] # _Proxy of (proc b, proc c)  
+self[Proc(id = &#39;d&#39;)] # proc d  
+  
+#### `addEnd (self, *procs) `
+  
+#### `addProc (self, p, tag, where, copy) `
+  
+Add a process to the aggregation.  
+Note that you have to adjust the dependencies after you add processes.  
+
+- **params:**  
+`p`:     The process  
+`where`: Add to where: &#39;starts&#39;, &#39;ends&#39;, &#39;both&#39; or None (default)  
+
+- **returns:**  
+the aggregation itself  
+  
+#### `addStart (self, *procs) `
+  
+#### `copy (self, tag, depends, id, delegates, modules) `
+  
+Like `proc`&#39;s `copy` function, copy an aggregation. Each processes will be copied.  
+
+- **params:**  
+`tag`:      The new tag of all copied processes  
+`depends`: Whether to copy the dependencies or not. Default: True  
+- dependences for processes in starts will not be copied  
+`id`:    Use a different id if you don&#39;t want to use the variant name  
+`delegates`: Copy delegates? Default: `True`  
+`configs`: Copy configs? Default: `True`  
+
+- **returns:**  
+The new aggregation  
+  
+#### `delEnd (self, *procs) `
+  
+#### `delStart (self, *procs) `
+  
+#### `delegate (self, attrs, procs) `
+  
+Delegate the procs to have the attributes set by:  
+`aggr.args.a.b = 1`  
+Instead of setting `args.a.b` of all processes, `args.a.b` of only delegated processes will be set.  
+`procs` can be `starts`/`ends`, but it cannot be set with other procs, which means you can do:  
+`aggr.delegate(&#39;args&#39;, &#39;starts&#39;)`, but not `aggr.delegate(&#39;args&#39;, [&#39;starts&#39;, &#39;pXXX&#39;])`  
+  
+#### `module (self, name, starts, depends, ends, starts_shared, depends_shared, ends_shared) `
+  
+Define a function for aggr.  
+The &quot;shared&quot; parameters will be indicators not to remove those processes  
+when the shared function is on.  
+
+- **params:**  
+`name`          : The name of the function  
+`starts`        : A list of start processes.  
+`depends`       : A dict of dependences of the procs  
+`ends`          : A list of end processes  
+`starts_shared` : A dict of functions that shares the same starts  
+`depends_shared`: A dict of functions that shares the same depends  
+`ends_shared`   : A dict of functions that shares the same ends  
+- For example: `{&lt;procs&gt;: &lt;func&gt;}`  
+  
+#### `moduleFunc (self, name, on, off) `
+  
+#### `off (self, *names) `
+  
+#### `on (self, *names) `
+  
+
+## Module `Parameter`  
+&gt; The class for a single parameter
+	
+
+#### `__init__ (self, name, value) `
+  
+Constructor  
+
+- **params:**  
+`name`:  The name of the parameter  
+`value`: The initial value of the parameter  
+  
+#### `_forceType (self) `
+  
+Coerce the value to the type specified  
+TypeError will be raised if error happens  
+  
+#### `_printName (self, prefix, keylen) `
+  
+Get the print name with type for the parameter  
+
+- **params:**  
+`prefix`: The prefix of the option  
+  
+#### `setDesc (self, d) `
+  
+Set the description of the parameter  
+
+- **params:**  
+`d`: The description  
+  
+#### `setName (self, n) `
+  
+Set the name of the parameter  
+
+- **params:**  
+`n`: The name  
+  
+#### `setRequired (self, r) `
+  
+Set whether this parameter is required  
+
+- **params:**  
+`r`: True if required else False. Default: True  
+  
+#### `setShow (self, s) `
+  
+Set whether this parameter should be shown in help information  
+
+- **params:**  
+`s`: True if it shows else False. Default: True  
+  
+#### `setType (self, t) `
+  
+Set the type of the parameter  
+
+- **params:**  
+`t`: The type of the value. Default: str  
+- Note: str rather then &#39;str&#39;  
+  
+#### `setValue (self, v) `
+  
+Set the value of the parameter  
+
+- **params:**  
+`v`: The value  
+  
+
+## Module `Parameters`  
+&gt; A set of parameters
+	
+
+#### `__init__ (self) `
+  
+Constructor  
+  
+#### `_coerceValue (value, t) [@staticmethod]`
+  
+#### `_getType (self, argname, argtype) `
+  
+#### `_parseName (self, argname) `
+  
+If `argname` is the name of an option  
+
+- **params:**  
+`argname`: The argname  
+
+- **returns:**  
+`an`: clean argument name  
+`at`: normalized argument type  
+`av`: the argument value, if `argname` is like: `-a=1`  
+  
+#### `_putValue (self, argname, argtype, argval) `
+  
+#### `_shouldPrintHelp (self, args) `
+  
+#### `asDict (self) `
+  
+Convert the parameters to Box object  
+
+- **returns:**  
+The Box object  
+  
+#### `help (self, error, printNexit) `
+  
+Calculate the help page  
+
+- **params:**  
+`error`: The error message to show before the help information. Default: `&#39;&#39;`  
+`printNexit`: Print the help page and exit the program? Default: `False` (return the help information)  
+
+- **return:**  
+The help information  
+  
+#### `loadDict (self, dictVar, show) `
+  
+Load parameters from a dict  
+
+- **params:**  
+`dictVar`: The dict variable.  
+- Properties are set by &quot;&lt;param&gt;.required&quot;, &quot;&lt;param&gt;.show&quot;, ...  
+`show`:    Whether these parameters should be shown in help information  
+- Default: False (don&#39;t show parameter from config object in help page)  
+- It&#39;ll be overwritten by the `show` property inside dict variable.  
+- If it is None, will inherit the param&#39;s show value  
+  
+#### `loadFile (self, cfgfile, show) `
+  
+Load parameters from a json/config file  
+If the file name ends with &#39;.json&#39;, `json.load` will be used,  
+otherwise, `ConfigParser` will be used.  
+For config file other than json, a section name is needed, whatever it is.  
+
+- **params:**  
+`cfgfile`: The config file  
+`show`:    Whether these parameters should be shown in help information  
+- Default: False (don&#39;t show parameter from config file in help page)  
+- It&#39;ll be overwritten by the `show` property inside the config file.  
+  
+#### `parse (self, args) `
+  
+Parse the arguments from `sys.argv`  
+  
+
+## Module `logger`  
+&gt; A customized logger for pyppl
+
+
+#### `class: LoggerThemeError`
+</pre></div>
+Theme errors for logger
+<div class="highlight"><pre><span></span>#### `class: PyPPLLogFilter`
+</pre></div>
+logging filter by levels (flags)
+<div class="highlight"><pre><span></span>#### `class: PyPPLLogFormatter`
+</pre></div>
+logging formatter for pyppl
+<div class="highlight"><pre><span></span>#### `class: TemplatePyPPL`
+</pre></div>
+Built-in template wrapper.
+<div class="highlight"><pre><span></span>#### `_formatTheme (theme) [@staticmethod]`
+  
+Make them in the standard form with bgcolor and fgcolor in raw terminal color strings  
+If the theme is read from file, try to translate &quot;COLORS.xxx&quot; to terminal color strings  
+
+- **params:**  
+`theme`: The theme  
+
+- **returns:**  
+The formatted colors  
+  
+#### `_getColorFromTheme (level, theme) [@staticmethod]`
+  
+Get colors from a them  
+
+- **params:**  
+`level`: Our own log record level  
+`theme`: The theme  
+
+- **returns:**  
+The colors  
+  
+#### `_getLevel (record) [@staticmethod]`
+  
+Get the flags of a record  
+
+- **params:**  
+`record`:  The logging record  
+  
+#### `getLogger (levels, theme, logfile, lvldiff, name) [@staticmethod]`
+  
+Get the default logger  
+
+- **params:**  
+`levels`: The log levels(tags), default: basic  
+`theme`:  The theme of the logs on terminal. Default: True (default theme will be used)  
+- False to disable theme  
+`logfile`:The log file. Default: None (don&#39;t white to log file)  
+`lvldiff`:The diff levels for log  
+- [&quot;-depends&quot;, &quot;jobdone&quot;, &quot;+debug&quot;]: show jobdone, hide depends and debug  
+`name`:   The name of the logger, default: PyPPL  
+
+- **returns:**  
+The logger  
+  
+
+## Module `utils`  
+&gt; A set of utitities for PyPPL
+
+
+#### `class: OrderedDict`
+</pre></div>
+Dictionary that remembers insertion order
+<div class="highlight"><pre><span></span>#### `class: Parallel`
+</pre></div></p>
+<div class="highlight"><pre><span></span>#### `class: ProcessPoolExecutor`
+</pre></div>
+
+<div class="highlight"><pre><span></span>#### `class: ThreadPoolExecutor`
+</pre></div>
+
+<div class="highlight"><pre><span></span>#### `_cp (f1, f2) `
+  
+Copy a file or a directory  
+
+- **params:**  
+`f1`: The source  
+`f2`: The destination  
+  
+#### `_link (f1, f2) `
+  
+Create a symbolic link for the given file  
+
+- **params:**  
+`f1`: The source  
+`f2`: The destination  
+  
+#### `_lockfile (f, real, tmpdir) `
+  
+Get the path of lockfile of a file  
+
+- **params:**  
+`f`: The file  
+
+- **returns:**  
+The path of the lock file  
+  
+#### `_rm (fn) `
+  
+Remove an entry  
+
+- **params:**  
+`fn`: The path of the entry  
+  
+#### `alwaysList (data) `
+  
+Convert a string or a list with element  
+
+- **params:**  
+`data`: the data to be converted  
+
+- **examples:**  
+```python  
+data = [&quot;a, b, c&quot;, &quot;d&quot;]  
+ret  = alwaysList (data)  
+# ret == [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]  
+</pre></div>
+
 <ul>
 <li><strong>returns:</strong><br />
-The Box object  </li>
-</ul>
-<h4 id="help-self-error-printnexit"><code>help (self, error, printNexit)</code></h4>
-<p>Calculate the help page  </p>
-<ul>
-<li>
-<p><strong>params:</strong><br />
-<code>error</code>: The error message to show before the help information. Default: <code>''</code><br />
-<code>printNexit</code>: Print the help page and exit the program? Default: <code>False</code> (return the help information)  </p>
-</li>
-<li>
-<p><strong>return:</strong><br />
-The help information  </p>
-</li>
-</ul>
-<h4 id="loaddict-self-dictvar-show"><code>loadDict (self, dictVar, show)</code></h4>
-<p>Load parameters from a dict  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>dictVar</code>: The dict variable.  </li>
-<li>Properties are set by "<param>.required", "<param>.show", ...<br />
-<code>show</code>:    Whether these parameters should be shown in help information  </li>
-<li>Default: False (don't show parameter from config object in help page)  </li>
-<li>It'll be overwritten by the <code>show</code> property inside dict variable.  </li>
-<li>If it is None, will inherit the param's show value  </li>
-</ul>
-<h4 id="loadfile-self-cfgfile-show"><code>loadFile (self, cfgfile, show)</code></h4>
-<p>Load parameters from a json/config file<br />
-If the file name ends with '.json', <code>json.load</code> will be used,<br />
-otherwise, <code>ConfigParser</code> will be used.<br />
-For config file other than json, a section name is needed, whatever it is.  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>cfgfile</code>: The config file<br />
-<code>show</code>:    Whether these parameters should be shown in help information  </li>
-<li>Default: False (don't show parameter from config file in help page)  </li>
-<li>It'll be overwritten by the <code>show</code> property inside the config file.  </li>
-</ul>
-<h4 id="parse-self-args"><code>parse (self, args)</code></h4>
-<p>Parse the arguments from <code>sys.argv</code>  </p>
-<h2 id="module-logger">Module <code>logger</code></h2>
-<blockquote>
-<p>A customized logger for pyppl</p>
-</blockquote>
-<h4 id="class-loggerthemeerror"><code>class: LoggerThemeError</code></h4>
-<div class="highlight"><pre><span></span>Theme errors for logger
-</pre></div>
-
-<h4 id="class-pyppllogfilter"><code>class: PyPPLLogFilter</code></h4>
-<div class="highlight"><pre><span></span>logging filter by levels (flags)
-</pre></div>
-
-<h4 id="class-pyppllogformatter"><code>class: PyPPLLogFormatter</code></h4>
-<div class="highlight"><pre><span></span>logging formatter for pyppl
-</pre></div>
-
-<h4 id="class-templatepyppl"><code>class: TemplatePyPPL</code></h4>
-<div class="highlight"><pre><span></span>Built-in template wrapper.
-</pre></div>
-
-<h4 id="_formattheme-theme-staticmethod"><code>_formatTheme (theme) [@staticmethod]</code></h4>
-<p>Make them in the standard form with bgcolor and fgcolor in raw terminal color strings<br />
-If the theme is read from file, try to translate "COLORS.xxx" to terminal color strings  </p>
-<ul>
-<li>
-<p><strong>params:</strong><br />
-<code>theme</code>: The theme  </p>
-</li>
-<li>
-<p><strong>returns:</strong><br />
-The formatted colors  </p>
-</li>
-</ul>
-<h4 id="_getcolorfromtheme-level-theme-staticmethod"><code>_getColorFromTheme (level, theme) [@staticmethod]</code></h4>
-<p>Get colors from a them  </p>
-<ul>
-<li>
-<p><strong>params:</strong><br />
-<code>level</code>: Our own log record level<br />
-<code>theme</code>: The theme  </p>
-</li>
-<li>
-<p><strong>returns:</strong><br />
-The colors  </p>
-</li>
-</ul>
-<h4 id="_getlevel-record-staticmethod"><code>_getLevel (record) [@staticmethod]</code></h4>
-<p>Get the flags of a record  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>record</code>:  The logging record  </li>
-</ul>
-<h4 id="getlogger-levels-theme-logfile-lvldiff-name-staticmethod"><code>getLogger (levels, theme, logfile, lvldiff, name) [@staticmethod]</code></h4>
-<p>Get the default logger  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>levels</code>: The log levels(tags), default: basic<br />
-<code>theme</code>:  The theme of the logs on terminal. Default: True (default theme will be used)  </li>
-<li>False to disable theme<br />
-<code>logfile</code>:The log file. Default: None (don't white to log file)<br />
-<code>lvldiff</code>:The diff levels for log  </li>
-<li>
-<p>["-depends", "jobdone", "+debug"]: show jobdone, hide depends and debug<br />
-<code>name</code>:   The name of the logger, default: PyPPL  </p>
-</li>
-<li>
-<p><strong>returns:</strong><br />
-The logger  </p>
-</li>
-</ul>
-<h2 id="module-utils">Module <code>utils</code></h2>
-<blockquote>
-<p>A set of utitities for PyPPL</p>
-</blockquote>
-<h4 id="class-ordereddict"><code>class: OrderedDict</code></h4>
-<div class="highlight"><pre><span></span>Dictionary that remembers insertion order
-</pre></div>
-
-<h4 id="class-parallel"><code>class: Parallel</code></h4>
-<div class="highlight"><pre><span></span>
-</pre></div>
-
-<h4 id="class-processpoolexecutor"><code>class: ProcessPoolExecutor</code></h4>
-<div class="highlight"><pre><span></span>
-</pre></div>
-
-<h4 id="class-threadpoolexecutor"><code>class: ThreadPoolExecutor</code></h4>
-<div class="highlight"><pre><span></span>
-</pre></div>
-
-<h4 id="_cp-f1-f2"><code>_cp (f1, f2)</code></h4>
-<p>Copy a file or a directory  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>f1</code>: The source<br />
-<code>f2</code>: The destination  </li>
-</ul>
-<h4 id="_link-f1-f2"><code>_link (f1, f2)</code></h4>
-<p>Create a symbolic link for the given file  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>f1</code>: The source<br />
-<code>f2</code>: The destination  </li>
-</ul>
-<h4 id="_lockfile-f-real-tmpdir"><code>_lockfile (f, real, tmpdir)</code></h4>
-<p>Get the path of lockfile of a file  </p>
-<ul>
-<li>
-<p><strong>params:</strong><br />
-<code>f</code>: The file  </p>
-</li>
-<li>
-<p><strong>returns:</strong><br />
-The path of the lock file  </p>
-</li>
-</ul>
-<h4 id="_rm-fn"><code>_rm (fn)</code></h4>
-<p>Remove an entry  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>fn</code>: The path of the entry  </li>
-</ul>
-<h4 id="alwayslist-data"><code>alwaysList (data)</code></h4>
-<p>Convert a string or a list with element  </p>
-<ul>
-<li>
-<p><strong>params:</strong><br />
-<code>data</code>: the data to be converted  </p>
-</li>
-<li>
-<p><strong>examples:</strong><br />
-<div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;a, b, c&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">]</span>  
-<span class="n">ret</span>  <span class="o">=</span> <span class="n">alwaysList</span> <span class="p">(</span><span class="n">data</span><span class="p">)</span>  
-<span class="c1"># ret == [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]  </span>
-</pre></div></p>
-</li>
-<li>
-<p><strong>returns:</strong><br />
-The split list  </p>
-</li>
+The split list  </li>
 </ul>
 <h4 id="asstr-s-encoding"><code>asStr (s, encoding)</code></h4>
 <p>Convert everything (str, unicode, bytes) to str with python2, python3 compatiblity  </p>
@@ -1734,7 +1782,7 @@ The variable name  </p>
 <blockquote>
 <p>.</p>
 </blockquote>
-<h4 id="__init__-self_1"><code>__init__ (self)</code></h4>
+<h4 id="__init__-self"><code>__init__ (self)</code></h4>
 <p>Constructor, set the status of all <code>ProcNode</code>s  </p>
 <h4 id="check-proc-staticmethod"><code>check (proc) [@staticmethod]</code></h4>
 <p>Check whether a process with the same id and tag exists  </p>
