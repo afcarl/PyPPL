@@ -153,6 +153,14 @@
         
             <li><a class="toctree-l3" href="#module-aggr">Module Aggr</a></li>
         
+            <li><a class="toctree-l3" href="#module-utilsbox">Module utils.box</a></li>
+        
+            <li><a class="toctree-l3" href="#module-utilscmd">Module utils.cmd</a></li>
+        
+            <li><a class="toctree-l3" href="#module-utilsparallel">Module utils.parallel</a></li>
+        
+            <li><a class="toctree-l3" href="#module-utilssafefs">Module utils.safefs</a></li>
+        
             <li><a class="toctree-l3" href="#module-proctreeprocnode">Module proctree.ProcNode</a></li>
         
             <li><a class="toctree-l3" href="#module-proctreeproctree">Module proctree.ProcTree</a></li>
@@ -1015,6 +1023,7 @@ True if succeed else False  </li>
 <code>proc</code>     : The process<br />
 <code>runner</code>   : The runner class  </li>
 </ul>
+<h4 id="_exit-self"><code>_exit (self)</code></h4>
 <h4 id="alljobsdone-self"><code>allJobsDone (self)</code></h4>
 <p>Tell whether all jobs are done.<br />
 No need to lock as it only runs in one process (the watcher process)  </p>
@@ -1028,7 +1037,7 @@ No need to lock as it only runs in one process (the watcher process)  </p>
 <li><strong>returns:</strong><br />
 <code>True</code> if we can, otherwise <code>False</code>  </li>
 </ul>
-<h4 id="halt-self-index"><code>halt (self, index)</code></h4>
+<h4 id="halt-self-halt_anyway"><code>halt (self, halt_anyway)</code></h4>
 <p>Halt the pipeline if needed  </p>
 <h4 id="progressbar-self-jid-loglevel"><code>progressbar (self, jid, loglevel)</code></h4>
 <h4 id="run-self"><code>run (self)</code></h4>
@@ -1154,7 +1163,55 @@ when the shared function is on.
 #### `on (self, *names) `
   
 
-## Module `Parameter`  
+## Module `flowchart.Flowchart`  
+&gt; Draw flowchart for pipelines
+
+	@static variables:
+		`THEMES`: predefined themes
+	
+
+#### `__init__ (self, fcfile, dotfile) `
+  
+The constructor  
+
+- **params:**  
+`fcfile`: The flowchart file. Default: `path.splitext(sys.argv[0])[0] + &#39;.pyppl.svg&#39;`  
+`dotfile`: The dot file. Default: `path.splitext(sys.argv[0])[0] + &#39;.pyppl.dot&#39;`  
+  
+#### `_assemble (self) `
+  
+Assemble the graph for printing and rendering  
+  
+#### `addLink (self, node1, node2) `
+  
+Add a link to the chart  
+
+- **params:**  
+`node1`: The first node.  
+`node2`: The second node.  
+  
+#### `addNode (self, node, role) `
+  
+Add a node to the chart  
+
+- **params:**  
+`node`: The node  
+`role`: Is it a starting node, an ending node or None. Default: None.  
+  
+#### `generate (self) `
+  
+Generate the dot file and graph file.  
+  
+#### `setTheme (self, theme, base) `
+  
+Set the theme to be used  
+
+- **params:**  
+`theme`: The theme, could be the key of Flowchart.THEMES or a dict of a theme definition.  
+`base` : The base theme to be based on you pass custom theme  
+  
+
+## Module `parameters.Parameter`  
 &gt; The class for a single parameter
 	
 
@@ -1222,7 +1279,7 @@ Set the value of the parameter
 `v`: The value  
   
 
-## Module `Parameters`  
+## Module `parameters.Parameters`  
 &gt; A set of parameters
 	
 
@@ -1302,7 +1359,10 @@ Parse the arguments from `sys.argv`
 &gt; A customized logger for pyppl
 
 
-#### `class: LoggerThemeError`
+#### `class: Box`
+</pre></div>
+Allow dot operation for OrderedDict
+<div class="highlight"><pre><span></span>#### `class: LoggerThemeError`
 </pre></div>
 Theme errors for logger
 <div class="highlight"><pre><span></span>#### `class: PyPPLLogFilter`
@@ -1364,51 +1424,10 @@ The logger
 &gt; A set of utitities for PyPPL
 
 
-#### `class: OrderedDict`
+#### `class: Box`
 </pre></div>
-Dictionary that remembers insertion order
-<div class="highlight"><pre><span></span>#### `class: Parallel`
-</pre></div></p>
-<div class="highlight"><pre><span></span>#### `class: ProcessPoolExecutor`
-</pre></div>
-
-<div class="highlight"><pre><span></span>#### `class: ThreadPoolExecutor`
-</pre></div>
-
-<div class="highlight"><pre><span></span>#### `_cp (f1, f2) `
-  
-Copy a file or a directory  
-
-- **params:**  
-`f1`: The source  
-`f2`: The destination  
-  
-#### `_link (f1, f2) `
-  
-Create a symbolic link for the given file  
-
-- **params:**  
-`f1`: The source  
-`f2`: The destination  
-  
-#### `_lockfile (f, real, tmpdir) `
-  
-Get the path of lockfile of a file  
-
-- **params:**  
-`f`: The file  
-
-- **returns:**  
-The path of the lock file  
-  
-#### `_rm (fn) `
-  
-Remove an entry  
-
-- **params:**  
-`fn`: The path of the entry  
-  
-#### `alwaysList (data) `
+Allow dot operation for OrderedDict
+<div class="highlight"><pre><span></span>#### `alwaysList (data) `
   
 Convert a string or a list with element  
 
@@ -1420,15 +1439,13 @@ Convert a string or a list with element
 data = [&quot;a, b, c&quot;, &quot;d&quot;]  
 ret  = alwaysList (data)  
 # ret == [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]  
-</pre></div>
-
+</pre></div></p>
 <ul>
 <li><strong>returns:</strong><br />
 The split list  </li>
 </ul>
 <h4 id="asstr-s-encoding"><code>asStr (s, encoding)</code></h4>
 <p>Convert everything (str, unicode, bytes) to str with python2, python3 compatiblity  </p>
-<h4 id="basename-f"><code>basename (f)</code></h4>
 <h4 id="brieflist-l"><code>briefList (l)</code></h4>
 <p>Briefly show an integer list, combine the continuous numbers.  </p>
 <ul>
@@ -1439,18 +1456,6 @@ The split list  </li>
 <li>
 <p><strong>returns:</strong><br />
 The string to show for the briefed list.  </p>
-</li>
-</ul>
-<h4 id="chmodx-thefile"><code>chmodX (thefile)</code></h4>
-<p>Convert script file to executable or add extract shebang to cmd line  </p>
-<ul>
-<li>
-<p><strong>params:</strong><br />
-<code>thefile</code>: the script file  </p>
-</li>
-<li>
-<p><strong>returns:</strong><br />
-A list with or without the path of the interpreter as the first element and the script file as the last element  </p>
 </li>
 </ul>
 <h4 id="dictupdate-origdict-newdict"><code>dictUpdate (origDict, newDict)</code></h4>
@@ -1473,60 +1478,6 @@ A list with or without the path of the interpreter as the first element and the 
 </pre></div></p>
 </li>
 </ul>
-<h4 id="dirmtime-d"><code>dirmtime (d)</code></h4>
-<p>Calculate the mtime for a directory.<br />
-Should be the max mtime of all files in it.  </p>
-<ul>
-<li>
-<p><strong>params:</strong><br />
-<code>d</code>:  the directory  </p>
-</li>
-<li>
-<p><strong>returns:</strong><br />
-The mtime.  </p>
-</li>
-</ul>
-<h4 id="dumbpopen-cmd-shell"><code>dumbPopen (cmd, shell)</code></h4>
-<p>A dumb Popen (no stdout and stderr)  </p>
-<ul>
-<li>
-<p><strong>params:</strong><br />
-<code>cmd</code>: The command for <code>Popen</code><br />
-<code>shell</code>: The shell argument for <code>Popen</code>  </p>
-</li>
-<li>
-<p><strong>returns:</strong><br />
-The process object  </p>
-</li>
-</ul>
-<h4 id="fileexists-f-callback-tmpdir"><code>fileExists (f, callback, tmpdir)</code></h4>
-<p>Tell whether a path exists under a lock  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>f</code>: the path<br />
-<code>callback</code>: the callback  </li>
-<li>
-<p>arguments: whether the file exists and the path of the file<br />
-<code>tmpdir</code>: The tmpdir to save the lock file  </p>
-</li>
-<li>
-<p><strong>returns:</strong><br />
-True if yes, otherwise False<br />
-If any of the path does not exist, return False  </p>
-</li>
-</ul>
-<h4 id="filesig-fn-dirsig"><code>filesig (fn, dirsig)</code></h4>
-<p>Calculate a signature for a file according to its path and mtime  </p>
-<ul>
-<li>
-<p><strong>params:</strong><br />
-<code>fn</code>: the file  </p>
-</li>
-<li>
-<p><strong>returns:</strong><br />
-The md5 deigested signature.  </p>
-</li>
-</ul>
 <h4 id="filter-func-vec"><code>filter (func, vec)</code></h4>
 <p>Python2 and Python3 compatible filter  </p>
 <ul>
@@ -1540,7 +1491,6 @@ The md5 deigested signature.  </p>
 The filtered list  </p>
 </li>
 </ul>
-<h4 id="flushfile-f-lastmsg-end"><code>flushFile (f, lastmsg, end)</code></h4>
 <h4 id="formatsecs-seconds"><code>formatSecs (seconds)</code></h4>
 <p>Format a time duration  </p>
 <ul>
@@ -1566,13 +1516,6 @@ Try to get the source first, if failed, try to get its name, otherwise return No
 <p><strong>returns:</strong><br />
 The signature  </p>
 </li>
-</ul>
-<h4 id="gz-srcfile-gzfile-overwrite-tmpdir"><code>gz (srcfile, gzfile, overwrite, tmpdir)</code></h4>
-<p>Do a "gzip"-like for a file  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>gzfile</code>:  the final .gz file<br />
-<code>srcfile</code>: the source file  </li>
 </ul>
 <h4 id="map-func-vec"><code>map (func, vec)</code></h4>
 <p>Python2 and Python3 compatible map  </p>
@@ -1612,78 +1555,6 @@ The converted list  </p>
 The reduced value  </p>
 </li>
 </ul>
-<h4 id="safecopy-f1-f2-callback-overwrite-tmpdir"><code>safeCopy (f1, f2, callback, overwrite, tmpdir)</code></h4>
-<p>Safe copy  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>src</code>: The source file<br />
-<code>dst</code>: The dist file<br />
-<code>callback</code>: The callback (r, f1, f2)<br />
-<code>overwrite</code>: Overwrite target file?<br />
-<code>tmpdir</code>: Tmpdir for lock file  </li>
-</ul>
-<h4 id="safelink-f1-f2-callback-overwrite-tmpdir"><code>safeLink (f1, f2, callback, overwrite, tmpdir)</code></h4>
-<p>Safe link  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>src</code>: The source file<br />
-<code>dst</code>: The dist file<br />
-<code>callback</code>: The callback (r, f1, f2)<br />
-<code>overwrite</code>: Overwrite target file?<br />
-<code>tmpdir</code>: Tmpdir for lock file  </li>
-</ul>
-<h4 id="safemove-f1-f2-callback-overwrite-tmpdir"><code>safeMove (f1, f2, callback, overwrite, tmpdir)</code></h4>
-<p>Move a file/dir  </p>
-<ul>
-<li>
-<p><strong>params:</strong><br />
-<code>src</code>: The source file<br />
-<code>dst</code>: The destination<br />
-<code>overwrite</code>: Whether overwrite the destination  </p>
-</li>
-<li>
-<p><strong>return:</strong><br />
-True if succeed else False  </p>
-</li>
-</ul>
-<h4 id="safemovewithlink-f1-f2-callback-overwrite-tmpdir"><code>safeMoveWithLink (f1, f2, callback, overwrite, tmpdir)</code></h4>
-<p>Move a file/dir and leave a link the source file with locks  </p>
-<ul>
-<li>
-<p><strong>params:</strong><br />
-<code>f1</code>: The source file<br />
-<code>f2</code>: The destination<br />
-<code>overwrite</code>: Whether overwrite the destination  </p>
-</li>
-<li>
-<p><strong>return:</strong><br />
-True if succeed else False  </p>
-</li>
-</ul>
-<h4 id="saferemove-f-callback-tmpdir"><code>safeRemove (f, callback, tmpdir)</code></h4>
-<p>Safely remove a file/dir.  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>f</code>: the file or dir.<br />
-<code>callback</code>: The callback  </li>
-<li>argument <code>r</code>: Whether the file exists before removing  </li>
-<li>argument <code>fn</code>: The path of the file  </li>
-</ul>
-<h4 id="samefile-f1-f2-callback-tmpdir"><code>samefile (f1, f2, callback, tmpdir)</code></h4>
-<p>Tell whether two paths pointing to the same file under locks  </p>
-<ul>
-<li>
-<p><strong>params:</strong><br />
-<code>f1</code>: the first path<br />
-<code>f2</code>: the second path<br />
-<code>callback</code>: the callback  </p>
-</li>
-<li>
-<p><strong>returns:</strong><br />
-True if yes, otherwise False<br />
-If any of the path does not exist, return False  </p>
-</li>
-</ul>
 <h4 id="split-s-delimter-trim"><code>split (s, delimter, trim)</code></h4>
 <p>Split a string using a single-character delimter  </p>
 <ul>
@@ -1705,13 +1576,6 @@ If any of the path does not exist, return False  </p>
 The list of substrings  </p>
 </li>
 </ul>
-<h4 id="targz-srcdir-tgzfile-overwrite-tmpdir"><code>targz (srcdir, tgzfile, overwrite, tmpdir)</code></h4>
-<p>Do a "tar zcf"-like for a directory  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>tgzfile</code>: the final .tgz file<br />
-<code>srcdir</code>:  the source directory  </li>
-</ul>
 <h4 id="uid-s-l-alphabet"><code>uid (s, l, alphabet)</code></h4>
 <p>Calculate a short uid based on a string.<br />
 Safe enough, tested on 1000000 32-char strings, no repeated uid found.<br />
@@ -1728,20 +1592,6 @@ This is used to calcuate a uid for a process  </p>
 The uid  </p>
 </li>
 </ul>
-<h4 id="ungz-gzfile-dstfile-overwrite-tmpdir"><code>ungz (gzfile, dstfile, overwrite, tmpdir)</code></h4>
-<p>Do a "gunzip"-like for a .gz file  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>gzfile</code>:  the .gz file<br />
-<code>dstfile</code>: the extracted file  </li>
-</ul>
-<h4 id="untargz-tgzfile-dstdir-overwrite-tmpdir"><code>untargz (tgzfile, dstdir, overwrite, tmpdir)</code></h4>
-<p>Do a "tar zxf"-like for .tgz file  </p>
-<ul>
-<li><strong>params:</strong><br />
-<code>tgzfile</code>:  the .tgz file<br />
-<code>dstdir</code>: which directory to extract the file to  </li>
-</ul>
 <h4 id="varname-maxline-incldot"><code>varname (maxline, incldot)</code></h4>
 <p>Get the variable name for ini  </p>
 <ul>
@@ -1753,6 +1603,234 @@ The uid  </p>
 <li>
 <p><strong>returns:</strong><br />
 The variable name  </p>
+</li>
+</ul>
+<h2 id="module-utilsbox">Module <code>utils.box</code></h2>
+<blockquote>
+<p>.</p>
+</blockquote>
+<h4 id="class-box"><code>class: Box</code></h4>
+<div class="highlight"><pre><span></span>Allow dot operation for OrderedDict
+</pre></div>
+
+<h4 id="class-ordereddict"><code>class: OrderedDict</code></h4>
+<div class="highlight"><pre><span></span>Dictionary that remembers insertion order
+</pre></div>
+
+<h2 id="module-utilscmd">Module <code>utils.cmd</code></h2>
+<blockquote>
+<p>.</p>
+</blockquote>
+<h4 id="class-box_1"><code>class: Box</code></h4>
+<div class="highlight"><pre><span></span>Allow dot operation for OrderedDict
+</pre></div>
+
+<h4 id="class-cmd"><code>class: Cmd</code></h4>
+<div class="highlight"><pre><span></span>A command (subprocess) wapper
+</pre></div>
+
+<h4 id="asstr-s-encoding-staticmethod"><code>asStr (s, encoding) [@staticmethod]</code></h4>
+<p>Convert everything (str, unicode, bytes) to str with python2, python3 compatiblity  </p>
+<h4 id="run-cmd-bg-raiseexc-kwargs-staticmethod"><code>run (cmd, bg, raiseExc, **kwargs) [@staticmethod]</code></h4>
+<p>A shortcut of <code>Command.run</code><br />
+To chain another command, you can do:<br />
+<code>run('seq 1 3', bg = True).pipe('grep 1')</code>  </p>
+<ul>
+<li><strong>params:</strong><br />
+<code>cmd</code>     : The command, could be a string or a list<br />
+<code>bg</code>      : Run in background or not. Default: <code>False</code>  </li>
+<li>
+<p>If it is <code>True</code>, <code>rc</code> and <code>stdout/stderr</code> will be default (no value retrieved).<br />
+<code>raiseExc</code>: raise the expcetion or not<br />
+<code>**kwargs</code>: other arguments for <code>Popen</code>  </p>
+</li>
+<li>
+<p><strong>returns:</strong><br />
+The <code>Command</code> instance  </p>
+</li>
+</ul>
+<h2 id="module-utilsparallel">Module <code>utils.parallel</code></h2>
+<blockquote>
+<p>.</p>
+</blockquote>
+<h4 id="class-parallel"><code>class: Parallel</code></h4>
+<div class="highlight"><pre><span></span>A parallel runner
+</pre></div>
+
+<h4 id="run-func-args-nthread-backend-raiseexc-staticmethod"><code>run (func, args, nthread, backend, raiseExc) [@staticmethod]</code></h4>
+<p>A shortcut of <code>Parallel.run</code>  </p>
+<ul>
+<li>
+<p><strong>params:</strong><br />
+<code>func</code>    : The function to run<br />
+<code>args</code>    : The arguments for the function, should be a <code>list</code> with <code>tuple</code>s<br />
+<code>nthread</code> : Number of jobs to run simultaneously. Default: <code>1</code><br />
+<code>backend</code> : The backend, either <code>process</code> (default) or <code>thread</code><br />
+<code>raiseExc</code>: Whether raise exception or not. Default: <code>True</code>  </p>
+</li>
+<li>
+<p><strong>returns:</strong><br />
+The merged results from each job.  </p>
+</li>
+</ul>
+<h2 id="module-utilssafefs">Module <code>utils.safefs</code></h2>
+<blockquote>
+<p>.</p>
+</blockquote>
+<h4 id="class-chmoderror"><code>class: ChmodError</code></h4>
+<div class="highlight"><pre><span></span>OS system call failed.
+</pre></div>
+
+<h4 id="lock-staticmethod"><code>Lock () [@staticmethod]</code></h4>
+<p>Returns a non-recursive lock object  </p>
+<h4 id="class-safefs"><code>class: SafeFs</code></h4>
+<div class="highlight"><pre><span></span>A thread-safe file system
+	
+	@static variables:
+		
+		`TMPDIR`: The default temporary directory to store lock files
+
+		# file types
+		`FILETYPE_UNKNOWN`  : Unknown file type
+		`FILETYPE_NOENT`    : File does not exist
+		`FILETYPE_NOENTLINK`: A dead link (a link links to a non-existent file.
+		`FILETYPE_FILE`     : A regular file
+		`FILETYPE_FILELINK` : A link to a regular file
+		`FILETYPE_DIR`      : A regular directory
+		`FILETYPE_DIRLINK`  : A link to a regular directory
+
+		# relation of two files
+		`FILES_DIFF_BOTHNOENT` : Two files are different and none of them exists
+		`FILES_DIFF_NOENT1`    : Two files are different but file1 does not exists
+		`FILES_DIFF_NOENT2`    : Two files are different but file2 does not exists
+		`FILES_DIFF_BOTHENT`   : Two files are different and both of them exist
+		`FILES_SAME_STRNOENT`  : Two files are the same string and it does not exist
+		`FILES_SAME_STRENT`    : Two files are the same string and it exists
+		`FILES_SAME_BOTHLINKS` : Two files link to one file
+		`FILES_SAME_BOTHLINKS1`: File1 links to file2, file2 links to a regular file
+		`FILES_SAME_BOTHLINKS2`: File2 links to file1, file1 links to a regular file
+		`FILES_SAME_REAL1`     : File2 links to file1, which a regular file
+		`FILES_SAME_REAL2`     : File1 links to file2, which a regular file
+
+		`LOCK`: A global lock ensures the locks are locked at the same time
+</pre></div>
+
+<h4 id="copy-file1-file2-overwrite-callback-staticmethod"><code>copy (file1, file2, overwrite, callback) [@staticmethod]</code></h4>
+<p>A shortcut of <code>SafeFs.copy</code>  </p>
+<ul>
+<li><strong>params:</strong><br />
+<code>file1</code>    : File 1<br />
+<code>file2</code>    : File 2<br />
+<code>overwrite</code>: Whether overwrite file 2. Default: <code>True</code><br />
+<code>callback</code> : The callback. arguments:  </li>
+<li><code>r</code> : Whether the file exists  </li>
+<li>
+<p><code>fs</code>: This instance  </p>
+</li>
+<li>
+<p><strong>returns:</strong><br />
+<code>True</code> if succeed else <code>False</code>  </p>
+</li>
+</ul>
+<h4 id="exists-filepath-callback-staticmethod"><code>exists (filepath, callback) [@staticmethod]</code></h4>
+<p>A shortcut of <code>SafeFs.exists</code>  </p>
+<ul>
+<li><strong>params:</strong><br />
+<code>filepath</code>: The filepath<br />
+<code>callback</code>: The callback. arguments:  </li>
+<li><code>r</code> : Whether the file exists  </li>
+<li>
+<p><code>fs</code>: This instance  </p>
+</li>
+<li>
+<p><strong>returns:</strong><br />
+<code>True</code> if the file exists else <code>False</code>  </p>
+</li>
+</ul>
+<h4 id="gz-file1-file2-overwrite-callback-staticmethod"><code>gz (file1, file2, overwrite, callback) [@staticmethod]</code></h4>
+<p>A shortcut of <code>SafeFs.gz</code>  </p>
+<ul>
+<li><strong>params:</strong><br />
+<code>file1</code>    : File 1<br />
+<code>file2</code>    : File 2<br />
+<code>overwrite</code>: Whether overwrite file 2. Default: <code>True</code><br />
+<code>callback</code> : The callback. arguments:  </li>
+<li><code>r</code> : Whether the file exists  </li>
+<li>
+<p><code>fs</code>: This instance  </p>
+</li>
+<li>
+<p><strong>returns:</strong><br />
+<code>True</code> if succeed else <code>False</code>  </p>
+</li>
+</ul>
+<h4 id="link-file1-file2-overwrite-callback-staticmethod"><code>link (file1, file2, overwrite, callback) [@staticmethod]</code></h4>
+<p>A shortcut of <code>SafeFs.link</code>  </p>
+<ul>
+<li><strong>params:</strong><br />
+<code>file1</code>    : File 1<br />
+<code>file2</code>    : File 2<br />
+<code>overwrite</code>: Whether overwrite file 2. Default: <code>True</code><br />
+<code>callback</code> : The callback. arguments:  </li>
+<li><code>r</code> : Whether the file exists  </li>
+<li>
+<p><code>fs</code>: This instance  </p>
+</li>
+<li>
+<p><strong>returns:</strong><br />
+<code>True</code> if succeed else <code>False</code>  </p>
+</li>
+</ul>
+<h4 id="movewithlink-file1-file2-overwrite-callback-staticmethod"><code>moveWithLink (file1, file2, overwrite, callback) [@staticmethod]</code></h4>
+<p>A shortcut of <code>SafeFs.moveWithLink</code>  </p>
+<ul>
+<li><strong>params:</strong><br />
+<code>file1</code>    : File 1<br />
+<code>file2</code>    : File 2<br />
+<code>overwrite</code>: Whether overwrite file 2. Default: <code>True</code><br />
+<code>callback</code> : The callback. arguments:  </li>
+<li><code>r</code> : Whether the file exists  </li>
+<li>
+<p><code>fs</code>: This instance  </p>
+</li>
+<li>
+<p><strong>returns:</strong><br />
+<code>True</code> if succeed else <code>False</code>  </p>
+</li>
+</ul>
+<h4 id="osremove-file1-file2-overwrite-callback"><code>osremove (file1, file2, overwrite, callback)</code></h4>
+<p>remove(path)  </p>
+<p>Remove a file (same as unlink(path)).  </p>
+<h4 id="readlink-file1-file2-overwrite-callback"><code>readlink (file1, file2, overwrite, callback)</code></h4>
+<p>readlink(path) -&gt; path  </p>
+<p>Return a string representing the path to which the symbolic link points.  </p>
+<h4 id="shmove-src-dst-staticmethod"><code>shmove (src, dst) [@staticmethod]</code></h4>
+<p>Recursively move a file or directory to another location. This is<br />
+similar to the Unix "mv" command.  </p>
+<p>If the destination is a directory or a symlink to a directory, the source<br />
+is moved inside the directory. The destination path must not already<br />
+exist.  </p>
+<p>If the destination already exists but is not a directory, it may be<br />
+overwritten depending on os.rename() semantics.  </p>
+<p>If the destination is on our current filesystem, then rename() is used.<br />
+Otherwise, src is copied to the destination and then removed.<br />
+A lot more could be done here...  A look at a mv.c shows a lot of<br />
+the issues this implementation glosses over.  </p>
+<h4 id="ungz-file1-file2-overwrite-callback-staticmethod"><code>ungz (file1, file2, overwrite, callback) [@staticmethod]</code></h4>
+<p>A shortcut of <code>SafeFs.ungz</code>  </p>
+<ul>
+<li><strong>params:</strong><br />
+<code>file1</code>    : File 1<br />
+<code>file2</code>    : File 2<br />
+<code>overwrite</code>: Whether overwrite file 2. Default: <code>True</code><br />
+<code>callback</code> : The callback. arguments:  </li>
+<li><code>r</code> : Whether the file exists  </li>
+<li>
+<p><code>fs</code>: This instance  </p>
+</li>
+<li>
+<p><strong>returns:</strong><br />
+<code>True</code> if succeed else <code>False</code>  </p>
 </li>
 </ul>
 <h2 id="module-proctreeprocnode">Module <code>proctree.ProcNode</code></h2>
@@ -1976,6 +2054,8 @@ The rendered string  </p>
 <li><strong>returns:</strong><br />
 <code>True</code> if yes, otherwise <code>False</code>  </li>
 </ul>
+<h4 id="kill-self"><code>kill (self)</code></h4>
+<p>Try to kill the running jobs if I am exiting  </p>
 <h4 id="retry-self"><code>retry (self)</code></h4>
 <h4 id="run-self_1"><code>run (self)</code></h4>
 <ul>
@@ -2019,14 +2099,6 @@ False: needs retry  </li>
 <code>job</code>:    The job object<br />
 <code>config</code>: The properties of the process  </li>
 </ul>
-<h4 id="getpid-self_1"><code>getpid (self)</code></h4>
-<p>Get the job identity and save it to job.pidfile  </p>
-<h4 id="isrunning-self_1"><code>isRunning (self)</code></h4>
-<p>Tell whether the job is still running  </p>
-<ul>
-<li><strong>returns:</strong><br />
-True if it is running else False  </li>
-</ul>
 <h2 id="module-runnersrunnerslurm">Module <code>runners.RunnerSlurm</code></h2>
 <blockquote>
 <p>The slurm runner</p>
@@ -2037,14 +2109,6 @@ True if it is running else False  </li>
 <li><strong>params:</strong><br />
 <code>job</code>:    The job object<br />
 <code>config</code>: The properties of the process  </li>
-</ul>
-<h4 id="getpid-self_2"><code>getpid (self)</code></h4>
-<p>Get the job identity and save it to job.pidfile  </p>
-<h4 id="isrunning-self_2"><code>isRunning (self)</code></h4>
-<p>Tell whether the job is still running  </p>
-<ul>
-<li><strong>returns:</strong><br />
-True if it is running else False  </li>
 </ul>
 <h2 id="module-runnersrunnerdry">Module <code>runners.RunnerDry</code></h2>
 <blockquote>
